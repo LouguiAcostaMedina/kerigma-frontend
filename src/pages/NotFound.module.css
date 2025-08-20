@@ -1,0 +1,329 @@
+/* NotFound.module.css */
+
+.notFoundContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.notFoundContainer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #004a86, #d4af37);
+  z-index: 1;
+}
+
+.notFoundCard {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  padding: 40px;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  border: 1px solid rgba(0, 74, 134, 0.1);
+}
+
+.churchLogo {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cross {
+  position: absolute;
+  width: 40px;
+  height: 8px;
+  background: #d4af37;
+  border-radius: 4px;
+  transform: rotate(90deg);
+}
+
+.cross::before {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 8px;
+  background: #d4af37;
+  border-radius: 4px;
+  transform: rotate(90deg);
+}
+
+.circle {
+  width: 60px;
+  height: 60px;
+  border: 3px solid #004a86;
+  border-radius: 50%;
+  position: relative;
+}
+
+.iconContainer {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.errorCode {
+  font-size: 120px;
+  font-weight: 900;
+  color: #004a86;
+  opacity: 0.15;
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+  line-height: 1;
+}
+
+.searchIcon {
+  font-size: 64px;
+  color: #d4af37;
+  position: relative;
+  z-index: 1;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.content {
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #004a86;
+  margin: 0 0 16px 0;
+  font-family: 'Merriweather', serif;
+}
+
+.message {
+  font-size: 16px;
+  color: #6c757d;
+  margin: 0 0 24px 0;
+  line-height: 1.6;
+}
+
+.suggestions {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: left;
+  border-left: 4px solid #d4af37;
+}
+
+.suggestions h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #004a86;
+  margin: 0 0 12px 0;
+}
+
+.suggestions ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #4a5568;
+}
+
+.suggestions li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.suggestions li:last-child {
+  margin-bottom: 0;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.helpText {
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.helpText small {
+  color: #718096;
+  font-size: 12px;
+}
+
+.inspirationText {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 14px;
+  color: #6c757d;
+  font-style: italic;
+  padding: 0 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.inspirationText span {
+  display: block;
+  margin-top: 8px;
+  font-weight: 600;
+  color: #004a86;
+}
+
+.natureElements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.15;
+}
+
+.leaf {
+  position: absolute;
+  background: #004a86;
+  border-radius: 50% 0;
+}
+
+.leaf1 {
+  width: 120px;
+  height: 120px;
+  top: 10%;
+  left: 5%;
+  transform: rotate(45deg);
+}
+
+.leaf2 {
+  width: 80px;
+  height: 80px;
+  bottom: 20%;
+  right: 10%;
+  transform: rotate(-20deg);
+}
+
+.leaf3 {
+  width: 60px;
+  height: 60px;
+  top: 40%;
+  right: 5%;
+  transform: rotate(70deg);
+}
+
+/* Estilos para botón */
+.btn {
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-align: center;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btnSecondary {
+  background: white;
+  color: #004a86;
+  border: 1px solid #004a86;
+}
+
+.btnSecondary:hover {
+  background: #f0f4f8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 74, 134, 0.1);
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, #004a86 0%, #003366 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 74, 134, 0.2);
+}
+
+.btnPrimary:hover {
+  background: linear-gradient(135deg, #003366 0%, #002244 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 74, 134, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .notFoundContainer {
+    padding: 16px;
+  }
+  
+  .notFoundCard {
+    padding: 30px;
+  }
+  
+  .errorCode {
+    font-size: 80px;
+    top: -30px;
+  }
+  
+  .title {
+    font-size: 24px;
+  }
+  
+  .message {
+    font-size: 14px;
+  }
+  
+  .searchIcon {
+    font-size: 48px;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .churchLogo {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .notFoundCard {
+    padding: 24px;
+  }
+  
+  .errorCode {
+    font-size: 60px;
+    top: -20px;
+  }
+  
+  .suggestions {
+    padding: 16px;
+  }
+}

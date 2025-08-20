@@ -1,0 +1,398 @@
+/* Estilos base para los componentes de input */
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+/* Labels */
+.input-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+.input-label--required {
+  color: #EF4444;
+  margin-left: 2px;
+}
+
+/* Wrapper para inputs con iconos */
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Estilos base del input */
+.input-field {
+  width: 100%;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  background-color: #ffffff;
+  color: #374151;
+}
+
+.input-field:focus {
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.input-field::placeholder {
+  color: #9CA3AF;
+}
+
+/* Tamaños del input */
+.input-field--small {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.input-field--medium {
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.input-field--large {
+  padding: 12px 16px;
+  font-size: 16px;
+}
+
+/* Variantes del input */
+.input-field--default {
+  /* Estilos por defecto ya aplicados */
+}
+
+.input-field--outline {
+  border-width: 2px;
+}
+
+.input-field--filled {
+  background-color: #F9FAFB;
+  border-color: transparent;
+}
+
+.input-field--filled:focus {
+  background-color: #ffffff;
+  border-color: #3B82F6;
+}
+
+/* Estados del input */
+.input-field--error {
+  border-color: #EF4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.input-field--focused {
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.input-field--disabled {
+  background-color: #F3F4F6;
+  color: #9CA3AF;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.input-field--readonly {
+  background-color: #F9FAFB;
+  cursor: default;
+}
+
+/* Inputs con iconos */
+.input-field--with-icon-left {
+  padding-left: 40px;
+}
+
+.input-field--with-icon-right {
+  padding-right: 40px;
+}
+
+/* Iconos */
+.input-icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: #6B7280;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.input-icon--left {
+  left: 12px;
+}
+
+.input-icon--right {
+  right: 12px;
+}
+
+.input-icon--password {
+  cursor: pointer;
+  pointer-events: all;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.input-icon--password:hover {
+  background-color: #F3F4F6;
+}
+
+/* TextArea */
+.textarea-field {
+  width: 100%;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  background-color: #ffffff;
+  color: #374151;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.textarea-field:focus {
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.textarea-field::placeholder {
+  color: #9CA3AF;
+}
+
+.textarea-field--error {
+  border-color: #EF4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.textarea-field--focused {
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.textarea-field--disabled {
+  background-color: #F3F4F6;
+  color: #9CA3AF;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.textarea-field--readonly {
+  background-color: #F9FAFB;
+  cursor: default;
+}
+
+/* Select */
+.select-field {
+  width: 100%;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  background-color: #ffffff;
+  color: #374151;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 8px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 32px;
+}
+
+.select-field:focus {
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.select-field--error {
+  border-color: #EF4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.select-field--disabled {
+  background-color: #F3F4F6;
+  color: #9CA3AF;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Checkbox */
+.checkbox-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-field {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #D1D5DB;
+  border-radius: 4px;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  margin: 0;
+}
+
+.checkbox-field:focus {
+  outline: none;
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.checkbox-field:checked {
+  background-color: #3B82F6;
+  border-color: #3B82F6;
+}
+
+.checkbox-checkmark {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.checkbox-field:checked + .checkbox-checkmark::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.checkbox-text {
+  font-size: 14px;
+  color: #374151;
+}
+
+.checkbox-field--error {
+  border-color: #EF4444;
+}
+
+.checkbox-field--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.checkbox-label:has(.checkbox-field--disabled) {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Mensajes de error y ayuda */
+.input-message {
+  margin-top: 4px;
+}
+
+.input-error {
+  font-size: 12px;
+  color: #EF4444;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.input-helper {
+  font-size: 12px;
+  color: #6B7280;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .input-field--large {
+    padding: 10px 14px;
+    font-size: 16px; /* Evita zoom en iOS */
+  }
+  
+  .input-field--medium {
+    font-size: 16px; /* Evita zoom en iOS */
+  }
+  
+  .select-field {
+    font-size: 16px; /* Evita zoom en iOS */
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .input-label {
+    color: #D1D5DB;
+  }
+  
+  .input-field,
+  .textarea-field,
+  .select-field {
+    background-color: #1F2937;
+    border-color: #4B5563;
+    color: #F9FAFB;
+  }
+  
+  .input-field::placeholder,
+  .textarea-field::placeholder {
+    color: #6B7280;
+  }
+  
+  .input-field:focus,
+  .textarea-field:focus,
+  .select-field:focus {
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+  
+  .input-field--filled,
+  .textarea-field--readonly,
+  .input-field--readonly {
+    background-color: #374151;
+  }
+  
+  .input-field--disabled,
+  .textarea-field--disabled,
+  .select-field--disabled {
+    background-color: #374151;
+    color: #6B7280;
+  }
+  
+  .checkbox-text {
+    color: #D1D5DB;
+  }
+  
+  .checkbox-field {
+    background-color: #1F2937;
+    border-color: #4B5563;
+  }
+  
+  .input-helper {
+    color: #9CA3AF;
+  }
+}

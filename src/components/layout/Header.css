@@ -1,0 +1,290 @@
+/* Estilos del Header */
+
+.app-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0 24px;
+  height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  max-width: 100%;
+}
+
+/* Botón de menú móvil */
+.mobile-menu-button {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  color: #374151;
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-button:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+/* Brand */
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  border-radius: 8px;
+  color: white;
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.brand-subtitle {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Usuario */
+.header-user {
+  position: relative;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.user-info:hover {
+  background-color: #f9fafb;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827;
+  line-height: 1.2;
+}
+
+.user-role {
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.2;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.user-avatar:hover {
+  transform: scale(1.05);
+}
+
+/* Dropdown del usuario */
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  min-width: 280px;
+  z-index: 1000;
+  animation: dropdownFadeIn 0.2s ease;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-header {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dropdown-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.dropdown-info {
+  flex: 1;
+}
+
+.dropdown-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 4px 0;
+}
+
+.dropdown-email {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0 0 4px 0;
+  word-break: break-all;
+}
+
+.dropdown-role {
+  font-size: 12px;
+  color: #3b82f6;
+  background: #eff6ff;
+  padding: 2px 8px;
+  border-radius: 12px;
+  display: inline-block;
+  margin: 0;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 0 16px;
+}
+
+.dropdown-menu {
+  padding: 8px 0;
+}
+
+.dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #374151;
+  text-align: left;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f3f4f6;
+}
+
+.dropdown-item--danger {
+  color: #dc2626;
+}
+
+.dropdown-item--danger:hover {
+  background-color: #fef2f2;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .mobile-menu-button {
+    display: block;
+  }
+  
+  .header-brand {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    padding: 0 16px;
+  }
+  
+  .user-details {
+    display: none;
+  }
+  
+  .user-dropdown {
+    min-width: 250px;
+    right: -16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dropdown-header {
+    padding: 12px;
+  }
+  
+  .dropdown-name {
+    font-size: 14px;
+  }
+  
+  .dropdown-email {
+    font-size: 12px;
+  }
+  
+  .dropdown-item {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,622 @@
+/**
+ * Estilos para la página de reportes avanzados
+ * Diseño moderno con gradientes y animaciones fluidas
+ */
+
+.reportsPage {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ===================== HEADER ===================== */
+.header {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.titleSection {
+  flex: 1;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.titleIcon {
+  font-size: 2rem;
+  color: #667eea;
+}
+
+.subtitle {
+  color: #718096;
+  font-size: 1.1rem;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.headerActions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* ===================== NAVIGATION ===================== */
+.navigation {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 1rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background: transparent;
+  border-radius: 12px;
+  color: #718096;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  position: relative;
+}
+
+.tab:hover {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  transform: translateY(-2px);
+}
+
+.tab.active {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  transform: translateY(-2px);
+}
+
+.badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: inherit;
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+}
+
+.tab.active .badge {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+/* ===================== FILTERS ===================== */
+.filtersSection {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.searchBox {
+  position: relative;
+  flex: 1;
+  min-width: 250px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #a0aec0;
+  z-index: 1;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 2px solid rgba(226, 232, 240, 0.8);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  background: white;
+}
+
+.filterSelect {
+  padding: 0.75rem 1rem;
+  border: 2px solid rgba(226, 232, 240, 0.8);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  background: white;
+}
+
+/* ===================== CONTENT ===================== */
+.content {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  min-height: 400px;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: #718096;
+  min-height: 300px;
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  color: #cbd5e0;
+  margin-bottom: 1rem;
+}
+
+.emptyState h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin: 0 0 0.5rem 0;
+}
+
+.emptyState p {
+  font-size: 1rem;
+  margin: 0 0 2rem 0;
+  max-width: 400px;
+}
+
+/* ===================== TABLE STYLES ===================== */
+.reportsTable {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.reportName {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.reportIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-size: 1.1rem;
+}
+
+.reportName .name {
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.25rem;
+}
+
+.reportName .description {
+  font-size: 0.85rem;
+  color: #718096;
+  line-height: 1.4;
+}
+
+.category {
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.category.membership { background: rgba(72, 187, 120, 0.2); color: #38a169; }
+.category.groups { background: rgba(66, 153, 225, 0.2); color: #3182ce; }
+.category.students { background: rgba(236, 201, 75, 0.2); color: #d69e2e; }
+.category.baptisms { background: rgba(167, 139, 250, 0.2); color: #805ad5; }
+.category.metrics { background: rgba(245, 101, 101, 0.2); color: #e53e3e; }
+
+.actionButtons {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.deleteButton {
+  color: #e53e3e !important;
+}
+
+.deleteButton:hover {
+  background: rgba(229, 62, 62, 0.1) !important;
+  color: #c53030 !important;
+}
+
+/* ===================== REPORT VIEWER ===================== */
+.reportViewer {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  margin-top: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+.reportViewerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.reportViewerHeader h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.reportViewerContent {
+  padding: 2rem;
+}
+
+/* ===================== MODAL FORMS ===================== */
+.scheduleForm,
+.shareForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formGroup label {
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 0.95rem;
+}
+
+.formControl {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.formControl:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.formControl[rows] {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* ===================== EXPORT OPTIONS ===================== */
+.exportOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.exportOptions h4 {
+  margin: 0;
+  color: #4a5568;
+  font-weight: 600;
+}
+
+.exportButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.exportButton {
+  flex: 1;
+  justify-content: center;
+}
+
+.exportActions {
+  display: flex;
+  justify-content: center;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* ===================== RESPONSIVE DESIGN ===================== */
+@media (max-width: 1024px) {
+  .reportsPage {
+    padding: 1rem;
+  }
+
+  .headerContent {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .tabs {
+    justify-content: center;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .searchBox {
+    min-width: auto;
+  }
+
+  .filterSelect {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .titleIcon {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .tabs {
+    flex-direction: column;
+  }
+
+  .tab {
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .content {
+    padding: 1rem;
+  }
+
+  .reportViewerHeader {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .reportViewerContent {
+    padding: 1rem;
+  }
+
+  .exportButtons {
+    flex-direction: column;
+  }
+
+  .formActions {
+    flex-direction: column-reverse;
+  }
+}
+
+@media (max-width: 480px) {
+  .reportsPage {
+    padding: 0.5rem;
+  }
+
+  .header,
+  .navigation,
+  .filtersSection,
+  .content {
+    border-radius: 12px;
+    padding: 1rem;
+  }
+
+  .actionButtons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* ===================== ANIMATIONS ===================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reportsPage > * {
+  animation: fadeInUp 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.reportsPage > *:nth-child(1) { animation-delay: 0.1s; }
+.reportsPage > *:nth-child(2) { animation-delay: 0.2s; }
+.reportsPage > *:nth-child(3) { animation-delay: 0.3s; }
+.reportsPage > *:nth-child(4) { animation-delay: 0.4s; }
+
+/* ===================== HOVER EFFECTS ===================== */
+.header:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.navigation:hover,
+.filtersSection:hover,
+.content:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* ===================== FOCUS STATES ===================== */
+.tab:focus,
+.searchInput:focus,
+.filterSelect:focus,
+.formControl:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* ===================== DARK MODE SUPPORT ===================== */
+@media (prefers-color-scheme: dark) {
+  .reportsPage {
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+  }
+
+  .header,
+  .navigation,
+  .filtersSection,
+  .content {
+    background: rgba(26, 32, 44, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .title {
+    color: #f7fafc;
+  }
+
+  .subtitle {
+    color: #a0aec0;
+  }
+
+  .tab {
+    color: #a0aec0;
+  }
+
+  .tab:hover {
+    color: #667eea;
+    background: rgba(102, 126, 234, 0.2);
+  }
+
+  .searchInput,
+  .filterSelect,
+  .formControl {
+    background: rgba(45, 55, 72, 0.9);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    color: #f7fafc;
+  }
+
+  .searchInput:focus,
+  .filterSelect:focus,
+  .formControl:focus {
+    background: #2d3748;
+    border-color: #667eea;
+  }
+
+  .emptyState h3 {
+    color: #f7fafc;
+  }
+
+  .emptyState p {
+    color: #a0aec0;
+  }
+
+  .formGroup label {
+    color: #f7fafc;
+  }
+}

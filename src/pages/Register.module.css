@@ -1,0 +1,367 @@
+/* Register.module.css */
+
+.registerContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.registerContainer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #004a86, #d4af37);
+  z-index: 1;
+}
+
+.registerCard {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  padding: 40px;
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+  z-index: 2;
+  border: 1px solid rgba(0, 74, 134, 0.1);
+}
+
+.registerHeader {
+  text-align: center;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.churchLogo {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cross {
+  position: absolute;
+  width: 40px;
+  height: 8px;
+  background: #d4af37;
+  border-radius: 4px;
+  transform: rotate(90deg);
+}
+
+.cross::before {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 8px;
+  background: #d4af37;
+  border-radius: 4px;
+  transform: rotate(90deg);
+}
+
+.circle {
+  width: 60px;
+  height: 60px;
+  border: 3px solid #004a86;
+  border-radius: 50%;
+  position: relative;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #004a86;
+  margin: 0 0 8px 0;
+  font-family: 'Merriweather', serif;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #6c757d;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.inputGroup {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 14px;
+  color: #495057;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.passwordContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6c757d;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+  z-index: 1;
+}
+
+.passwordToggle:hover {
+  color: #004a86;
+}
+
+.select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s;
+  background-color: #f8f9fa;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236c757d' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+.select:focus {
+  outline: none;
+  border-color: #004a86;
+  box-shadow: 0 0 0 3px rgba(0, 74, 134, 0.1);
+}
+
+.error {
+  color: #dc3545;
+  font-size: 13px;
+  margin-top: 6px;
+  display: block;
+}
+
+.registerFooter {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.loginLink {
+  font-size: 14px;
+  color: #6c757d;
+  margin: 0;
+}
+
+.link {
+  color: #004a86;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.link:hover {
+  color: #003366;
+  text-decoration: underline;
+}
+
+.inspirationText {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 14px;
+  color: #6c757d;
+  font-style: italic;
+  padding: 0 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.inspirationText span {
+  display: block;
+  margin-top: 8px;
+  font-weight: 600;
+  color: #004a86;
+}
+
+.natureElements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.15;
+}
+
+.leaf {
+  position: absolute;
+  background: #004a86;
+  border-radius: 50% 0;
+}
+
+.leaf1 {
+  width: 120px;
+  height: 120px;
+  top: 10%;
+  left: 5%;
+  transform: rotate(45deg);
+}
+
+.leaf2 {
+  width: 80px;
+  height: 80px;
+  bottom: 20%;
+  right: 10%;
+  transform: rotate(-20deg);
+}
+
+.leaf3 {
+  width: 60px;
+  height: 60px;
+  top: 40%;
+  right: 5%;
+  transform: rotate(70deg);
+}
+
+/* Estilos para componentes de entrada */
+.inputContainer {
+  position: relative;
+}
+
+.inputContainer input {
+  width: 100%;
+  padding: 14px 16px 14px 40px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s;
+  background-color: #f8f9fa;
+}
+
+.inputContainer input:focus {
+  outline: none;
+  border-color: #004a86;
+  box-shadow: 0 0 0 3px rgba(0, 74, 134, 0.1);
+}
+
+.inputContainer .icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+
+.inputContainer .error {
+  color: #dc3545;
+  font-size: 13px;
+  margin-top: 6px;
+  display: block;
+}
+
+/* Estilos para botón */
+.btn {
+  padding: 14px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-align: center;
+  border: none;
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, #004a86 0%, #003366 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 74, 134, 0.2);
+}
+
+.btnPrimary:hover {
+  background: linear-gradient(135deg, #003366 0%, #002244 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 74, 134, 0.3);
+}
+
+.btnPrimary:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btnFullWidth {
+  width: 100%;
+}
+
+.btnLarge {
+  padding: 15px 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .registerContainer {
+    padding: 16px;
+  }
+  
+  .registerCard {
+    padding: 30px;
+  }
+  
+  .row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .title {
+    font-size: 24px;
+  }
+  
+  .subtitle {
+    font-size: 14px;
+  }
+  
+  .churchLogo {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .registerCard {
+    padding: 24px;
+  }
+}

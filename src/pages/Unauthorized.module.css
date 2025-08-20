@@ -1,0 +1,185 @@
+/* Estilos para la página de No Autorizado */
+
+.unauthorizedContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  padding: 20px;
+}
+
+.unauthorizedCard {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.unauthorizedCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ff7b7b, #ff9f43);
+}
+
+.iconContainer {
+  margin-bottom: 24px;
+}
+
+.warningIcon {
+  font-size: 64px;
+  color: #ff7b7b;
+  animation: pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.7;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+.content {
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0 0 16px 0;
+}
+
+.message {
+  font-size: 16px;
+  color: #718096;
+  margin: 0 0 24px 0;
+  line-height: 1.6;
+}
+
+.roleInfo {
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.roleText,
+.userRole {
+  font-size: 14px;
+  margin: 0 0 8px 0;
+  color: #2d3748;
+}
+
+.userRole {
+  margin-bottom: 0;
+  color: #e53e3e;
+}
+
+.suggestions {
+  background: #f7fafc;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: left;
+}
+
+.suggestions h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0 0 12px 0;
+}
+
+.suggestions ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #4a5568;
+}
+
+.suggestions li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.suggestions li:last-child {
+  margin-bottom: 0;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.attemptedPath {
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.attemptedPath small {
+  color: #718096;
+  font-size: 12px;
+}
+
+.attemptedPath code {
+  background: #edf2f7;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  color: #2d3748;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .unauthorizedContainer {
+    padding: 16px;
+  }
+  
+  .unauthorizedCard {
+    padding: 24px;
+  }
+  
+  .title {
+    font-size: 24px;
+  }
+  
+  .message {
+    font-size: 14px;
+  }
+  
+  .warningIcon {
+    font-size: 48px;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .unauthorizedCard {
+    padding: 20px;
+  }
+  
+  .suggestions {
+    padding: 16px;
+  }
+}

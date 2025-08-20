@@ -1,0 +1,210 @@
+/* --- MetricCard --- */
+.metricCard {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+  border-left: 4px solid transparent;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.metricCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.metricCard.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+}
+
+/* Hover indicator */
+.hoverIndicator,
+.hoverEffect {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.metricCard:hover .hoverIndicator,
+.metricCard:hover .hoverEffect {
+  opacity: 1;
+}
+
+/* --- Header --- */
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.titleSection {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* --- Value Section --- */
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.valueSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+/* --- Change Section --- */
+.changeSection {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.changeSection.trendUp {
+  background: rgba(56, 161, 105, 0.1);
+  color: #16a34a;
+}
+
+.changeSection.trendDown {
+  background: rgba(229, 62, 62, 0.1);
+  color: #dc2626;
+}
+
+.changeSection.trendNeutral {
+  background: rgba(113, 128, 150, 0.1);
+  color: #6b7280;
+}
+
+.changeIcon {
+  font-size: 10px;
+}
+
+.changeText,
+.changeValue {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* --- Comparison (opcional extra info) --- */
+.comparison {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.comparisonLabel {
+  font-weight: 500;
+}
+
+.comparisonValue {
+  font-weight: 600;
+  color: #374151;
+}
+
+/* --- Color Variants --- */
+.metricCard.primary { border-left-color: #667eea; }
+.metricCard.primary .iconContainer { background: linear-gradient(135deg, #667eea, #764ba2); }
+
+.metricCard.secondary { border-left-color: #718096; }
+.metricCard.secondary .iconContainer { background: linear-gradient(135deg, #718096, #4a5568); }
+
+.metricCard.success { border-left-color: #38a169; }
+.metricCard.success .iconContainer { background: linear-gradient(135deg, #38a169, #2f855a); }
+
+.metricCard.warning { border-left-color: #d69e2e; }
+.metricCard.warning .iconContainer { background: linear-gradient(135deg, #d69e2e, #b7791f); }
+
+.metricCard.error { border-left-color: #e53e3e; }
+.metricCard.error .iconContainer { background: linear-gradient(135deg, #e53e3e, #c53030); }
+
+.metricCard.info { border-left-color: #3182ce; }
+.metricCard.info .iconContainer { background: linear-gradient(135deg, #3182ce, #2c5aa0); }
+
+/* --- Animations --- */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Accessibility --- */
+.metricCard:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .metricCard { padding: 20px; }
+  .iconContainer { width: 40px; height: 40px; font-size: 18px; }
+  .title { font-size: 13px; }
+  .value { font-size: 28px; }
+  .valueSection { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+@media (max-width: 480px) {
+  .metricCard { padding: 16px; }
+  .cardHeader { gap: 10px; margin-bottom: 12px; }
+  .iconContainer { width: 36px; height: 36px; font-size: 16px; }
+  .title { font-size: 12px; }
+  .value { font-size: 24px; }
+}

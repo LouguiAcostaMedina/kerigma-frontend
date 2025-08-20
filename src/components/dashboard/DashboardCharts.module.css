@@ -1,0 +1,48 @@
+/* Estilos para el componente DashboardCharts */
+
+.chartsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.chartSection {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chartSection:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .chartsContainer {
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .chartsContainer {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .chartSection {
+    margin: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .chartsContainer {
+    gap: 12px;
+    margin-top: 20px;
+  }
+}

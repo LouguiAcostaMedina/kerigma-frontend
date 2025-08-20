@@ -1,0 +1,140 @@
+/* Estilos para el componente Loading */
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+}
+
+/* Spinner base */
+.loading-spinner {
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top: 3px solid #3B82F6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Tamaños del spinner */
+.loading-spinner--small {
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+}
+
+.loading-spinner--medium {
+  width: 40px;
+  height: 40px;
+  border-width: 3px;
+}
+
+.loading-spinner--large {
+  width: 60px;
+  height: 60px;
+  border-width: 4px;
+}
+
+/* Spinner para botones */
+.loading-spinner--button {
+  border-color: rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+}
+
+/* Texto de carga */
+.loading-text {
+  margin: 0;
+  font-size: 14px;
+  color: #6B7280;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Overlay para loading de página completa */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(2px);
+}
+
+/* Loading específico para páginas */
+.page-loading {
+  min-height: 200px;
+}
+
+/* Animación de rotación */
+@keyframes spin {
+  0% { 
+    transform: rotate(0deg); 
+  }
+  100% { 
+    transform: rotate(360deg); 
+  }
+}
+
+/* Variaciones de color para diferentes estados */
+.loading-spinner--success {
+  border-top-color: #10B981;
+}
+
+.loading-spinner--warning {
+  border-top-color: #F59E0B;
+}
+
+.loading-spinner--error {
+  border-top-color: #EF4444;
+}
+
+.loading-spinner--info {
+  border-top-color: #8B5CF6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .loading-container {
+    padding: 15px;
+    gap: 8px;
+  }
+  
+  .loading-text {
+    font-size: 12px;
+  }
+  
+  .loading-spinner--large {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .loading-spinner--medium {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+/* Estados hover para contenedores interactivos */
+.loading-container:hover .loading-spinner {
+  animation-duration: 0.8s;
+}
+
+/* Efecto de entrada suave */
+.loading-overlay {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
