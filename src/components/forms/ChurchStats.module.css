@@ -1,0 +1,285 @@
+/* ChurchStats.module.css */
+
+.statsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 24px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+/* Métricas principales */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.metricCard {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.metricCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+}
+
+.metricCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.metricIcon {
+  font-size: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+}
+
+.metricContent {
+  flex: 1;
+}
+
+.metricContent h3 {
+  margin: 0 0 8px 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metricValue {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+
+.metricSubtext {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+/* Grid de gráficos */
+.chartsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+}
+
+.chartCard {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.chartCard:hover {
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.chartCard h3 {
+  margin: 0 0 20px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  text-align: center;
+  position: relative;
+}
+
+.chartCard h3::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  border-radius: 2px;
+}
+
+.chartContainer {
+  height: 300px;
+  position: relative;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.fullWidth .chartContainer {
+  height: 400px;
+}
+
+/* Tarjetas de resumen */
+.summaryCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.summaryCard {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.summaryCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  transition: all 0.3s ease;
+}
+
+.summaryCard.success::before {
+  background: #10b981;
+}
+
+.summaryCard.warning::before {
+  background: #f59e0b;
+}
+
+.summaryCard.info::before {
+  background: #3b82f6;
+}
+
+.summaryCard.error::before {
+  background: #ef4444;
+}
+
+.summaryCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.summaryCard.success:hover {
+  border-color: #10b981;
+  box-shadow: 0 8px 25px -5px rgba(16, 185, 129, 0.3);
+}
+
+.summaryCard.warning:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 8px 25px -5px rgba(245, 158, 11, 0.3);
+}
+
+.summaryCard.info:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 8px 25px -5px rgba(59, 130, 246, 0.3);
+}
+
+.summaryCard.error:hover {
+  border-color: #ef4444;
+  box-shadow: 0 8px 25px -5px rgba(239, 68, 68, 0.3);
+}
+
+.summaryCard h4 {
+  margin: 0 0 12px 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summaryValue {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+.summaryCard.success .summaryValue {
+  color: #059669;
+}
+
+.summaryCard.warning .summaryValue {
+  color: #d97706;
+}
+
+.summaryCard.info .summaryValue {
+  color: #2563eb;
+}
+
+.summaryCard.error .summaryValue {
+  color: #dc2626;
+}
+
+.summaryPercentage {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.metricCard,
+.chartCard,
+.summaryCard {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.metricCard:nth-child(1) { animation-delay: 0.1s; }
+.metricCard:nth-child(2) { animation-delay: 0.2s; }
+.metricCard:nth-child(3) { animation-delay: 0.3s; }
+.metricCard:nth-child(4) { animation-delay: 0.4s; }
+
+/* Estados de loading */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #6b7280;
+}
+
+.noData {
+  text-align: center;
+  padding: 40px;
+}

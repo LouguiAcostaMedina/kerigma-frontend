@@ -25,8 +25,11 @@ const NotFound = () => {
     <div className={styles.notFoundContainer}>
       <div className={styles.notFoundCard}>
         <div className={styles.churchLogo}>
-          <div className={styles.cross}></div>
-          <div className={styles.circle}></div>
+         <img 
+    src="/src/assets/LOGO-ADVENTISTA.png" 
+    alt="Logo Iglesia Adventista" 
+    className={styles.logoImage} 
+  />
         </div>
         
         <div className={styles.iconContainer}>

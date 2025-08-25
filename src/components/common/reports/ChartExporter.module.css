@@ -1,0 +1,455 @@
+/**
+ * Estilos para el componente ChartExporter
+ * Incluye configuraciones, vista previa y animaciones
+ */
+
+.chartExporter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.exportButtons {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Modal de configuración */
+.exportConfig {
+  padding: 0.5rem 0;
+}
+
+.configSection {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.configSection:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.configSection h4 {
+  margin: 0 0 1rem 0;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Formatos de exportación */
+.formatGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.formatOption {
+  cursor: pointer;
+}
+
+.formatOption input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.formatCard {
+  padding: 1rem;
+  border: 2px solid var(--border-light);
+  border-radius: 8px;
+  text-align: center;
+  transition: all 0.2s ease;
+  background: var(--card-bg);
+}
+
+.formatOption input:checked + .formatCard {
+  border-color: var(--primary-400);
+  background: var(--primary-50);
+  color: var(--primary-700);
+}
+
+.formatCard:hover {
+  border-color: var(--primary-300);
+}
+
+.formatLabel {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.formatDesc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* Tamaños predefinidos */
+.presetsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.presetButton {
+  padding: 0.75rem;
+  border: 2px solid var(--border-light);
+  border-radius: 6px;
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.presetButton:hover {
+  border-color: var(--primary-300);
+  background: var(--primary-50);
+}
+
+.presetButton.active {
+  border-color: var(--primary-400);
+  background: var(--primary-100);
+  color: var(--primary-700);
+  font-weight: 600;
+}
+
+.dimensionsInputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputGroup label {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.inputGroup input,
+.inputGroup select {
+  padding: 0.5rem;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.inputGroup input:focus,
+.inputGroup select:focus {
+  outline: none;
+  border-color: var(--primary-400);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+/* Opciones de fondo */
+.backgroundOptions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+}
+
+.backgroundOption {
+  cursor: pointer;
+}
+
+.backgroundOption input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.backgroundPreview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 2px solid var(--border-light);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.backgroundOption input:checked + .backgroundPreview {
+  border-color: var(--primary-400);
+  background: var(--primary-50);
+}
+
+.backgroundPreview:hover {
+  border-color: var(--primary-300);
+}
+
+.backgroundColor {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  border: 1px solid var(--border-light);
+}
+
+.backgroundPreview span {
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.customColorInput {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+}
+
+.customColorInput label {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.customColorInput input[type="color"] {
+  width: 40px;
+  height: 30px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Checkboxes */
+.checkboxGroup {
+  margin: 0.75rem 0;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.checkboxLabel input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary-500);
+}
+
+/* Vista previa */
+.preview {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.previewInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.previewInfo div {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.previewInfo strong {
+  color: var(--primary-600);
+}
+
+/* Acciones del modal */
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-light);
+}
+
+/* Range slider personalizado */
+input[type="range"] {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border-light);
+  outline: none;
+  -webkit-appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--primary-500);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--primary-500);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.exportConfig {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.configSection {
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Estados de carga */
+.chartExporter.loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .formatGrid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .presetsGrid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .dimensionsInputs {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .backgroundOptions {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .modalActions {
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+  }
+
+  .exportButtons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .formatGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .backgroundOptions {
+    grid-template-columns: 1fr;
+  }
+
+  .previewInfo {
+    gap: 0.25rem;
+  }
+
+  .previewInfo div {
+    font-size: 0.8rem;
+  }
+
+  .configSection h4 {
+    font-size: 1rem;
+  }
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
+  .chartExporter {
+    --card-bg: #1f2937;
+    --bg-primary: #374151;
+    --bg-secondary: #4b5563;
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --border-light: #6b7280;
+  }
+
+  .formatCard,
+  .presetButton,
+  .backgroundPreview {
+    background: #374151;
+    border-color: #6b7280;
+  }
+
+  .formatOption input:checked + .formatCard,
+  .presetButton.active,
+  .backgroundOption input:checked + .backgroundPreview {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: var(--primary-400);
+  }
+
+  .customColorInput {
+    background: #374151;
+  }
+
+  .preview {
+    background: #374151;
+  }
+
+  input[type="range"] {
+    background: #6b7280;
+  }
+}
+
+/* Efectos especiales */
+.formatCard,
+.presetButton,
+.backgroundPreview {
+  position: relative;
+  overflow: hidden;
+}
+
+.formatCard::after,
+.presetButton::after,
+.backgroundPreview::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.formatCard:hover::after,
+.presetButton:hover::after,
+.backgroundPreview:hover::after {
+  left: 100%;
+}

@@ -1,0 +1,627 @@
+/* ChurchDashboard.module.css */
+
+.dashboardContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f8fafc;
+  overflow: hidden;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.churchInfo h1 {
+  margin: 0 0 8px 0;
+  font-size: 1.875rem;
+  font-weight: 700;
+}
+
+.churchMeta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.location,
+.capacity {
+  font-size: 0.875rem;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status.active {
+  background: rgba(34, 197, 94, 0.2);
+  color: #10b981;
+}
+
+.status.construction {
+  background: rgba(251, 191, 36, 0.2);
+  color: #f59e0b;
+}
+
+.status.planning {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+.status.inactive {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dateSelector {
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+}
+
+.dateSelector:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.dateSelector option {
+  background: #374151;
+  color: white;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64748b;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-width: fit-content;
+}
+
+.tab:hover {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.tab.active {
+  background: #f8fafc;
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+.tabIcon {
+  font-size: 1.1rem;
+}
+
+/* Content */
+.content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.tabContent {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Métricas */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.metricCard {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.metricCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+}
+
+.metricCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.metricIcon {
+  font-size: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+}
+
+.metricContent {
+  flex: 1;
+}
+
+.metricContent h3 {
+  margin: 0 0 8px 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metricValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+
+.metricChange {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+/* Tarjetas de información */
+.infoCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.infoCard {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.infoCard:hover {
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.infoCard h3 {
+  margin: 0 0 16px 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.contactInfo,
+.servicesInfo,
+.facilitiesInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contactInfo div,
+.servicesInfo div,
+.facilitiesInfo div {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #374151;
+}
+
+.contactInfo strong,
+.servicesInfo strong {
+  color: #111827;
+  font-weight: 600;
+  display: inline-block;
+  min-width: 80px;
+}
+
+.contactInfo a {
+  color: #3b82f6;
+  text-decoration: none;
+  margin-left: 8px;
+}
+
+.contactInfo a:hover {
+  text-decoration: underline;
+}
+
+/* Gráficos */
+.chartCard {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.chartCard:hover {
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.chartHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.chartHeader h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.chartContainer {
+  height: 400px;
+  position: relative;
+}
+
+/* Estados especiales */
+.noData {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+  color: #9ca3af;
+}
+
+.noData h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .metricsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .infoCards {
+    grid-template-columns: 1fr;
+  }
+
+  .chartContainer {
+    height: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboardContainer {
+    height: 100vh;
+  }
+
+  .header {
+    padding: 16px 20px;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .churchInfo h1 {
+    font-size: 1.5rem;
+  }
+
+  .churchMeta {
+    gap: 12px;
+  }
+
+  .headerActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .tabs {
+    padding: 0 4px;
+  }
+
+  .tab {
+    padding: 12px 16px;
+    font-size: 0.8rem;
+  }
+
+  .tabIcon {
+    font-size: 1rem;
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .metricsGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .metricCard {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .metricIcon {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+  }
+
+  .metricValue {
+    font-size: 1.75rem;
+  }
+
+  .infoCards {
+    gap: 16px;
+  }
+
+  .infoCard {
+    padding: 20px;
+  }
+
+  .chartCard {
+    padding: 20px;
+  }
+
+  .chartContainer {
+    height: 300px;
+  }
+
+  .chartHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 12px 16px;
+  }
+
+  .churchInfo h1 {
+    font-size: 1.25rem;
+  }
+
+  .churchMeta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .content {
+    padding: 16px;
+  }
+
+  .metricCard {
+    flex-direction: column;
+    text-align: center;
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .metricIcon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+
+  .metricValue {
+    font-size: 1.5rem;
+  }
+
+  .infoCard {
+    padding: 16px;
+  }
+
+  .chartCard {
+    padding: 16px;
+  }
+
+  .chartContainer {
+    height: 250px;
+  }
+
+  .contactInfo strong,
+  .servicesInfo strong {
+    min-width: 70px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .dashboardContainer {
+    background: #0f172a;
+  }
+
+  .tabs {
+    background: #1e293b;
+    border-bottom-color: #334155;
+  }
+
+  .tab {
+    color: #94a3b8;
+  }
+
+  .tab:hover {
+    background: #334155;
+    color: #f1f5f9;
+  }
+
+  .tab.active {
+    background: #0f172a;
+    color: #3b82f6;
+  }
+
+  .metricCard,
+  .infoCard,
+  .chartCard {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  .metricContent h3,
+  .infoCard h3 {
+    color: #f3f4f6;
+  }
+
+  .metricValue,
+  .chartHeader h3 {
+    color: #f8fafc;
+  }
+
+  .metricChange {
+    color: #94a3b8;
+  }
+
+  .contactInfo div,
+  .servicesInfo div,
+  .facilitiesInfo div {
+    color: #d1d5db;
+  }
+
+  .contactInfo strong,
+  .servicesInfo strong {
+    color: #f3f4f6;
+  }
+
+  .dateSelector {
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .noData h2 {
+    color: #94a3b8;
+  }
+}
+
+/* Print styles */
+@media print {
+  .dashboardContainer {
+    height: auto;
+    background: white;
+  }
+
+  .header {
+    background: white;
+    color: black;
+    box-shadow: none;
+    border-bottom: 2px solid #e5e7eb;
+  }
+
+  .tabs {
+    display: none;
+  }
+
+  .metricCard,
+  .infoCard,
+  .chartCard {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #e5e7eb;
+  }
+
+  .chartContainer {
+    height: 300px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .metricCard,
+  .infoCard,
+  .chartCard,
+  .tabContent {
+    animation: none;
+    transition: none;
+  }
+
+  .metricCard:hover,
+  .infoCard:hover,
+  .chartCard:hover {
+    transform: none;
+  }
+}

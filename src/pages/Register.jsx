@@ -129,8 +129,11 @@ const Register = () => {
       <div className={styles.registerCard}>
         <div className={styles.registerHeader}>
           <div className={styles.churchLogo}>
-            <div className={styles.cross}></div>
-            <div className={styles.circle}></div>
+            <img
+              src="/src/assets/LOGO-ADVENTISTA.png"
+              alt="Logo Iglesia Adventista"
+              className={styles.logoImage}
+            />
           </div>
           <h1 className={styles.title}>Registro de Usuario</h1>
           <p className={styles.subtitle}>Únete al sistema de gestión misionera</p>

@@ -11,7 +11,7 @@ import DataTable from '@/components/common/DataTable';
 import Modal  from '@/components/common/Modal';
 import Loading  from '@/components/common/Loading';
 import { ReportBuilder } from '@/components/common/reports/ReportBuilder';
-import { ChartExporter } from '@/components/common/reports/ChartExporter';
+import  ChartExporter  from '@/components/common/reports/ChartExporter';
 import { showNotification } from '@/utils/notifications';
 import {
   FiFileText, FiPlus, FiPlay, FiDownload, FiCalendar, FiShare2,

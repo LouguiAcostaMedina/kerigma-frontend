@@ -1,7 +1,7 @@
 /* Register.module.css */
 
 .registerContainer {
-  min-height: 100vh;
+  min-height: 93vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,13 +23,16 @@
   z-index: 1;
 }
 
+
+
+
+
 .registerCard {
   background: white;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  padding: 40px;
-  width: 100%;
-  max-width: 600px;
+  padding:020px;
+ max-width: 600px;
   position: relative;
   z-index: 2;
   border: 1px solid rgba(0, 74, 134, 0.1);
@@ -42,40 +45,15 @@
 }
 
 .churchLogo {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 20px;
-  position: relative;
+ margin: 0 auto 20px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
-.cross {
-  position: absolute;
-  width: 40px;
-  height: 8px;
-  background: #d4af37;
-  border-radius: 4px;
-  transform: rotate(90deg);
-}
-
-.cross::before {
-  content: '';
-  position: absolute;
-  width: 40px;
-  height: 8px;
-  background: #d4af37;
-  border-radius: 4px;
-  transform: rotate(90deg);
-}
-
-.circle {
-  width: 60px;
-  height: 60px;
-  border: 3px solid #004a86;
-  border-radius: 50%;
-  position: relative;
+.logoImage {
+  width: 80px;
+  height: 80px;
+  object-fit: contain; /* para que no se deforme */
 }
 
 .title {
@@ -196,7 +174,7 @@
 
 .inspirationText {
   position: absolute;
-  bottom: 30px;
+  bottom: 5px;
   left: 0;
   right: 0;
   text-align: center;
