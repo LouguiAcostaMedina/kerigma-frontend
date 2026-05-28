@@ -1,23 +1,8 @@
 // Constantes para el sistema de gestión de iglesia
-
-// URLs de la API - Cambiar por tu URL de producción
-export const API_BASE_URL = 'http://localhost:8080/api';
-
-// Roles del sistema basados en la jerarquía definida
-export const ROLES = {
-  ADMIN: 'administrador',
-  DIRECTOR: 'director', 
-  LEADER: 'lider',
-  READER: 'lector'
-};
-
-// Mapeo de roles para mostrar en la UI
-export const ROLE_LABELS = {
-  [ROLES.ADMIN]: 'Administrador',
-  [ROLES.DIRECTOR]: 'Director',
-  [ROLES.LEADER]: 'Líder', 
-  [ROLES.READER]: 'Lector'
-};
+// Importamos los roles desde su propio archivo para mantener el código DRY (Don't Repeat Yourself)
+import { ROLES, ROLE_LABELS } from './roles';
+// 🔄 CAMBIO CLAVE: Ahora es dinámica. Si no existe la variable de entorno, usa el fallback local.
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
 
 // Configuración de semanas para reportes trimestrales
 export const WEEKS_CONFIG = {
