@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# ==============================================
+# ARCHIVOS DE ENTORNO Y CONFIGURACIÓN
+# ==============================================
+.env
+.env.local
+.env.production
+.env.development
+.env.test
