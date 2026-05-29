@@ -17,6 +17,7 @@ import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import ChangePassword from '@/pages/ChangePassword';
 import Profile from '@/pages/Profile';
+import Configuration from '@/pages/Configuration';
 
 // Dashboard
 import Dashboard from '@/pages/Dashboard';
@@ -35,13 +36,15 @@ import Users from '@/pages/Users';
 import NotFound from '@/pages/NotFound';
 import Unauthorized from '@/pages/Unauthorized';
 
+
 const AppRouter = () => {
   const { isLoading } = useAuth();
 
   if (isLoading) {
     return <Loading fullScreen />;
   }
-
+// Definimos un array con todos los roles incluyendo el formato que manda el backend ('admin')
+  const allRoles = ['Lector', 'Líder', 'Director', 'Administrador', 'admin'];
   return (
     <Routes>
       {/* Rutas públicas (sin autenticación) */}
@@ -100,7 +103,14 @@ const AppRouter = () => {
             </ProtectedRoute>
           } 
         />
-
+<Route 
+  path="configuration" 
+  element={
+    <ProtectedRoute roles={['Administrador', 'admin']}>
+      <Configuration />
+    </ProtectedRoute>
+  } 
+/>
         {/* Miembros - Líder, Director y Administrador */}
         <Route 
           path="members" 

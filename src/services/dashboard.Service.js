@@ -17,6 +17,8 @@ export const dashboardService = {
     }
   },
 
+
+  
   // Obtener datos para gráficos de crecimiento mensual
   getMonthlyGrowth: async (year = new Date().getFullYear()) => {
     try {
