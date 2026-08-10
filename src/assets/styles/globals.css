@@ -1,0 +1,203 @@
+/**
+ * Estilos globales del Sistema de Gestión Misionera
+ * Componentes base: cards, páginas, tablas, formularios y utilidades.
+ * Todos los valores provienen de los tokens de src/index.css
+ * (temas oscuro/claro vía data-theme).
+ */
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+.card {
+  background: var(--card-bg);
+  border: var(--card-border);
+  border-radius: var(--card-radius);
+  padding: var(--card-padding);
+}
+
+.card--flat {
+  box-shadow: none;
+}
+
+.card--elevated {
+  box-shadow: var(--shadow-lg);
+}
+
+.card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.card__title {
+  font-family: var(--font-serif);
+  font-size: var(--text-h3);
+  font-weight: 700;
+  margin: 0;
+}
+
+/* ============================================================
+   PÁGINAS
+   ============================================================ */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.page__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.page__title {
+  font-size: var(--text-h1);
+  font-family: var(--font-serif);
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.page__subtitle {
+  color: var(--color-text-muted);
+  font-size: var(--text-p);
+  margin: var(--space-xs) 0 0;
+}
+
+/* ============================================================
+   TABLAS
+   ============================================================ */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: var(--text-p);
+  color: var(--color-text);
+}
+
+.table thead th {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.table tbody td {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--color-border-soft);
+  vertical-align: middle;
+}
+
+.table tbody tr {
+  background: var(--color-bg);
+  transition: background-color 0.15s ease;
+}
+
+.table tbody tr:hover {
+  background: var(--color-surface-alt);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table--striped tbody tr:nth-child(even) {
+  background: var(--color-surface);
+}
+
+.table--striped tbody tr:nth-child(even):hover {
+  background: var(--color-surface-alt);
+}
+
+/* ============================================================
+   FORMULARIOS
+   ============================================================ */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.form-field__label {
+  font-size: var(--text-small);
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.form-field__label--required::after {
+  content: ' *';
+  color: var(--color-danger);
+}
+
+input,
+select,
+textarea {
+  color-scheme: inherit;
+}
+
+input[type='date'],
+input[type='datetime-local'],
+input[type='time'],
+input[type='color'] {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+}
+
+.badge--success {
+  color: var(--color-success);
+  background: var(--color-success-soft);
+  border-color: var(--color-success-soft);
+}
+
+.badge--danger {
+  color: var(--color-danger);
+  background: var(--color-danger-soft);
+  border-color: var(--color-danger-soft);
+}
+
+.badge--warning {
+  color: var(--color-warning);
+  background: var(--color-warning-soft);
+  border-color: var(--color-warning-soft);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-lg) var(--space-sm);
+  color: var(--color-text-muted);
+  text-align: center;
+}

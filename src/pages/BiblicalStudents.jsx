@@ -6,9 +6,12 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useStudents } from '@/hooks/useStudents';
+import { ROLES } from '@/constants';
 import DataTable from '@/components/common/DataTable';
 import Modal from '@/components/common/Modal';
 import Button from '@/components/common/Button';
+import BulkImportModal from '@/components/common/BulkImportModal';
+import StudentForm from '@/components/forms/StudentForm';
 import { 
   FaPlus, 
   FaDownload, 
@@ -26,23 +29,20 @@ import { showNotification } from '@/utils/notifications';
 import styles from './BiblicalStudents.module.css';
 
 const BiblicalStudents = () => {
-  const { user } = useAuth();
+  const { hasRole } = useAuth();
   const {
     students,
     loading,
     pagination,
     fetchStudents,
+    createStudent,
+    updateStudent,
     deleteStudent,
     deleteMultipleStudents,
-    updateStudentStatus,
-    updateStudentLevel,
-    markAsBaptized,
-    convertToMember,
     graduateStudent,
     sendReminder,
     exportToExcel,
-    exportToPDF,
-    importFromExcel
+    exportToPDF
   } = useStudents();
 
   // Estados locales
@@ -51,9 +51,8 @@ const BiblicalStudents = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showProgressModal, setShowProgressModal] = useState(false);
-  const [showBaptismModal, setShowBaptismModal] = useState(false);
-  const [showConvertModal, setShowConvertModal] = useState(false);
+  const [, setShowProgressModal] = useState(false);
+  const [, setShowBaptismModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
@@ -75,6 +74,7 @@ const BiblicalStudents = () => {
   // Cargar datos iniciales
   useEffect(() => {
     loadStudents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, sortConfig]);
 
   // Función para cargar estudiantes
@@ -253,24 +253,6 @@ const BiblicalStudents = () => {
     }
   };
 
-  const handleStatusChange = async (student, newStatus) => {
-    try {
-      await updateStudentStatus(student.id, newStatus);
-      await loadStudents(pagination.currentPage);
-    } catch (error) {
-      console.error('Error updating student status:', error);
-    }
-  };
-
-  const handleLevelChange = async (student, newLevel) => {
-    try {
-      await updateStudentLevel(student.id, newLevel);
-      await loadStudents(pagination.currentPage);
-    } catch (error) {
-      console.error('Error updating student level:', error);
-    }
-  };
-
   const handleViewProgress = (student) => {
     setSelectedStudent(student);
     setShowProgressModal(true);
@@ -279,11 +261,6 @@ const BiblicalStudents = () => {
   const handleMarkBaptized = (student) => {
     setSelectedStudent(student);
     setShowBaptismModal(true);
-  };
-
-  const handleConvertToMember = (student) => {
-    setSelectedStudent(student);
-    setShowConvertModal(true);
   };
 
   const handleGraduate = async (student) => {
@@ -325,39 +302,52 @@ const BiblicalStudents = () => {
     }
   };
 
-  const handleImport = async (file) => {
+  const handleCreateStudent = async (data) => {
     try {
-      await importFromExcel(file);
-      setShowImportModal(false);
+      await createStudent(data);
+      setShowCreateModal(false);
       await loadStudents(1);
     } catch (error) {
-      console.error('Error importing students:', error);
+      console.error('Error creating student:', error);
     }
   };
 
-  // Calcular estadísticas
+  const handleUpdateStudent = async (data) => {
+    try {
+      await updateStudent(selectedStudent.id, data);
+      setShowEditModal(false);
+      setSelectedStudent(null);
+      await loadStudents(pagination.currentPage);
+    } catch (error) {
+      console.error('Error updating student:', error);
+    }
+  };
+
+// Calcular estadísticas con salvaguardas contra valores nulos o indefinidos
   const stats = useMemo(() => {
+    const safeStudents = Array.isArray(students) ? students : [];
+    const totalCount = pagination?.total || safeStudents.length;
+
     return {
-      total: pagination.total,
-      active: students.filter(s => s.status === 'active').length,
-      baptized: students.filter(s => s.baptized).length,
-      graduated: students.filter(s => s.status === 'graduated').length,
+      total: totalCount,
+      active: safeStudents.filter(s => s?.status === 'active').length,
+      baptized: safeStudents.filter(s => s?.baptized).length,
+      graduated: safeStudents.filter(s => s?.status === 'graduated').length,
       averageProgress: Math.round(
-        students.reduce((sum, s) => sum + (s.progress || 0), 0) / 
-        (students.length || 1)
+        safeStudents.reduce((sum, s) => sum + (s?.progress || 0), 0) / 
+        (safeStudents.length || 1)
       )
     };
-  }, [students, pagination.total]);
+  }, [students, pagination]);
 
   // Verificar permisos
-  const canCreate = ['administrador', 'director', 'lider'].includes(user?.role);
-  const canEdit = ['administrador', 'director', 'lider'].includes(user?.role);
-  const canDelete = ['administrador', 'director'].includes(user?.role);
+  const canCreate = [ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER].some(r => hasRole(r));
+  const canEdit = [ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER].some(r => hasRole(r));
+  const canDelete = [ROLES.ADMIN, ROLES.DIRECTOR].some(r => hasRole(r));
   const canExport = true; // Todos pueden exportar
-  const canImport = ['administrador', 'director'].includes(user?.role);
-  const canBaptize = ['administrador', 'director', 'lider'].includes(user?.role);
-  const canConvert = ['administrador', 'director'].includes(user?.role);
-  const canGraduate = ['administrador', 'director', 'lider'].includes(user?.role);
+  const canImport = [ROLES.ADMIN, ROLES.DIRECTOR].some(r => hasRole(r));
+  const canBaptize = [ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER].some(r => hasRole(r));
+  const canGraduate = [ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER].some(r => hasRole(r));
 
   return (
     <div className={styles.studentsPage}>
@@ -626,8 +616,62 @@ const BiblicalStudents = () => {
         </Modal>
       )}
 
-      {/* Aquí irían los otros modales: Create, Edit, View, Progress, Baptism, Convert, Import */}
-      {/* Los implementaremos en el siguiente paso si es necesario */}
+      <BulkImportModal
+        isOpen={showImportModal}
+        onClose={() => setShowImportModal(false)}
+        entity="students"
+        onImported={() => loadStudents(1)}
+      />
+
+      {/* Modal crear estudiante */}
+      <Modal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        title="Nuevo Estudiante"
+        size="large"
+      >
+        <StudentForm
+          mode="create"
+          onSubmit={handleCreateStudent}
+          onCancel={() => setShowCreateModal(false)}
+          isLoading={loading}
+        />
+      </Modal>
+
+      {/* Modal editar estudiante */}
+      <Modal
+        isOpen={showEditModal}
+        onClose={() => { setShowEditModal(false); setSelectedStudent(null); }}
+        title="Editar Estudiante"
+        size="large"
+      >
+        {selectedStudent && (
+          <StudentForm
+            mode="edit"
+            initialData={selectedStudent}
+            onSubmit={handleUpdateStudent}
+            onCancel={() => { setShowEditModal(false); setSelectedStudent(null); }}
+            isLoading={loading}
+          />
+        )}
+      </Modal>
+
+      {/* Modal ver estudiante */}
+      <Modal
+        isOpen={showViewModal}
+        onClose={() => { setShowViewModal(false); setSelectedStudent(null); }}
+        title="Detalles del Estudiante"
+        size="large"
+      >
+        {selectedStudent && (
+          <StudentForm
+            mode="view"
+            initialData={selectedStudent}
+            onCancel={() => { setShowViewModal(false); setSelectedStudent(null); }}
+            isLoading={loading}
+          />
+        )}
+      </Modal>
     </div>
   );
 };

@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { FaUsers, FaUserPlus, FaFilter, FaDownload, FaTrash, FaEdit, FaEye, FaEnvelope, FaKey, FaToggleOn, FaToggleOff, FaSearch, FaSort } from 'react-icons/fa';
+import { FaUsers, FaUserPlus, FaFilter, FaDownload, FaUpload, FaTrash, FaEdit, FaEye, FaEnvelope, FaKey, FaToggleOn, FaToggleOff, FaSearch, FaSort } from 'react-icons/fa';
 import { useUsers } from '../hooks/useUsers';
 import { useChurches } from '../hooks/useChurches';
 import DataTable from '../components/common/DataTable';
@@ -15,6 +15,7 @@ import Loading from '../components/common/Loading';
 import UserForm from '../components/forms/UserForm';
 import UserStats from '../components/forms/UserStats';
 import BulkActions from '../components/forms/BulkActions';
+import BulkImportModal from '../components/common/BulkImportModal';
 import styles from './Users.module.css';
 
 const Users = () => {
@@ -35,7 +36,6 @@ const Users = () => {
     canCreate,
     canUpdate,
     canDelete,
-    fetchUsers,
     createUser,
     updateUser,
     deleteUser,
@@ -63,6 +63,7 @@ const Users = () => {
   
   const [showFilters, setShowFilters] = useState(false);
   const [exportLoading, setExportLoading] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
 
   // Cargar iglesias para los filtros
   useEffect(() => {
@@ -336,10 +337,6 @@ const Users = () => {
     </div>
   );
 
-  if (loading && users.length === 0) {
-    return <Loading message="Cargando usuarios..." />;
-  }
-
   return (
     <div className={styles.usersPage}>
       {/* Header */}
@@ -383,6 +380,16 @@ const Users = () => {
 
           {canCreate && (
             <Button
+              variant="outline"
+              onClick={() => setShowImportModal(true)}
+              icon={<FaUpload />}
+            >
+              Importar
+            </Button>
+          )}
+
+          {canCreate && (
+            <Button
               variant="primary"
               onClick={openCreateModal}
               icon={<FaUserPlus />}
@@ -419,17 +426,21 @@ const Users = () => {
           </div>
         )}
 
-        <DataTable
-          data={users}
-          columns={columns}
-          loading={loading}
-          pagination={pagination}
-          onPageChange={changePage}
-          onPageSizeChange={changePageSize}
-          sortConfig={sortConfig}
-          onSort={sort}
-          emptyMessage="No se encontraron usuarios"
-        />
+        {loading && users.length === 0 ? (
+          <Loading message="Cargando usuarios..." />
+        ) : (
+          <DataTable
+            data={users || []}
+            columns={columns}
+            loading={loading}
+            pagination={pagination}
+            onPageChange={changePage}
+            onPageSizeChange={changePageSize}
+            sortConfig={sortConfig}
+            onSort={sort}
+            emptyMessage="No se encontraron usuarios"
+          />
+        )}
       </div>
 
       {/* Modal de usuario */}
@@ -454,6 +465,13 @@ const Users = () => {
           onCancel={closeModal}
         />
       </Modal>
+
+      <BulkImportModal
+        isOpen={showImportModal}
+        onClose={() => setShowImportModal(false)}
+        entity="users"
+        onImported={refreshData}
+      />
     </div>
   );
 };

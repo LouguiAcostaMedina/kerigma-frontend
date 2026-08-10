@@ -6,15 +6,17 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useMembers } from '@/hooks/useMembers';
+import { ROLES } from '@/constants';
 import DataTable from '@/components/common/DataTable';
 import Modal from '@/components/common/Modal';
 import Button from '@/components/common/Button';
+import BulkImportModal from '@/components/common/BulkImportModal';
+import MemberForm from '@/components/forms/MemberForm';
 import { 
   FaPlus, 
   FaDownload, 
   FaUpload, 
   FaSearch, 
-  FaFilter,
   FaUsers,
   FaTrash
 } from 'react-icons/fa';
@@ -22,18 +24,18 @@ import { showNotification } from '@/utils/notifications';
 import styles from './Members.module.css';
 
 const Members = () => {
-  const { user } = useAuth();
+  const { hasRole } = useAuth();
   const {
     members,
     loading,
     pagination,
     fetchMembers,
+    createMember,
+    updateMember,
     deleteMember,
     deleteMultipleMembers,
-    updateMemberStatus,
     exportToExcel,
-    exportToPDF,
-    importFromExcel
+    exportToPDF
   } = useMembers();
 
   // Estados locales
@@ -63,6 +65,7 @@ const Members = () => {
   // Cargar datos iniciales
   useEffect(() => {
     loadMembers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, sortConfig]);
 
   // Función para cargar miembros
@@ -210,15 +213,6 @@ const Members = () => {
     }
   };
 
-  const handleStatusChange = async (member, newStatus) => {
-    try {
-      await updateMemberStatus(member.id, newStatus);
-      await loadMembers(pagination.currentPage);
-    } catch (error) {
-      console.error('Error updating member status:', error);
-    }
-  };
-
   const handleExportExcel = async () => {
     try {
       await exportToExcel({ ...filters, search: searchTerm });
@@ -235,22 +229,33 @@ const Members = () => {
     }
   };
 
-  const handleImport = async (file) => {
+  const handleCreateMember = async (data) => {
     try {
-      await importFromExcel(file);
-      setShowImportModal(false);
+      await createMember(data);
+      setShowCreateModal(false);
       await loadMembers(1);
     } catch (error) {
-      console.error('Error importing members:', error);
+      console.error('Error creating member:', error);
+    }
+  };
+
+  const handleUpdateMember = async (data) => {
+    try {
+      await updateMember(selectedMember.id, data);
+      setShowEditModal(false);
+      setSelectedMember(null);
+      await loadMembers(pagination.currentPage);
+    } catch (error) {
+      console.error('Error updating member:', error);
     }
   };
 
   // Verificar permisos
-  const canCreate = ['administrador', 'director', 'lider'].includes(user?.role);
-  const canEdit = ['administrador', 'director', 'lider'].includes(user?.role);
-  const canDelete = ['administrador', 'director'].includes(user?.role);
+  const canCreate = [ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER].some(r => hasRole(r));
+  const canEdit = [ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER].some(r => hasRole(r));
+  const canDelete = [ROLES.ADMIN, ROLES.DIRECTOR].some(r => hasRole(r));
   const canExport = true; // Todos pueden exportar
-  const canImport = ['administrador', 'director'].includes(user?.role);
+  const canImport = [ROLES.ADMIN, ROLES.DIRECTOR].some(r => hasRole(r));
 
   return (
     <div className={styles.membersPage}>
@@ -431,8 +436,62 @@ const Members = () => {
         </Modal>
       )}
 
-      {/* Aquí irían los otros modales: Create, Edit, View, Import */}
-      {/* Los implementaremos en el siguiente paso */}
+      <BulkImportModal
+        isOpen={showImportModal}
+        onClose={() => setShowImportModal(false)}
+        entity="members"
+        onImported={() => loadMembers(1)}
+      />
+
+      {/* Modal crear miembro */}
+      <Modal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        title="Nuevo Miembro"
+        size="large"
+      >
+        <MemberForm
+          mode="create"
+          onSubmit={handleCreateMember}
+          onCancel={() => setShowCreateModal(false)}
+          isLoading={loading}
+        />
+      </Modal>
+
+      {/* Modal editar miembro */}
+      <Modal
+        isOpen={showEditModal}
+        onClose={() => { setShowEditModal(false); setSelectedMember(null); }}
+        title="Editar Miembro"
+        size="large"
+      >
+        {selectedMember && (
+          <MemberForm
+            mode="edit"
+            initialData={selectedMember}
+            onSubmit={handleUpdateMember}
+            onCancel={() => { setShowEditModal(false); setSelectedMember(null); }}
+            isLoading={loading}
+          />
+        )}
+      </Modal>
+
+      {/* Modal ver miembro */}
+      <Modal
+        isOpen={showViewModal}
+        onClose={() => { setShowViewModal(false); setSelectedMember(null); }}
+        title="Detalles del Miembro"
+        size="large"
+      >
+        {selectedMember && (
+          <MemberForm
+            mode="view"
+            initialData={selectedMember}
+            onCancel={() => { setShowViewModal(false); setSelectedMember(null); }}
+            isLoading={loading}
+          />
+        )}
+      </Modal>
     </div>
   );
 };

@@ -1,13 +1,25 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { fileURLToPath } from 'url'
 
 export default defineConfig({
   plugins: [
     react({
       include: [/\.js$/, /\.jsx$/] // <-- ajuste importante
+    }),
+    nodePolyfills({
+      // Los polyfills solo se inyectan cuando un módulo los requiere en el cliente
+      include: ['stream', 'buffer', 'process', 'util', 'events', 'crypto', 'zlib', 'path', 'fs'],
+      globals: {
+        process: true,
+        Buffer: true
+      }
     })
   ],
+  define: {
+    'process.env': {}
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -27,6 +39,17 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: true
+    sourcemap: true,
+    chunkSizeWarningLimit: 1100,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          charts: ['chart.js', 'react-chartjs-2'],
+          xlsx: ['xlsx-js-style'],
+          pdf: ['jspdf', 'jspdf-autotable', 'html2canvas']
+        }
+      }
+    }
   }
 })

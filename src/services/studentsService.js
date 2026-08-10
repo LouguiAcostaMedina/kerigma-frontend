@@ -242,8 +242,7 @@ export const studentsService = {
   // Exportar estudiantes a Excel
   exportToExcel: async (filters = {}) => {
     try {
-      const response = await apiClient.get('/students/export/excel', {
-        params: filters,
+      const response = await apiClient.post('/students/export/excel', filters, {
         responseType: 'blob'
       });
       return response.data;
@@ -256,8 +255,7 @@ export const studentsService = {
   // Exportar estudiantes a PDF
   exportToPDF: async (filters = {}) => {
     try {
-      const response = await apiClient.get('/students/export/pdf', {
-        params: filters,
+      const response = await apiClient.post('/students/export/excel', filters, {
         responseType: 'blob'
       });
       return response.data;

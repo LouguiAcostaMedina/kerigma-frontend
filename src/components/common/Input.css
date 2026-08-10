@@ -11,12 +11,12 @@
 .input-label {
   font-size: 14px;
   font-weight: 500;
-  color: #374151;
+  color: var(--color-text);
   margin-bottom: 4px;
 }
 
 .input-label--required {
-  color: #EF4444;
+  color: var(--color-danger);
   margin-left: 2px;
 }
 
@@ -30,23 +30,23 @@
 /* Estilos base del input */
 .input-field {
   width: 100%;
-  border: 1px solid #D1D5DB;
-  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   font-size: 14px;
   font-family: inherit;
   transition: all 0.2s ease-in-out;
   outline: none;
-  background-color: #ffffff;
-  color: #374151;
+  background-color: var(--color-surface);
+  color: var(--color-text);
 }
 
 .input-field:focus {
-  border-color: #3B82F6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
 }
 
 .input-field::placeholder {
-  color: #9CA3AF;
+  color: var(--color-text-muted);
 }
 
 /* Tamaños del input */
@@ -66,44 +66,40 @@
 }
 
 /* Variantes del input */
-.input-field--default {
-  /* Estilos por defecto ya aplicados */
-}
-
 .input-field--outline {
   border-width: 2px;
 }
 
 .input-field--filled {
-  background-color: #F9FAFB;
+  background-color: var(--color-surface-alt);
   border-color: transparent;
 }
 
 .input-field--filled:focus {
-  background-color: #ffffff;
-  border-color: #3B82F6;
+  background-color: var(--color-surface);
+  border-color: var(--color-accent);
 }
 
 /* Estados del input */
 .input-field--error {
-  border-color: #EF4444;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px var(--color-danger-soft);
 }
 
 .input-field--focused {
-  border-color: #3B82F6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
 }
 
 .input-field--disabled {
-  background-color: #F3F4F6;
-  color: #9CA3AF;
+  background-color: var(--color-border-soft);
+  color: var(--color-text-muted);
   cursor: not-allowed;
   opacity: 0.6;
 }
 
 .input-field--readonly {
-  background-color: #F9FAFB;
+  background-color: var(--color-surface-alt);
   cursor: default;
 }
 
@@ -124,7 +120,7 @@
   justify-content: center;
   width: 16px;
   height: 16px;
-  color: #6B7280;
+  color: var(--color-text-secondary);
   pointer-events: none;
   z-index: 1;
 }
@@ -141,73 +137,73 @@
   cursor: pointer;
   pointer-events: all;
   padding: 4px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   transition: background-color 0.2s ease;
 }
 
 .input-icon--password:hover {
-  background-color: #F3F4F6;
+  background-color: var(--color-border-soft);
 }
 
 /* TextArea */
 .textarea-field {
   width: 100%;
-  border: 1px solid #D1D5DB;
-  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   padding: 8px 12px;
   font-size: 14px;
   font-family: inherit;
   transition: all 0.2s ease-in-out;
   outline: none;
-  background-color: #ffffff;
-  color: #374151;
+  background-color: var(--color-surface);
+  color: var(--color-text);
   resize: vertical;
   min-height: 80px;
 }
 
 .textarea-field:focus {
-  border-color: #3B82F6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
 }
 
 .textarea-field::placeholder {
-  color: #9CA3AF;
+  color: var(--color-text-muted);
 }
 
 .textarea-field--error {
-  border-color: #EF4444;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px var(--color-danger-soft);
 }
 
 .textarea-field--focused {
-  border-color: #3B82F6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
 }
 
 .textarea-field--disabled {
-  background-color: #F3F4F6;
-  color: #9CA3AF;
+  background-color: var(--color-border-soft);
+  color: var(--color-text-muted);
   cursor: not-allowed;
   opacity: 0.6;
 }
 
 .textarea-field--readonly {
-  background-color: #F9FAFB;
+  background-color: var(--color-surface-alt);
   cursor: default;
 }
 
 /* Select */
 .select-field {
   width: 100%;
-  border: 1px solid #D1D5DB;
-  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   padding: 8px 12px;
   font-size: 14px;
   font-family: inherit;
   transition: all 0.2s ease-in-out;
   outline: none;
-  background-color: #ffffff;
-  color: #374151;
+  background-color: var(--color-surface);
+  color: var(--color-text);
   cursor: pointer;
   appearance: none;
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
@@ -218,18 +214,18 @@
 }
 
 .select-field:focus {
-  border-color: #3B82F6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
 }
 
 .select-field--error {
-  border-color: #EF4444;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px var(--color-danger-soft);
 }
 
 .select-field--disabled {
-  background-color: #F3F4F6;
-  color: #9CA3AF;
+  background-color: var(--color-border-soft);
+  color: var(--color-text-muted);
   cursor: not-allowed;
   opacity: 0.6;
 }
@@ -253,9 +249,9 @@
   appearance: none;
   width: 16px;
   height: 16px;
-  border: 1px solid #D1D5DB;
-  border-radius: 4px;
-  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   position: relative;
@@ -264,13 +260,13 @@
 
 .checkbox-field:focus {
   outline: none;
-  border-color: #3B82F6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
 }
 
 .checkbox-field:checked {
-  background-color: #3B82F6;
-  border-color: #3B82F6;
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
 }
 
 .checkbox-checkmark {
@@ -286,18 +282,18 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: white;
+  color: var(--color-on-accent);
   font-size: 12px;
   font-weight: bold;
 }
 
 .checkbox-text {
   font-size: 14px;
-  color: #374151;
+  color: var(--color-text);
 }
 
 .checkbox-field--error {
-  border-color: #EF4444;
+  border-color: var(--color-danger);
 }
 
 .checkbox-field--disabled {
@@ -317,7 +313,7 @@
 
 .input-error {
   font-size: 12px;
-  color: #EF4444;
+  color: var(--color-danger);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -325,7 +321,7 @@
 
 .input-helper {
   font-size: 12px;
-  color: #6B7280;
+  color: var(--color-text-secondary);
 }
 
 /* Responsive */
@@ -334,65 +330,16 @@
     padding: 10px 14px;
     font-size: 16px; /* Evita zoom en iOS */
   }
-  
+
   .input-field--medium {
     font-size: 16px; /* Evita zoom en iOS */
   }
-  
+
   .select-field {
     font-size: 16px; /* Evita zoom en iOS */
   }
-}
 
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
-  .input-label {
-    color: #D1D5DB;
-  }
-  
-  .input-field,
-  .textarea-field,
-  .select-field {
-    background-color: #1F2937;
-    border-color: #4B5563;
-    color: #F9FAFB;
-  }
-  
-  .input-field::placeholder,
-  .textarea-field::placeholder {
-    color: #6B7280;
-  }
-  
-  .input-field:focus,
-  .textarea-field:focus,
-  .select-field:focus {
-    border-color: #3B82F6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-  }
-  
-  .input-field--filled,
-  .textarea-field--readonly,
-  .input-field--readonly {
-    background-color: #374151;
-  }
-  
-  .input-field--disabled,
-  .textarea-field--disabled,
-  .select-field--disabled {
-    background-color: #374151;
-    color: #6B7280;
-  }
-  
-  .checkbox-text {
-    color: #D1D5DB;
-  }
-  
-  .checkbox-field {
-    background-color: #1F2937;
-    border-color: #4B5563;
-  }
-  
-  .input-helper {
-    color: #9CA3AF;
+  .textarea-field {
+    font-size: 16px; /* Evita zoom en iOS */
   }
 }

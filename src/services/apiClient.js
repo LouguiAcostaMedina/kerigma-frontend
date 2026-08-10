@@ -23,50 +23,38 @@ export const apiClient = {
 
   // Métodos específicos para diferentes tipos de contenido
   postForm: async (url, formData, config = {}) => {
-    try {
-      const response = await api.post(url, formData, {
-        ...config,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          ...config.headers
-        }
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await api.post(url, formData, {
+      ...config,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        ...config.headers
+      }
+    });
+    return response.data;
   },
 
   // Método para descargar archivos (Excel, PDF)
   downloadFile: async (url, config = {}) => {
-    try {
-      const response = await api.get(url, {
-        ...config,
-        responseType: 'blob'
-      });
-      return response.data; // Retorna el blob directamente
-    } catch (error) {
-      throw error;
-    }
+    const response = await api.get(url, {
+      ...config,
+      responseType: 'blob'
+    });
+    return response.data; // Retorna el blob directamente
   },
 
   // Método para subir archivos
   uploadFile: async (url, file, config = {}) => {
     const formData = new FormData();
     formData.append('file', file);
-    
-    try {
-      const response = await api.post(url, formData, {
-        ...config,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          ...config.headers
-        }
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+
+    const response = await api.post(url, formData, {
+      ...config,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        ...config.headers
+      }
+    });
+    return response.data;
   },
 
   // Método con cancelación para requests largos
@@ -112,8 +100,9 @@ export const ENDPOINTS = {
   // Autenticación
   AUTH: {
     LOGIN: '/auth/login',
-    REGISTER: '/auth/register',
+    REGISTER: '/auth/signup',
     REFRESH: '/auth/refresh',
+    ME: '/auth/me',
     LOGOUT: '/auth/logout',
     CHANGE_PASSWORD: '/auth/change-password',
     PROFILE: '/auth/profile'

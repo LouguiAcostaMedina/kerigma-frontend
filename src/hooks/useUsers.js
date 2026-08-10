@@ -60,7 +60,7 @@ export const useUsers = (initialFilters = {}) => {
   const [cache, setCache] = useState(new Map());
   const [lastFetch, setLastFetch] = useState(null);
 
-  const { user: currentUser, hasPermission } = useAuth();
+  const { hasPermission } = useAuth();
 
   // Cargar usuarios con paginación y filtros
   const fetchUsers = useCallback(async (page = 1, customFilters = {}) => {

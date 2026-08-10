@@ -191,7 +191,7 @@ export const ChurchForm = ({
       newErrors.email = 'El email no es válido';
     }
 
-    if (formData.phone && !/^\+?[\d\s\-\(\)]+$/.test(formData.phone)) {
+    if (formData.phone && !/^\+?[\d\s\-()]+$/.test(formData.phone)) {
       newErrors.phone = 'El teléfono no es válido';
     }
 
@@ -229,8 +229,8 @@ export const ChurchForm = ({
     onClose();
   };
 
-  const pastors = users.filter(user => user.role === 'pastor' || user.role === 'director');
-  const leaders = users.filter(user => ['leader', 'pastor', 'director'].includes(user.role));
+  const pastors = users.filter(user => ['director', 'admin', 'super_admin'].includes(user.role));
+  const leaders = users.filter(user => ['leader', 'director', 'admin', 'super_admin'].includes(user.role));
 
   const tabs = [
     { id: 'basic', label: 'Información Básica', icon: '🏛️' },
@@ -407,7 +407,7 @@ export const ChurchForm = ({
                     <option value="">Seleccionar pastor...</option>
                     {pastors.map(pastor => (
                       <option key={pastor.id} value={pastor.id}>
-                        {pastor.name} {pastor.lastName}
+                        {pastor.name || pastor.fullName}
                       </option>
                     ))}
                   </select>
@@ -424,7 +424,7 @@ export const ChurchForm = ({
                     <option value="">Seleccionar líder...</option>
                     {leaders.map(leader => (
                       <option key={leader.id} value={leader.id}>
-                        {leader.name} {leader.lastName} ({leader.role})
+                        {leader.name || leader.fullName} ({leader.role})
                       </option>
                     ))}
                   </select>

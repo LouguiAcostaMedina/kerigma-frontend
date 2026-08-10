@@ -3,15 +3,15 @@
  * Componente avanzado con visualización en tiempo real y configuraciones granulares
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useReports } from '@/hooks/useReports';
 import  Button  from '@/components/common/Button';
 import  Loading  from '@/components/common/Loading';
 import { showNotification } from '@/utils/notifications';
 import {
   FiPlus, FiTrash2, FiEye, FiSave, FiSettings, FiMove,
-  FiBarChart, FiPieChart, FiTrendingUp, FiTable,
-  FiFilter, FiCalendar, FiDatabase, FiLayers
+  FiBarChart2, FiPieChart, FiTrendingUp, FiTable,
+  FiFilter, FiDatabase, FiLayers
 } from 'react-icons/fi';
 import styles from './ReportBuilder.module.css';
 
@@ -19,7 +19,6 @@ export const ReportBuilder = ({ reportId = null, onSave, onCancel }) => {
   // ===================== HOOKS =====================
   const {
     availableFields,
-    aggregationFunctions,
     reportPreview,
     previewing,
     fetchAvailableFields,
@@ -51,7 +50,7 @@ export const ReportBuilder = ({ reportId = null, onSave, onCancel }) => {
   const [draggedField, setDraggedField] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [hasChanges, setHasChanges] = useState(false);
+  const [, setHasChanges] = useState(false);
 
   // ===================== ENTIDADES DISPONIBLES =====================
   const entities = [
@@ -65,7 +64,7 @@ export const ReportBuilder = ({ reportId = null, onSave, onCancel }) => {
   // ===================== TIPOS DE GRÁFICO =====================
   const chartTypes = [
     { key: 'table', label: 'Tabla', icon: <FiTable /> },
-    { key: 'bar', label: 'Barras', icon: <FiBarChart3 /> },
+    { key: 'bar', label: 'Barras', icon: <FiBarChart2 /> },
     { key: 'line', label: 'Líneas', icon: <FiTrendingUp /> },
     { key: 'pie', label: 'Circular', icon: <FiPieChart /> },
     { key: 'area', label: 'Área', icon: <FiTrendingUp /> },
@@ -77,13 +76,14 @@ export const ReportBuilder = ({ reportId = null, onSave, onCancel }) => {
     { key: 'basic', label: 'Información Básica', icon: <FiSettings /> },
     { key: 'data', label: 'Selección de Datos', icon: <FiDatabase /> },
     { key: 'filters', label: 'Filtros', icon: <FiFilter /> },
-    { key: 'visualization', label: 'Visualización', icon: <FiBarChart3 /> },
+    { key: 'visualization', label: 'Visualización', icon: <FiBarChart2 /> },
     { key: 'preview', label: 'Vista Previa', icon: <FiEye /> }
   ];
 
   // ===================== EFECTOS =====================
   useEffect(() => {
     loadInitialData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -606,7 +606,7 @@ export const ReportBuilder = ({ reportId = null, onSave, onCancel }) => {
                   <div className={styles.previewData}>
                     {/* Aquí se mostraría el preview real del reporte */}
                     <div className={styles.previewPlaceholder}>
-                      <FiBarChart3 />
+                      <FiBarChart2 />
                       <h4>Vista Previa del Reporte</h4>
                       <p>Configuración completada correctamente</p>
                       <ul>

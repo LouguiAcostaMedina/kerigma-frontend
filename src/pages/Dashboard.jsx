@@ -1,98 +1,90 @@
 /**
  * Página Principal del Dashboard
- * Muestra el dashboard con métricas, estadísticas y gráficos según el rol del usuario
+ * Muestra KPIs, pilares espirituales del trimestre y comparativa de metas
  */
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { useDashboard } from '@/hooks/useDashboard';
-import DashboardStats from '@/components/dashboard/DashboardStats';
-import DashboardCharts from '@/components/dashboard/DashboardCharts';
+import { dashboardService } from '@/services/dashboard.Service';
+import DashboardKpis from '@/components/dashboard/DashboardKpis';
+import PillarGauge from '@/components/dashboard/PillarGauge';
+import GoalsComparisonChart from '@/components/dashboard/GoalsComparisonChart';
+import AttendanceQrModal from '@/components/dashboard/AttendanceQrModal';
 import Loading from '@/components/common/Loading';
-import { showNotification } from '@/utils/notifications';
-import { FaSync, FaCalendarAlt, FaFilter } from 'react-icons/fa';
+import { showToast } from '@/utils/notifications';
+import { exportDashboardExcel, exportDashboardPdf } from '@/utils/dashboardExport';
+import { FaSync, FaHeart, FaCalendarAlt, FaBullseye, FaFilePdf, FaFileExcel, FaQrcode, FaGlobe } from 'react-icons/fa';
 import styles from './Dashboard.module.css';
 
+const PILLAR_CONFIG = {
+  comunion: { color: '#e2a63f', icon: FaHeart },
+  relacionamiento: { color: '#34d399', icon: FaHeart },
+  mision: { color: '#60a5fa', icon: FaHeart }
+};
+
 const Dashboard = () => {
-  const { user } = useAuth();
-  const { 
-    stats, 
-    chartsData, 
-    loading, 
-    error, 
-    fetchDashboardData,
-    fetchChartData 
-  } = useDashboard();
-  
-  const [selectedPeriod, setSelectedPeriod] = useState('month');
+  const { user, hasRole } = useAuth();
+  const [kpis, setKpis] = useState(null);
+  const [spiritual, setSpiritual] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [isQrOpen, setIsQrOpen] = useState(false);
 
-  // Cargar datos iniciales
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        await Promise.all([
-          fetchDashboardData(),
-          fetchChartData(selectedPeriod)
-        ]);
-      } catch (error) {
-        console.error('Error loading dashboard:', error);
-      }
-    };
-
-    loadData();
-  }, [fetchDashboardData, fetchChartData, selectedPeriod]);
-
-  // Manejo de errores
-  useEffect(() => {
-    if (error) {
-      showNotification({
-        type: 'error',
-        title: 'Error',
-        message: 'Error al cargar los datos del dashboard'
-      });
+  const loadData = useCallback(async (force = false) => {
+    if (force) {
+      setRefreshing(true);
+    } else {
+      setLoading(true);
     }
-  }, [error]);
-
-  // Refrescar datos
-  const handleRefresh = async () => {
-    setRefreshing(true);
     try {
-      await Promise.all([
-        fetchDashboardData(),
-        fetchChartData(selectedPeriod)
+      const [kpisData, spiritualData] = await Promise.all([
+        dashboardService.getDashboardKpis(),
+        dashboardService.getSpiritualHealth()
       ]);
-      showNotification({
-        type: 'success',
-        title: 'Actualizado',
-        message: 'Datos actualizados correctamente'
-      });
+      setKpis(kpisData);
+      setSpiritual(spiritualData);
+      return true;
     } catch (error) {
-      showNotification({
-        type: 'error',
-        title: 'Error',
-        message: 'Error al actualizar los datos'
-      });
+      console.error('Error loading dashboard:', error);
+      showToast(error?.message || 'Error al cargar los datos del dashboard', 'error');
+      return false;
     } finally {
+      setLoading(false);
       setRefreshing(false);
     }
-  };
+  }, []);
 
-  // Cambiar período de tiempo
-  const handlePeriodChange = async (period) => {
-    setSelectedPeriod(period);
-    try {
-      await fetchChartData(period);
-    } catch (error) {
-      showNotification({
-        type: 'error',
-        title: 'Error',
-        message: 'Error al cargar datos del período seleccionado'
-      });
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  const handleRefresh = async () => {
+    const success = await loadData(true);
+    if (success) {
+      showToast('Datos actualizados correctamente', 'success');
     }
   };
 
-  // Obtener saludo según la hora
+  const handleExportPdf = () => {
+    try {
+      exportDashboardPdf({ kpis, spiritual });
+      showToast('Reporte PDF descargado correctamente', 'success');
+    } catch (error) {
+      console.error('Error exporting PDF:', error);
+      showToast('Error al exportar el reporte PDF', 'error');
+    }
+  };
+
+  const handleExportExcel = () => {
+    try {
+      exportDashboardExcel({ kpis, spiritual });
+      showToast('Reporte Excel descargado correctamente', 'success');
+    } catch (error) {
+      console.error('Error exporting Excel:', error);
+      showToast('Error al exportar el reporte Excel', 'error');
+    }
+  };
+
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return 'Buenos días';
@@ -100,27 +92,32 @@ const Dashboard = () => {
     return 'Buenas noches';
   };
 
-  // Obtener mensaje según el rol
-  const getRoleMessage = (role) => {
-    const messages = {
-      'administrador': 'Panel de administración completo',
-      'director': 'Vista de director regional',
-      'lider': 'Dashboard de liderazgo',
-      'lector': 'Vista de consulta'
-    };
-    return messages[role] || 'Dashboard';
+  const getRoleMessage = () => {
+    if (hasRole('admin')) return 'Panel de administración completo';
+    if (hasRole('director')) return 'Vista de director regional';
+    if (hasRole('lider')) return 'Dashboard de liderazgo';
+    if (hasRole('lector')) return 'Vista de consulta';
+    return 'Dashboard';
   };
 
   const formatDate = (date) => {
+    if (!date) return '';
     return new Intl.DateTimeFormat('es-ES', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    }).format(date);
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    }).format(new Date(date));
   };
 
-  if (loading && !stats) {
+  const buildPillarDetail = (pillar) => {
+    if (!pillar) return null;
+    if (pillar.activeDisciplePairs !== undefined) {
+      return `${pillar.activeDisciplePairs} parejas · ${pillar.bibleStudentsInProgress} estudiantes en curso`;
+    }
+    return `${pillar.raw} de ${pillar.denominator} miembros`;
+  };
+
+  if (loading && !kpis && !spiritual) {
     return (
       <div className={styles.loadingContainer}>
         <Loading size="large" />
@@ -129,37 +126,58 @@ const Dashboard = () => {
     );
   }
 
+  const pillars = spiritual?.pillars || {};
+  const quarter = spiritual?.quarter;
+
   return (
     <div className={styles.dashboard}>
       {/* Header del Dashboard */}
       <div className={styles.header}>
         <div className={styles.welcomeSection}>
           <h1 className={styles.title}>
-            {getGreeting()}, {user?.firstName || 'Usuario'}
+            {getGreeting()}, {user?.nombre || user?.firstName || 'Usuario'}
           </h1>
           <p className={styles.subtitle}>
-            {getRoleMessage(user?.role)} - {formatDate(new Date())}
+            {getRoleMessage()} - {new Intl.DateTimeFormat('es-ES', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            }).format(new Date())}
           </p>
         </div>
-        
+
         <div className={styles.headerActions}>
-          {/* Selector de período */}
-          <div className={styles.periodSelector}>
-            <FaFilter className={styles.filterIcon} />
-            <select 
-              value={selectedPeriod} 
-              onChange={(e) => handlePeriodChange(e.target.value)}
-              className={styles.periodSelect}
+          <div className={styles.exportBar}>
+            <button
+              onClick={handleExportPdf}
+              className={styles.exportButton}
+              disabled={loading}
+              title="Exportar reporte PDF"
             >
-              <option value="week">Esta semana</option>
-              <option value="month">Este mes</option>
-              <option value="quarter">Este trimestre</option>
-              <option value="year">Este año</option>
-            </select>
+              <FaFilePdf className={styles.exportIcon} />
+              PDF
+            </button>
+            <button
+              onClick={handleExportExcel}
+              className={styles.exportButton}
+              disabled={loading}
+              title="Exportar reporte Excel"
+            >
+              <FaFileExcel className={styles.exportIcon} />
+              Excel
+            </button>
+            <button
+              onClick={() => setIsQrOpen(true)}
+              className={styles.exportButton}
+              title="Códigos QR de asistencia por grupo"
+            >
+              <FaQrcode className={styles.exportIcon} />
+              QR
+            </button>
           </div>
 
-          {/* Botón de actualizar */}
-          <button 
+          <button
             onClick={handleRefresh}
             disabled={refreshing}
             className={styles.refreshButton}
@@ -170,40 +188,72 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Estadísticas Principales */}
-      <section className={styles.statsSection}>
-        <DashboardStats 
-          stats={stats} 
-          loading={loading} 
-        />
-      </section>
-
-      {/* Gráficos y Charts */}
-      {(user?.role === 'administrador' || user?.role === 'director' || user?.role === 'lider') && (
-        <section className={styles.chartsSection}>
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>
-              <FaCalendarAlt className={styles.sectionIcon} />
-              Análisis y Tendencias
-            </h2>
-          </div>
-          <DashboardCharts 
-            chartsData={chartsData} 
-            loading={loading}
-          />
-        </section>
-      )}
-
-      {/* Mensaje para lectores */}
-      {user?.role === 'lector' && (
-        <div className={styles.readerMessage}>
-          <div className={styles.messageCard}>
-            <h3>Vista de Solo Lectura</h3>
-            <p>Como lector, tienes acceso a visualizar las métricas generales del sistema.</p>
-            <p>Para acceder a más funcionalidades, contacta con tu administrador.</p>
+      {/* Referencia del trimestre (o vista consolidada global) */}
+      {quarter ? (
+        <div className={styles.quarterBanner}>
+          <FaCalendarAlt className={styles.quarterIcon} />
+          <div className={styles.quarterInfo}>
+            <strong>{quarter.name} {quarter.year}</strong>
+            <span>
+              {quarter.period} · {formatDate(quarter.startDate)} - {formatDate(quarter.endDate)}
+            </span>
           </div>
         </div>
+      ) : (
+        spiritual?.churchId === '__global__' && (
+          <div className={styles.quarterBanner}>
+            <FaGlobe className={styles.quarterIcon} />
+            <div className={styles.quarterInfo}>
+              <strong>Vista consolidada global</strong>
+              <span>Todas las iglesias activas · sin trimestre de referencia</span>
+            </div>
+          </div>
+        )
       )}
+
+      {/* KPIs Principales */}
+      <section className={styles.statsSection}>
+        <DashboardKpis kpis={kpis} loading={loading} />
+      </section>
+
+      {/* Pilares Espirituales */}
+      <section className={styles.pillarsSection}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>
+            <FaHeart className={styles.sectionIcon} />
+            Salud Espiritual del Trimestre
+          </h2>
+        </div>
+        <div className={styles.pillarsGrid}>
+          {['comunion', 'relacionamiento', 'mision'].map((key) => {
+            const pillar = pillars[key];
+            if (!pillar) return null;
+            return (
+              <PillarGauge
+                key={key}
+                label={pillar.label}
+                value={pillar.value}
+                description={pillar.description}
+                detail={buildPillarDetail(pillar)}
+                color={PILLAR_CONFIG[key].color}
+              />
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Comparativa de Metas */}
+      <section className={styles.goalsSection}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>
+            <FaBullseye className={styles.sectionIcon} />
+            Comparativa de Metas Planificadas vs Alcanzadas
+          </h2>
+        </div>
+        <GoalsComparisonChart goals={spiritual?.goals} loading={loading} />
+      </section>
+
+      <AttendanceQrModal isOpen={isQrOpen} onClose={() => setIsQrOpen(false)} />
     </div>
   );
 };

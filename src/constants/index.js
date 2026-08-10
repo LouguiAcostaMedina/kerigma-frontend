@@ -1,8 +1,8 @@
 // Constantes para el sistema de gestión de iglesia
 // Importamos los roles desde su propio archivo para mantener el código DRY (Don't Repeat Yourself)
-import { ROLES, ROLE_LABELS } from './roles';
+import { ROLES, ROLE_LABELS, ROLE_PERMISSIONS } from './roles';
 // 2. Las exportamos inmediatamente para que Sidebar.jsx las pueda leer desde aquí
-export { ROLES, ROLE_LABELS };
+export { ROLES, ROLE_LABELS, ROLE_PERMISSIONS };
 // 🔄 CAMBIO CLAVE: Ahora es dinámica. Si no existe la variable de entorno, usa el fallback local.
 export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
 
@@ -94,5 +94,6 @@ export const STORAGE_KEYS = {
   TOKEN: 'auth_token',
   USER: 'user_data',
   THEME: 'app_theme',
-  LANGUAGE: 'app_language'
+  LANGUAGE: 'app_language',
+  SESSION_MARKER: 'sgm_session'
 };

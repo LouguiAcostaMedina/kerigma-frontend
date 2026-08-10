@@ -1,11 +1,11 @@
 // Login.jsx
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import Button from "@/components/common/Button";
 import Input from "@/components/common/Input";
 import { FaEye, FaEyeSlash, FaUser, FaLock } from "react-icons/fa";
-import styles from "./Login.module.css"; // Importamos el módulo CSS
+import styles from "./Login.module.css"; 
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -15,15 +15,18 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
-
+  const submittingRef = useRef(false);
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   const from = location.state?.from?.pathname || "/dashboard";
+  const infoMessage = location.state?.message;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
+    // Cambiado a callback funcional estricto para evitar pérdidas de caracteres en hilos de React
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -40,9 +43,9 @@ const Login = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.email) {
+    if (!formData.email || !formData.email.trim()) {
       newErrors.email = "El email es requerido";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    } else if (!/\S+@\S+\.\S+/.test(formData.email.trim())) {
       newErrors.email = "El email no es válido";
     }
 
@@ -55,24 +58,47 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
 
-    if (!validateForm()) return;
+    // 1. 🛑 CONTROL CRÍTICO SÍNCRONO: Freno de mano instantáneo a nivel de CPU
+    if (submittingRef.current || isSubmitting) {
+      return false;
+    }
 
+    // 2. Ejecutar validaciones locales
+    if (!validateForm()) return false;
+
+    // 3. CAPTURA SEGURA INMUTABLE: Extraemos y congelamos los datos en este milisegundo exacto
+    const emailToSend = formData.email ? formData.email.trim() : "";
+    const passwordToSend = formData.password || "";
+
+    // 4. SALVAGUARDA ABSOLUTA: Si por desfase de renderizado los datos están vacíos,
+    // matamos el proceso en el cliente ANTES de que toque Axios y genere el Error 400
+    if (!emailToSend || !passwordToSend) {
+      return false;
+    }
+
+    // 5. Encendemos ambos bloqueos en paralelo de forma segura
+    submittingRef.current = true;
     setIsSubmitting(true);
 
     try {
+      // Pasamos los datos congelados limpios a la API
       const result = await login({
-        email: formData.email,
-        password: formData.password,
+        email: emailToSend,
+        password: passwordToSend,
       });
 
-      if (result.success) {
+      if (result && result.success) {
         navigate(from, { replace: true });
       }
     } catch (error) {
       console.error("Error en login:", error);
     } finally {
+      submittingRef.current = false;
       setIsSubmitting(false);
     }
   };
@@ -92,7 +118,13 @@ const Login = () => {
           <p className={styles.subtitle}>Sistema de Gestión Misionera</p>
         </div>
 
-        <form onSubmit={handleSubmit} className={styles.form}>
+        <form onSubmit={(e) => { e.preventDefault(); handleSubmit(e); }} className={styles.form} noValidate>
+          {infoMessage && (
+            <div className={styles.infoBanner}>
+              {infoMessage}
+            </div>
+          )}
+
           <div className={styles.inputGroup}>
             <Input
               type="email"
@@ -104,6 +136,7 @@ const Login = () => {
               icon={<FaUser />}
               autoComplete="email"
               autoFocus
+              disabled={isSubmitting} // Deshabilitar inputs durante el envío
             />
           </div>
 
@@ -118,6 +151,7 @@ const Login = () => {
                 error={errors.password}
                 icon={<FaLock />}
                 autoComplete="current-password"
+                disabled={isSubmitting} // Deshabilitar inputs durante el envío
               />
               <button
                 type="button"
@@ -126,6 +160,7 @@ const Login = () => {
                 aria-label={
                   showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
                 }
+                disabled={isSubmitting}
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
@@ -138,7 +173,7 @@ const Login = () => {
             size="large"
             fullWidth
             loading={isSubmitting}
-            disabled={isSubmitting}
+            disabled={isSubmitting} // 🛡️ Congela físicamente el botón para evitar clics dobles
           >
             {isSubmitting ? "Iniciando sesión..." : "Iniciar Sesión"}
           </Button>

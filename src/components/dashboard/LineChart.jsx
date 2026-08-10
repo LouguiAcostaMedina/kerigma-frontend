@@ -39,7 +39,7 @@ const LineChart = ({
   height = 300,
   showLegend = true,
   gradient = true,
-  color = '#6366f1'
+  color = '#e2a63f'
 }) => {
   const chartRef = useRef(null);
   const [chartData, setChartData] = useState(null);
@@ -66,7 +66,7 @@ const LineChart = ({
         backgroundColor: gradient ? gradientFill : `${color}10`,
         borderWidth: 3,
         pointBackgroundColor: color,
-        pointBorderColor: '#fff',
+        pointBorderColor: '#f3ece0',
         pointBorderWidth: 2,
         pointRadius: 5,
         pointHoverRadius: 7,
@@ -106,9 +106,9 @@ const LineChart = ({
         }
       },
       tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        titleColor: '#fff',
-        bodyColor: '#fff',
+        backgroundColor: 'rgba(20, 17, 11, 0.95)',
+        titleColor: '#f3ece0',
+        bodyColor: '#f3ece0',
         borderColor: color,
         borderWidth: 1,
         cornerRadius: 8,
@@ -137,13 +137,13 @@ const LineChart = ({
           font: {
             size: 11
           },
-          color: '#6b7280'
+          color: '#c2b6a1'
         }
       },
       y: {
         beginAtZero: true,
         grid: {
-          color: 'rgba(0, 0, 0, 0.1)',
+          color: 'rgba(243, 236, 224, 0.08)',
           borderDash: [5, 5]
         },
         border: {
@@ -153,7 +153,7 @@ const LineChart = ({
           font: {
             size: 11
           },
-          color: '#6b7280',
+          color: '#c2b6a1',
           callback: function(value) {
             return value.toLocaleString();
           }

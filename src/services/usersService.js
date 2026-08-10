@@ -5,6 +5,10 @@
 
 import { apiClient } from './apiClient';
 
+const unwrap = (response) => response?.data ?? response;
+
+export const cleanParams = (params = {}) => Object.fromEntries(Object.entries(params).filter(([, val]) => val !== "" && val !== null && val !== undefined));
+
 export const usersService = {
   // ===================== OPERACIONES CRUD BÁSICAS =====================
   
@@ -13,8 +17,8 @@ export const usersService = {
    */
   getUsers: async (params = {}) => {
     try {
-      const response = await apiClient.get('/users', { params });
-      return response.data;
+      const response = await apiClient.get('/users', { params: cleanParams(params) });
+      return unwrap(response);
     } catch (error) {
       console.error('Error fetching users:', error);
       throw error;
@@ -27,7 +31,7 @@ export const usersService = {
   getUserById: async (id) => {
     try {
       const response = await apiClient.get(`/users/${id}`);
-      return response.data;
+      return unwrap(response);
     } catch (error) {
       console.error('Error fetching user:', error);
       throw error;
@@ -40,7 +44,7 @@ export const usersService = {
   createUser: async (userData) => {
     try {
       const response = await apiClient.post('/users', userData);
-      return response.data;
+      return unwrap(response);
     } catch (error) {
       console.error('Error creating user:', error);
       throw error;
@@ -53,7 +57,7 @@ export const usersService = {
   updateUser: async (id, userData) => {
     try {
       const response = await apiClient.put(`/users/${id}`, userData);
-      return response.data;
+      return unwrap(response);
     } catch (error) {
       console.error('Error updating user:', error);
       throw error;
@@ -66,7 +70,7 @@ export const usersService = {
   deleteUser: async (id) => {
     try {
       const response = await apiClient.delete(`/users/${id}`);
-      return response.data;
+      return unwrap(response);
     } catch (error) {
       console.error('Error deleting user:', error);
       throw error;
@@ -81,9 +85,52 @@ export const usersService = {
       const response = await apiClient.delete('/users/bulk', {
         data: { ids }
       });
-      return response.data;
+      return unwrap(response);
     } catch (error) {
       console.error('Error deleting multiple users:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Operación en lote genérica (delete, activate, deactivate, suspend, reactivate)
+   */
+  bulkOperation: async (operation, userIds, data = {}) => {
+    try {
+      const response = await apiClient.post('/users/bulk', {
+        operation,
+        userIds,
+        ...data
+      });
+      return unwrap(response);
+    } catch (error) {
+      console.error('Error in bulk operation:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Enviar email de invitación
+   */
+  sendInvitation: async (userId) => {
+    try {
+      const response = await apiClient.post(`/users/${userId}/invite`);
+      return unwrap(response);
+    } catch (error) {
+      console.error('Error sending invitation:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Enviar email de recuperación de contraseña
+   */
+  resetPassword: async (userId) => {
+    try {
+      const response = await apiClient.post(`/users/${userId}/reset-password`);
+      return unwrap(response);
+    } catch (error) {
+      console.error('Error resetting password:', error);
       throw error;
     }
   },
@@ -148,7 +195,7 @@ export const usersService = {
   updateUserStatus: async (id, status, reason = null) => {
     try {
       const response = await apiClient.patch(`/users/${id}/status`, { status, reason });
-      return response.data;
+      return unwrap(response);
     } catch (error) {
       console.error('Error updating user status:', error);
       throw error;
@@ -695,7 +742,7 @@ export const usersService = {
    */
   getUsersByRole: async (roleId, params = {}) => {
     try {
-      const response = await apiClient.get(`/users/by-role/${roleId}`, { params });
+      const response = await apiClient.get(`/users/by-role/${roleId}`, { params: cleanParams(params) });
       return response.data;
     } catch (error) {
       console.error('Error fetching users by role:', error);
@@ -708,7 +755,7 @@ export const usersService = {
    */
   getUsersByChurch: async (churchId, params = {}) => {
     try {
-      const response = await apiClient.get(`/users/by-church/${churchId}`, { params });
+      const response = await apiClient.get(`/users/by-church/${churchId}`, { params: cleanParams(params) });
       return response.data;
     } catch (error) {
       console.error('Error fetching users by church:', error);

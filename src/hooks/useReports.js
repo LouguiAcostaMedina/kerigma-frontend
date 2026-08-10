@@ -35,7 +35,6 @@ export const useReports = () => {
   // ===================== REFERENCIAS Y CACHE =====================
   const abortControllerRef = useRef(null);
   const cacheRef = useRef(new Map());
-  const lastFetchRef = useRef({});
 
   // ===================== REPORTES PREDEFINIDOS =====================
 
@@ -127,23 +126,20 @@ export const useReports = () => {
     setError(null);
 
     try {
-      const response = await reportsService.getCustomReports({
-        ...params,
-        signal: abortControllerRef.current.signal
-      });
-      
+      const response = await reportsService.getCustomReports(params, abortControllerRef.current.signal);
+      if (!response) return;
+
       setCustomReports(response.data || []);
       return response;
     } catch (err) {
-      if (err.name !== 'AbortError') {
-        console.error('Error fetching custom reports:', err);
-        setError(err.message || 'Error al cargar los reportes personalizados');
-        showNotification({
-          type: 'error',
-          title: 'Error',
-          message: 'Error al cargar los reportes personalizados'
-        });
-      }
+      if (err.name === 'AbortError') return;
+      console.error('Error fetching custom reports:', err);
+      setError(err.message || 'Error al cargar los reportes personalizados');
+      showNotification({
+        type: 'error',
+        title: 'Error',
+        message: 'Error al cargar los reportes personalizados'
+      });
       throw err;
     } finally {
       setLoading(false);

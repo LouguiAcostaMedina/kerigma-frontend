@@ -15,7 +15,7 @@ const MetricCard = ({
   change,
   changeType = 'percentage', // 'percentage', 'absolute', 'none'
   icon: IconComponent,
-  color = '#3b82f6', // ahora acepta HEX/string en lugar de solo variantes
+  color = '#e2a63f', // ahora acepta HEX/string en lugar de solo variantes
   isLoading = false,
   trend = null, // 'up', 'down', 'neutral'
   format = 'number', // 'number', 'currency', 'percentage'

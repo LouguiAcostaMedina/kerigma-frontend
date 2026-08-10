@@ -6,6 +6,7 @@
 import { useState, useCallback, useRef, useMemo } from 'react';
 import { churchesService } from '@/services/churchesService';
 import { showNotification } from '@/utils/notifications';
+import { useAuth } from './useAuth';
 
 export const useChurches = () => {
   // ===================== ESTADO PRINCIPAL =====================
@@ -21,9 +22,9 @@ export const useChurches = () => {
   // ===================== ESTADO DE ESTADÍSTICAS =====================
   const [churchStatistics, setChurchStatistics] = useState(null);
   const [growthMetrics, setGrowthMetrics] = useState(null);
-  const [attendanceStats, setAttendanceStats] = useState(null);
-  const [baptismReport, setBaptismReport] = useState(null);
-  const [financialSummary, setFinancialSummary] = useState(null);
+  const [attendanceStats] = useState(null);
+  const [baptismReport] = useState(null);
+  const [financialSummary] = useState(null);
   const [globalStatistics, setGlobalStatistics] = useState(null);
   const [churchRanking, setChurchRanking] = useState([]);
 
@@ -31,7 +32,7 @@ export const useChurches = () => {
   const [churchConfiguration, setChurchConfiguration] = useState(null);
   const [churchSchedules, setChurchSchedules] = useState([]);
   const [churchFilters, setChurchFilters] = useState(null);
-  const [userPermissions, setUserPermissions] = useState({});
+  const [userPermissions] = useState({});
 
   // ===================== ESTADO DE UI =====================
   const [loading, setLoading] = useState(false);
@@ -48,6 +49,22 @@ export const useChurches = () => {
     from: 0,
     to: 0
   });
+
+  // ===================== ESTADO DE MODALES =====================
+  const [showModal, setShowModal] = useState(false);
+  const [modalMode, setModalMode] = useState('create'); // create | edit | view
+  const [formData, setFormData] = useState({});
+  const [formErrors, setFormErrors] = useState({});
+
+  // ===================== FILTROS, ORDEN Y PAGINACIÓN DE LISTA =====================
+  const filtersRef = useRef({ search: '', status: '', city: '', state: '', minMembers: '', maxMembers: '' });
+  const [filters, setFilters] = useState(filtersRef.current);
+  const sortConfigRef = useRef({ key: 'name', direction: 'asc' });
+  const [sortConfig, setSortConfig] = useState(sortConfigRef.current);
+  const pageRef = useRef(1);
+  const pageSizeRef = useRef(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   // ===================== REFERENCIAS Y CACHE =====================
   const abortControllerRef = useRef(null);
@@ -77,10 +94,8 @@ export const useChurches = () => {
     setError(null);
 
     try {
-      const response = await churchesService.getChurches({
-        ...params,
-        signal: abortControllerRef.current.signal
-      });
+      const response = await churchesService.getChurches(params, abortControllerRef.current.signal);
+      if (!response) return;
 
       setChurches(response.data || []);
       setPagination({
@@ -93,15 +108,14 @@ export const useChurches = () => {
 
       return response;
     } catch (err) {
-      if (err.name !== 'AbortError') {
-        console.error('Error fetching churches:', err);
-        setError(err.message || 'Error al cargar las iglesias');
-        showNotification({
-          type: 'error',
-          title: 'Error',
-          message: 'Error al cargar las iglesias'
-        });
-      }
+      if (err.name === 'AbortError') return;
+      console.error('Error fetching churches:', err);
+      setError(err.message || 'Error al cargar las iglesias');
+      showNotification({
+        type: 'error',
+        title: 'Error',
+        message: 'Error al cargar las iglesias'
+      });
       throw err;
     } finally {
       setLoading(false);
@@ -302,6 +316,103 @@ export const useChurches = () => {
       setLoading(false);
     }
   }, []);
+
+  // ===================== MODALES Y PERMISOS =====================
+
+  const { hasPermission } = useAuth();
+
+  const canCreate = useMemo(() => hasPermission('churches.create'), [hasPermission]);
+  const canUpdate = useMemo(() => hasPermission('churches.update'), [hasPermission]);
+  const canDelete = useMemo(() => hasPermission('churches.delete'), [hasPermission]);
+
+  const openCreateModal = useCallback(() => {
+    setFormData({});
+    setFormErrors({});
+    setModalMode('create');
+    setShowModal(true);
+  }, []);
+
+  const openEditModal = useCallback((churchData) => {
+    setFormData(churchData || {});
+    setFormErrors({});
+    setModalMode('edit');
+    setShowModal(true);
+  }, []);
+
+  const openViewModal = useCallback((churchData) => {
+    setFormData(churchData || {});
+    setFormErrors({});
+    setModalMode('view');
+    setShowModal(true);
+  }, []);
+
+  const closeModal = useCallback(() => {
+    setShowModal(false);
+    setFormData({});
+    setFormErrors({});
+  }, []);
+
+  // ===================== FILTROS, ORDEN Y PAGINACIÓN =====================
+
+  const buildParams = useCallback((overrides = {}) => ({
+    page: overrides.page ?? pageRef.current,
+    limit: overrides.limit ?? pageSizeRef.current,
+    search: filtersRef.current.search || undefined,
+    status: filtersRef.current.status || undefined,
+    city: filtersRef.current.city || undefined,
+    state: filtersRef.current.state || undefined,
+    minMembers: filtersRef.current.minMembers || undefined,
+    maxMembers: filtersRef.current.maxMembers || undefined,
+    sortField: sortConfigRef.current.key || undefined,
+    sortDirection: sortConfigRef.current.direction || undefined,
+    ...overrides
+  }), []);
+
+  const applyFilters = useCallback((partial) => {
+    const next = { ...filtersRef.current, ...partial };
+    filtersRef.current = next;
+    setFilters(next);
+    pageRef.current = 1;
+    setCurrentPage(1);
+    fetchChurches(buildParams({ page: 1 }));
+  }, [fetchChurches, buildParams]);
+
+  const clearFilters = useCallback(() => {
+    const next = { search: '', status: '', city: '', state: '', minMembers: '', maxMembers: '' };
+    filtersRef.current = next;
+    setFilters(next);
+    pageRef.current = 1;
+    setCurrentPage(1);
+    fetchChurches(buildParams({ page: 1 }));
+  }, [fetchChurches, buildParams]);
+
+  const sort = useCallback((key, direction) => {
+    const nextSort = { key, direction: direction || 'asc' };
+    sortConfigRef.current = nextSort;
+    setSortConfig(nextSort);
+    fetchChurches(buildParams({ sortField: key, sortDirection: nextSort.direction }));
+  }, [fetchChurches, buildParams]);
+
+  const changePage = useCallback((page) => {
+    const p = Math.max(1, Number(page) || 1);
+    pageRef.current = p;
+    setCurrentPage(p);
+    fetchChurches(buildParams({ page: p }));
+  }, [fetchChurches, buildParams]);
+
+  const changePageSize = useCallback((size) => {
+    const nextSize = Number(size) || 10;
+    pageSizeRef.current = nextSize;
+    setPageSize(nextSize);
+    pageRef.current = 1;
+    setCurrentPage(1);
+    fetchChurches(buildParams({ page: 1, limit: nextSize }));
+  }, [fetchChurches, buildParams]);
+
+  const refreshData = useCallback(() => {
+    lastParamsRef.current = null;
+    fetchChurches(buildParams());
+  }, [fetchChurches, buildParams]);
 
   // ===================== GESTIÓN DE ESTADOS =====================
 
@@ -1084,6 +1195,22 @@ export const useChurches = () => {
     churchFilters,
     userPermissions,
     pagination,
+    filters,
+    sortConfig,
+    currentPage,
+    pageSize,
+    
+    // ===================== ESTADO DE MODALES =====================
+    showModal,
+    modalMode,
+    formData,
+    formErrors,
+    setFormData,
+    
+    // ===================== PERMISOS =====================
+    canCreate,
+    canUpdate,
+    canDelete,
     
     // ===================== ESTADOS DE CARGA =====================
     loading,
@@ -1099,6 +1226,20 @@ export const useChurches = () => {
     updateChurch,
     deleteChurch,
     deleteMultipleChurches,
+    
+    // ===================== FILTROS, ORDEN Y PAGINACIÓN =====================
+    applyFilters,
+    clearFilters,
+    sort,
+    changePage,
+    changePageSize,
+    refreshData,
+    
+    // ===================== MANEJO DE MODALES =====================
+    openCreateModal,
+    openEditModal,
+    openViewModal,
+    closeModal,
     
     // ===================== GESTIÓN DE ESTADOS =====================
     activateChurch,

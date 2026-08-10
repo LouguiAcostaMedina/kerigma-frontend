@@ -5,6 +5,8 @@
 
 import { apiClient } from './apiClient';
 
+const unwrap = (envelope) => envelope?.data ?? envelope;
+
 export const reportsService = {
   // ===================== REPORTES PREDEFINIDOS =====================
   
@@ -14,7 +16,7 @@ export const reportsService = {
   getPredefinedReports: async () => {
     try {
       const response = await apiClient.get('/reports/predefined');
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error fetching predefined reports:', error);
       throw error;
@@ -27,7 +29,7 @@ export const reportsService = {
   executePredefinedReport: async (reportId, params = {}) => {
     try {
       const response = await apiClient.post(`/reports/predefined/${reportId}/execute`, params);
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error executing predefined report:', error);
       throw error;
@@ -39,11 +41,12 @@ export const reportsService = {
   /**
    * Obtener reportes personalizados del usuario
    */
-  getCustomReports: async (params = {}) => {
+  getCustomReports: async (params = {}, signal) => {
     try {
-      const response = await apiClient.get('/reports/custom', { params });
+      const response = await apiClient.get('/reports/custom', { params, signal });
       return response.data;
     } catch (error) {
+      if (error.name === 'AbortError' || error.message?.includes('cancelada')) return;
       console.error('Error fetching custom reports:', error);
       throw error;
     }
@@ -55,7 +58,7 @@ export const reportsService = {
   createCustomReport: async (reportData) => {
     try {
       const response = await apiClient.post('/reports/custom', reportData);
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error creating custom report:', error);
       throw error;
@@ -68,7 +71,7 @@ export const reportsService = {
   updateCustomReport: async (id, reportData) => {
     try {
       const response = await apiClient.put(`/reports/custom/${id}`, reportData);
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error updating custom report:', error);
       throw error;
@@ -81,7 +84,7 @@ export const reportsService = {
   deleteCustomReport: async (id) => {
     try {
       const response = await apiClient.delete(`/reports/custom/${id}`);
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error deleting custom report:', error);
       throw error;
@@ -94,7 +97,7 @@ export const reportsService = {
   executeCustomReport: async (id, params = {}) => {
     try {
       const response = await apiClient.post(`/reports/custom/${id}/execute`, params);
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error executing custom report:', error);
       throw error;
@@ -109,7 +112,7 @@ export const reportsService = {
   getAvailableFields: async (entity) => {
     try {
       const response = await apiClient.get(`/reports/fields/${entity}`);
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error fetching available fields:', error);
       throw error;
@@ -122,7 +125,7 @@ export const reportsService = {
   getAggregationFunctions: async () => {
     try {
       const response = await apiClient.get('/reports/aggregations');
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error fetching aggregation functions:', error);
       throw error;
@@ -135,7 +138,7 @@ export const reportsService = {
   previewReport: async (reportConfig) => {
     try {
       const response = await apiClient.post('/reports/preview', reportConfig);
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error previewing report:', error);
       throw error;
@@ -150,7 +153,7 @@ export const reportsService = {
   getMembershipGrowthReport: async (params = {}) => {
     try {
       const response = await apiClient.get('/reports/metrics/membership-growth', { params });
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error fetching membership growth report:', error);
       throw error;
@@ -163,7 +166,7 @@ export const reportsService = {
   getGroupActivityReport: async (params = {}) => {
     try {
       const response = await apiClient.get('/reports/metrics/group-activity', { params });
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error fetching group activity report:', error);
       throw error;
@@ -176,7 +179,7 @@ export const reportsService = {
   getBibleStudentProgressReport: async (params = {}) => {
     try {
       const response = await apiClient.get('/reports/metrics/bible-student-progress', { params });
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error fetching bible student progress report:', error);
       throw error;
@@ -189,7 +192,7 @@ export const reportsService = {
   getBaptismConversionReport: async (params = {}) => {
     try {
       const response = await apiClient.get('/reports/metrics/baptism-conversion', { params });
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error fetching baptism conversion report:', error);
       throw error;
@@ -202,7 +205,7 @@ export const reportsService = {
   getLeaderPerformanceReport: async (params = {}) => {
     try {
       const response = await apiClient.get('/reports/metrics/leader-performance', { params });
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error fetching leader performance report:', error);
       throw error;
@@ -217,7 +220,7 @@ export const reportsService = {
   getComparativeReport: async (params) => {
     try {
       const response = await apiClient.post('/reports/comparative', params);
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error fetching comparative report:', error);
       throw error;
@@ -230,7 +233,7 @@ export const reportsService = {
   getChurchComparativeReport: async (params) => {
     try {
       const response = await apiClient.post('/reports/comparative/churches', params);
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error fetching church comparative report:', error);
       throw error;
@@ -316,7 +319,7 @@ export const reportsService = {
         reportId,
         ...scheduleConfig
       });
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error scheduling report:', error);
       throw error;
@@ -329,7 +332,7 @@ export const reportsService = {
   getScheduledReports: async () => {
     try {
       const response = await apiClient.get('/reports/scheduled');
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error fetching scheduled reports:', error);
       throw error;
@@ -342,7 +345,7 @@ export const reportsService = {
   cancelScheduledReport: async (scheduleId) => {
     try {
       const response = await apiClient.delete(`/reports/scheduled/${scheduleId}`);
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error canceling scheduled report:', error);
       throw error;
@@ -358,7 +361,7 @@ export const reportsService = {
     try {
       const params = category ? { category } : {};
       const response = await apiClient.get('/reports/templates', { params });
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error fetching report templates:', error);
       throw error;
@@ -371,7 +374,7 @@ export const reportsService = {
   createReportFromTemplate: async (templateId, customizations = {}) => {
     try {
       const response = await apiClient.post(`/reports/templates/${templateId}/create`, customizations);
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error creating report from template:', error);
       throw error;
@@ -386,7 +389,7 @@ export const reportsService = {
   getReportUsageStats: async (params = {}) => {
     try {
       const response = await apiClient.get('/reports/stats/usage', { params });
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error fetching report usage stats:', error);
       throw error;
@@ -401,7 +404,7 @@ export const reportsService = {
       const response = await apiClient.get('/reports/stats/popular', { 
         params: { limit } 
       });
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error fetching popular reports:', error);
       throw error;
@@ -416,7 +419,7 @@ export const reportsService = {
   getUserReportConfig: async () => {
     try {
       const response = await apiClient.get('/reports/config');
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error fetching user report config:', error);
       throw error;
@@ -429,7 +432,7 @@ export const reportsService = {
   updateUserReportConfig: async (config) => {
     try {
       const response = await apiClient.put('/reports/config', config);
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error updating user report config:', error);
       throw error;
@@ -442,7 +445,7 @@ export const reportsService = {
   shareReport: async (reportId, shareConfig) => {
     try {
       const response = await apiClient.post(`/reports/custom/${reportId}/share`, shareConfig);
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error sharing report:', error);
       throw error;
@@ -455,7 +458,7 @@ export const reportsService = {
   getSharedReports: async () => {
     try {
       const response = await apiClient.get('/reports/shared');
-      return response.data;
+      return unwrap(response.data);
     } catch (error) {
       console.error('Error fetching shared reports:', error);
       throw error;

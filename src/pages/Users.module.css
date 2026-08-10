@@ -4,7 +4,7 @@
  */
 
 .usersPage {
-  padding: 2rem;
+  padding: var(--space-8);
   max-width: 1400px;
   margin: 0 auto;
   animation: fadeIn 0.3s ease-out;
@@ -15,59 +15,59 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 2px solid var(--border-light);
+  margin-bottom: var(--space-8);
+  padding-bottom: var(--space-6);
+  border-bottom: 2px solid var(--color-border);
 }
 
 .headerLeft h1 {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin: 0 0 0.5rem 0;
-  color: var(--primary-600);
-  font-size: 2rem;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-2) 0;
+  color: var(--color-text);
+  font-size: var(--text-h1);
   font-weight: 700;
 }
 
 .headerIcon {
   font-size: 1.75rem;
-  color: var(--primary-500);
+  color: var(--color-accent);
 }
 
 .headerLeft p {
-  color: var(--text-secondary);
+  color: var(--color-text-muted);
   margin: 0;
-  font-size: 1.1rem;
+  font-size: var(--text-p);
 }
 
 .headerActions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--space-4);
   flex-wrap: wrap;
 }
 
 .exportButtons {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 /* Panel de filtros */
 .filtersPanel {
-  background: var(--card-bg);
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-8);
   box-shadow: var(--shadow-sm);
   animation: slideDown 0.3s ease-out;
 }
 
 .filterRow {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
   flex-wrap: wrap;
 }
 
@@ -82,29 +82,29 @@
 
 .filterGroup label {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2);
   font-weight: 600;
-  color: var(--text-primary);
-  font-size: 0.9rem;
+  color: var(--color-text);
+  font-size: var(--text-small);
 }
 
 .filterGroup input,
 .filterGroup select {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
-  font-size: 0.95rem;
-  transition: all 0.2s ease;
-  background: var(--bg-primary);
-  color: var(--text-primary);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-small);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background: var(--color-surface-alt);
+  color: var(--color-text);
 }
 
 .filterGroup input:focus,
 .filterGroup select:focus {
   outline: none;
-  border-color: var(--primary-400);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
 }
 
 .searchInput {
@@ -113,10 +113,10 @@
 
 .searchIcon {
   position: absolute;
-  left: 0.75rem;
+  left: var(--space-3);
   top: 50%;
   transform: translateY(-50%);
-  color: var(--text-secondary);
+  color: var(--color-text-muted);
   z-index: 2;
 }
 
@@ -127,14 +127,14 @@
 .filterActions {
   display: flex;
   align-items: flex-end;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 /* Información de usuario */
 .userInfo {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-3);
 }
 
 .userAvatar {
@@ -154,85 +154,85 @@
 .avatarPlaceholder {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+  background: var(--color-accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--color-on-accent);
   font-weight: 600;
-  font-size: 1rem;
+  font-size: var(--text-p);
 }
 
 .userName {
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--color-text);
   margin-bottom: 0.25rem;
 }
 
 .userEmail {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+  font-size: var(--text-small);
+  color: var(--color-text-muted);
 }
 
 /* Badges y estados */
 .badge {
   display: inline-block;
-  padding: 0.25rem 0.75rem;
+  padding: 0.25rem var(--space-3);
   border-radius: 20px;
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .badgeadmin {
-  background: linear-gradient(135deg, #dc2626, #ef4444);
-  color: white;
+  background: var(--color-danger);
+  color: var(--color-on-danger);
 }
 
 .badgedirector {
-  background: linear-gradient(135deg, #7c3aed, #8b5cf6);
-  color: white;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
 }
 
 .badgeleader {
-  background: linear-gradient(135deg, #059669, #10b981);
-  color: white;
+  background: var(--color-success);
+  color: var(--color-on-success);
 }
 
 .badgereader {
-  background: linear-gradient(135deg, #0891b2, #06b6d4);
-  color: white;
+  background: var(--color-info);
+  color: var(--color-on-info);
 }
 
 .status {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.25rem 0.75rem;
+  padding: 0.25rem var(--space-3);
   border-radius: 20px;
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
   font-weight: 500;
 }
 
 .status.active {
-  background: rgba(34, 197, 94, 0.1);
-  color: #059669;
+  background: var(--color-success-soft);
+  color: var(--color-success);
 }
 
 .status.inactive {
-  background: rgba(156, 163, 175, 0.1);
-  color: #6b7280;
+  background: var(--color-surface-alt);
+  color: var(--color-text-secondary);
 }
 
 .status.suspended {
-  background: rgba(239, 68, 68, 0.1);
-  color: #dc2626;
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
 }
 
 .status.pending {
-  background: rgba(245, 158, 11, 0.1);
-  color: #d97706;
+  background: var(--color-warning-soft);
+  color: var(--color-warning);
 }
 
 /* Acciones */
@@ -243,11 +243,11 @@
 }
 
 .deleteButton {
-  color: var(--error-500) !important;
+  color: var(--color-danger) !important;
 }
 
 .deleteButton:hover {
-  background: rgba(239, 68, 68, 0.1) !important;
+  background: var(--color-danger-soft) !important;
 }
 
 /* Checkbox */
@@ -255,37 +255,37 @@
   width: 18px;
   height: 18px;
   cursor: pointer;
-  accent-color: var(--primary-500);
+  accent-color: var(--color-accent);
 }
 
 /* Container de tabla */
 .tableContainer {
-  background: var(--card-bg);
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
 
 .error {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  background: var(--color-danger-soft);
+  border: 1px solid var(--color-danger-soft);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
   text-align: center;
 }
 
 .error p {
-  color: var(--error-600);
-  margin: 0 0 1rem 0;
+  color: var(--color-danger);
+  margin: 0 0 var(--space-4) 0;
 }
 
 /* Botón activo en filtros */
 .headerActions .active {
-  background: var(--primary-50);
-  border-color: var(--primary-300);
-  color: var(--primary-700);
+  background: var(--color-accent-soft);
+  border-color: var(--color-border);
+  color: var(--color-accent);
 }
 
 /* Animaciones */
@@ -311,21 +311,33 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .usersPage,
+  .filtersPanel {
+    animation: none;
+  }
+
+  .filterGroup input,
+  .filterGroup select {
+    transition: none;
+  }
+}
+
 /* Responsive */
 @media (max-width: 1200px) {
   .usersPage {
-    padding: 1.5rem;
+    padding: var(--space-6);
   }
 }
 
 @media (max-width: 768px) {
   .usersPage {
-    padding: 1rem;
+    padding: var(--space-4);
   }
 
   .header {
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--space-4);
     align-items: stretch;
   }
 
@@ -353,7 +365,7 @@
   .userInfo {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 
   .userAvatar {
@@ -364,7 +376,7 @@
 
 @media (max-width: 480px) {
   .headerLeft h1 {
-    font-size: 1.5rem;
+    font-size: var(--text-h1);
   }
 
   .exportButtons {
@@ -373,22 +385,6 @@
   }
 
   .filterRow {
-    gap: 0.75rem;
-  }
-}
-
-/* Modo oscuro */
-@media (prefers-color-scheme: dark) {
-  .usersPage {
-    --bg-primary: #1f2937;
-    --bg-secondary: #111827;
-    --card-bg: #374151;
-    --text-primary: #f9fafb;
-    --text-secondary: #d1d5db;
-    --border-light: #4b5563;
-  }
-
-  .avatarPlaceholder {
-    background: linear-gradient(135deg, var(--primary-400), var(--primary-500));
+    gap: var(--space-3);
   }
 }

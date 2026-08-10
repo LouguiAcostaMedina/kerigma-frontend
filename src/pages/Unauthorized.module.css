@@ -5,15 +5,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-  padding: 20px;
+  background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-surface) 100%);
+  padding: var(--space-5);
 }
 
 .unauthorizedCard {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  padding: 40px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  padding: var(--space-10);
   width: 100%;
   max-width: 600px;
   text-align: center;
@@ -28,16 +28,16 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #ff7b7b, #ff9f43);
+  background: linear-gradient(90deg, var(--color-danger), var(--color-warning));
 }
 
 .iconContainer {
-  margin-bottom: 24px;
+  margin-bottom: var(--space-6);
 }
 
 .warningIcon {
   font-size: 64px;
-  color: #ff7b7b;
+  color: var(--color-danger);
   animation: pulse 2s ease-in-out infinite alternate;
 }
 
@@ -53,66 +53,67 @@
 }
 
 .content {
-  margin-bottom: 32px;
+  margin-bottom: var(--space-8);
 }
 
 .title {
-  font-size: 28px;
+  font-size: var(--text-h1);
   font-weight: 700;
-  color: #2d3748;
-  margin: 0 0 16px 0;
+  color: var(--color-text);
+  margin: 0 0 var(--space-4) 0;
+  font-family: var(--font-serif);
 }
 
 .message {
-  font-size: 16px;
-  color: #718096;
-  margin: 0 0 24px 0;
+  font-size: var(--text-p);
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-6) 0;
   line-height: 1.6;
 }
 
 .roleInfo {
-  background: #fff5f5;
-  border: 1px solid #fed7d7;
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 24px;
+  background: var(--color-danger-soft);
+  border: 1px solid var(--color-danger-soft);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin-bottom: var(--space-6);
   text-align: left;
 }
 
 .roleText,
 .userRole {
-  font-size: 14px;
-  margin: 0 0 8px 0;
-  color: #2d3748;
+  font-size: var(--text-small);
+  margin: 0 0 var(--space-2) 0;
+  color: var(--color-text);
 }
 
 .userRole {
   margin-bottom: 0;
-  color: #e53e3e;
+  color: var(--color-danger);
 }
 
 .suggestions {
-  background: #f7fafc;
-  border-radius: 8px;
-  padding: 20px;
+  background: var(--color-surface-alt);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
   text-align: left;
 }
 
 .suggestions h3 {
-  font-size: 16px;
+  font-size: var(--text-p);
   font-weight: 600;
-  color: #2d3748;
-  margin: 0 0 12px 0;
+  color: var(--color-text);
+  margin: 0 0 var(--space-3) 0;
 }
 
 .suggestions ul {
   margin: 0;
   padding-left: 20px;
-  color: #4a5568;
+  color: var(--color-text);
 }
 
 .suggestions li {
-  margin-bottom: 8px;
+  margin-bottom: var(--space-2);
   line-height: 1.5;
 }
 
@@ -122,47 +123,47 @@
 
 .actions {
   display: flex;
-  gap: 12px;
+  gap: var(--space-3);
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 20px;
+  margin-bottom: var(--space-5);
 }
 
 .attemptedPath {
-  padding-top: 16px;
-  border-top: 1px solid #e2e8f0;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
 }
 
 .attemptedPath small {
-  color: #718096;
-  font-size: 12px;
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
 }
 
 .attemptedPath code {
-  background: #edf2f7;
+  background: var(--color-surface-alt);
   padding: 2px 6px;
-  border-radius: 4px;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 12px;
-  color: #2d3748;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .unauthorizedContainer {
-    padding: 16px;
+    padding: var(--space-4);
   }
   
   .unauthorizedCard {
-    padding: 24px;
+    padding: var(--space-6);
   }
   
   .title {
-    font-size: 24px;
+    font-size: var(--text-h1);
   }
   
   .message {
-    font-size: 14px;
+    font-size: var(--text-small);
   }
   
   .warningIcon {
@@ -176,10 +177,10 @@
 
 @media (max-width: 480px) {
   .unauthorizedCard {
-    padding: 20px;
+    padding: var(--space-5);
   }
   
   .suggestions {
-    padding: 16px;
+    padding: var(--space-4);
   }
 }

@@ -1,145 +1,403 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import Button from '@/components/common/Button';
+import Input, { Select } from '@/components/common/Input';
+import Loading from '@/components/common/Loading';
+import { showToast } from '@/utils/notifications';
+import { ROLE_LABELS } from '@/constants';
+import {
+  FaUserCircle,
+  FaShieldAlt,
+  FaCog,
+  FaUser,
+  FaEnvelope,
+  FaPhone,
+  FaKey,
+  FaBuilding,
+  FaDatabase,
+  FaSave,
+  FaCheckCircle,
+  FaClock
+} from 'react-icons/fa';
+import styles from './Configuration.module.css';
 
-/**
- * Componente de la página de Configuración del Sistema
- * Permite gestionar los parámetros globales del Sistema Misionero
- */
+const TABS = [
+  { id: 'profile', label: 'Perfil de Usuario', icon: <FaUserCircle /> },
+  { id: 'security', label: 'Seguridad', icon: <FaShieldAlt /> },
+  { id: 'preferences', label: 'Preferencias del Sistema', icon: <FaCog /> }
+];
+
+const SETTINGS_KEY = 'app_settings';
+
 const Configuration = () => {
-  const { user } = useAuth();
-  
-  // Estados para simular la persistencia de los campos
-  const [systemName, setSystemName] = useState('Sistema Misionero');
-  const [allowRegister, setAllowRegister] = useState(false);
-  const [backupFrequency, setBackupFrequency] = useState('daily');
-  const [isSaving, setIsSaving] = useState(false);
+  const { user, updateProfile, isLoading } = useAuth();
+  const navigate = useNavigate();
 
-  // Manejador del envío del formulario
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsSaving(true);
-    
-    // Simulación de petición a la API (/api/v1/auth/config)
-    setTimeout(() => {
-      setIsSaving(false);
-      alert('¡Configuración guardada con éxito!');
-    }, 1000);
+  const [activeTab, setActiveTab] = useState('profile');
+  const [profileForm, setProfileForm] = useState({ firstName: '', lastName: '', phone: '' });
+  const [errors, setErrors] = useState({});
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [settings, setSettings] = useState({
+    systemName: 'Sistema Misionero',
+    allowRegister: false,
+    backupFrequency: 'daily'
+  });
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+
+  // Cargar preferencias guardadas localmente
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(SETTINGS_KEY);
+      if (raw) {
+        setSettings((prev) => ({ ...prev, ...JSON.parse(raw) }));
+      }
+    } catch (error) {
+      console.error('Error cargando preferencias:', error);
+    }
+  }, []);
+
+  // Sincronizar el formulario de perfil con el usuario actual
+  useEffect(() => {
+    if (user) {
+      setProfileForm({
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        phone: user.phone || ''
+      });
+    }
+  }, [user]);
+
+  if (isLoading || !user) {
+    return <Loading fullScreen />;
+  }
+
+  const roleLabel = ROLE_LABELS[user.role] || user.role || 'Usuario';
+  const userFullName = user.fullName || [user.firstName, user.lastName].filter(Boolean).join(' ');
+  const churchName = user.church?.name || 'Sin iglesia asignada';
+
+  // ---------- Perfil ----------
+  const handleProfileChange = (e) => {
+    const { name, value } = e.target;
+    setProfileForm((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: '' }));
+    }
   };
 
+  const validateProfile = () => {
+    const nextErrors = {};
+    if (!profileForm.firstName.trim()) nextErrors.firstName = 'El nombre es requerido';
+    if (!profileForm.lastName.trim()) nextErrors.lastName = 'El apellido es requerido';
+    if (profileForm.phone && !/^\d{7,20}$/.test(profileForm.phone.trim())) {
+      nextErrors.phone = 'El teléfono debe contener entre 7 y 20 dígitos';
+    }
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  };
+
+  const handleSaveProfile = async () => {
+    if (!validateProfile()) return;
+    setIsUpdating(true);
+    try {
+      const result = await updateProfile({
+        firstName: profileForm.firstName.trim(),
+        lastName: profileForm.lastName.trim(),
+        phone: profileForm.phone
+      });
+      if (result.success) {
+        showToast('Perfil actualizado correctamente', 'success');
+      }
+    } catch (error) {
+      console.error('Error al actualizar perfil:', error);
+      showToast(error?.message || 'Error al actualizar el perfil', 'error');
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  // ---------- Preferencias ----------
+  const handleSettingsChange = (field, value) => {
+    setSettings((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSaveSettings = async () => {
+    setIsSavingSettings(true);
+    try {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+      showToast('Preferencias guardadas correctamente', 'success');
+    } catch (error) {
+      console.error('Error guardando preferencias:', error);
+      showToast('Error al guardar las preferencias', 'error');
+    } finally {
+      setIsSavingSettings(false);
+    }
+  };
+
+  const formatDate = (date) => {
+    if (!date) return 'Nunca';
+    return new Intl.DateTimeFormat('es-ES', {
+      dateStyle: 'medium',
+      timeStyle: 'short'
+    }).format(new Date(date));
+  };
+
+  const renderProfileTab = () => (
+    <div className={styles.card}>
+      <h2 className={styles.cardTitle}>
+        <FaUserCircle className={styles.cardTitleIcon} />
+        Información del Perfil
+      </h2>
+
+      <div className={styles.avatarSection}>
+        <div className={styles.avatar}>
+          {user.firstName?.charAt(0)}
+          {user.lastName?.charAt(0)}
+        </div>
+        <div>
+          <p className={styles.avatarName}>{userFullName}</p>
+          <p className={styles.avatarRole}>{roleLabel}</p>
+          <p className={styles.avatarChurch}>
+            <FaBuilding /> {churchName}
+          </p>
+        </div>
+      </div>
+
+      <div className={styles.grid}>
+        <Input
+          label="Nombre"
+          name="firstName"
+          value={profileForm.firstName}
+          onChange={handleProfileChange}
+          error={errors.firstName}
+          icon={<FaUser />}
+        />
+        <Input
+          label="Apellido"
+          name="lastName"
+          value={profileForm.lastName}
+          onChange={handleProfileChange}
+          error={errors.lastName}
+          icon={<FaUser />}
+        />
+      </div>
+
+      <div className={styles.field}>
+        <Input
+          label="Correo Electrónico"
+          name="email"
+          value={user.email || ''}
+          icon={<FaEnvelope />}
+          readOnly
+        />
+        <p className={styles.helper}>El correo electrónico no se puede modificar.</p>
+      </div>
+
+      <div className={styles.field}>
+        <Input
+          label="Teléfono"
+          name="phone"
+          value={profileForm.phone}
+          onChange={handleProfileChange}
+          error={errors.phone}
+          icon={<FaPhone />}
+        />
+      </div>
+
+      <div className={styles.fieldActions}>
+        <Button
+          variant="primary"
+          onClick={handleSaveProfile}
+          loading={isUpdating}
+          disabled={isUpdating}
+          icon={<FaSave />}
+        >
+          Guardar Cambios
+        </Button>
+      </div>
+    </div>
+  );
+
+  const renderSecurityTab = () => (
+    <>
+      <div className={styles.card}>
+        <h2 className={styles.cardTitle}>
+          <FaKey className={styles.cardTitleIcon} />
+          Contraseña y Autenticación
+        </h2>
+        <p className={styles.description}>
+          Cambia tu contraseña para mantener tu cuenta segura. Se recomienda una
+          contraseña de al menos 8 caracteres con letras y números.
+        </p>
+        <div className={styles.fieldActions}>
+          <Button
+            variant="primary"
+            onClick={() => navigate('/change-password')}
+            icon={<FaKey />}
+          >
+            Cambiar Contraseña
+          </Button>
+        </div>
+      </div>
+
+      <div className={styles.card}>
+        <h2 className={styles.cardTitle}>
+          <FaShieldAlt className={styles.cardTitleIcon} />
+          Estado de la Cuenta
+        </h2>
+
+        <div className={styles.statusRow}>
+          <span className={styles.statusLabel}>
+            <FaUser /> Rol
+          </span>
+          <span className={styles.statusValue}>{roleLabel}</span>
+        </div>
+
+        <div className={styles.statusRow}>
+          <span className={styles.statusLabel}>
+            <FaBuilding /> Iglesia
+          </span>
+          <span className={styles.statusValue}>{churchName}</span>
+        </div>
+
+        <div className={styles.statusRow}>
+          <span className={styles.statusLabel}>
+            <FaCheckCircle /> Cuenta activa
+          </span>
+          <span className={styles.statusValue}>
+            {user.isActive ? 'Sí' : 'No'}
+          </span>
+        </div>
+
+        <div className={styles.statusRow}>
+          <span className={styles.statusLabel}>
+            <FaCheckCircle /> Cuenta aprobada
+          </span>
+          <span className={styles.statusValue}>
+            {user.isApproved ? 'Sí' : 'No'}
+          </span>
+        </div>
+
+        <div className={styles.statusRow}>
+          <span className={styles.statusLabel}>
+            <FaClock /> Último acceso
+          </span>
+          <span className={styles.statusValue}>{formatDate(user.lastLogin)}</span>
+        </div>
+      </div>
+    </>
+  );
+
+  const renderPreferencesTab = () => (
+    <div className={styles.card}>
+      <h2 className={styles.cardTitle}>
+        <FaCog className={styles.cardTitleIcon} />
+        Preferencias del Sistema
+      </h2>
+
+      <div className={styles.field}>
+        <Input
+          label="Nombre de la Aplicación"
+          name="systemName"
+          value={settings.systemName}
+          onChange={(e) => handleSettingsChange('systemName', e.target.value)}
+          icon={<FaCog />}
+        />
+      </div>
+
+      <div className={styles.switchRow}>
+        <div>
+          <p className={styles.switchTitle}>Permitir Nuevos Registros</p>
+          <p className={styles.switchDescription}>
+            Habilita o deshabilita el formulario público de registro para nuevos usuarios.
+          </p>
+        </div>
+        <label className={styles.toggle}>
+          <input
+            type="checkbox"
+            checked={settings.allowRegister}
+            onChange={(e) => handleSettingsChange('allowRegister', e.target.checked)}
+          />
+          <span className={styles.toggleSlider}></span>
+        </label>
+      </div>
+
+      <div className={styles.field}>
+        <Select
+          label="Frecuencia de Copias de Seguridad"
+          name="backupFrequency"
+          value={settings.backupFrequency}
+          onChange={(e) => handleSettingsChange('backupFrequency', e.target.value)}
+          options={[
+            { value: 'daily', label: 'Cada 24 horas (Recomendado)' },
+            { value: 'weekly', label: 'Semanal' },
+            { value: 'monthly', label: 'Mensual' }
+          ]}
+        />
+      </div>
+
+      <div className={styles.field}>
+        <div className={styles.databaseRow}>
+          <div>
+            <p className={styles.switchTitle}>Base de Datos</p>
+            <p className={styles.switchDescription}>
+              PostgreSQL · Los respaldos automatizados se gestionan a nivel de infraestructura.
+            </p>
+          </div>
+          <Button
+            variant="secondary"
+            onClick={() => showToast('El respaldo se gestiona en el proveedor de la base de datos', 'info')}
+            icon={<FaDatabase />}
+          >
+            Respaldar Ahora
+          </Button>
+        </div>
+      </div>
+
+      <p className={styles.note}>
+        Estas preferencias se guardan localmente en este navegador.
+      </p>
+
+      <div className={styles.fieldActions}>
+        <Button
+          variant="primary"
+          onClick={handleSaveSettings}
+          loading={isSavingSettings}
+          disabled={isSavingSettings}
+          icon={<FaSave />}
+        >
+          Guardar Preferencias
+        </Button>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      {/* Encabezado */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">⚙️ Configuración del Sistema</h1>
-        <p className="text-gray-600 mt-1">
-          Gestiona las preferencias globales, copias de seguridad y seguridad de la plataforma.
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1 className={styles.title}>Configuración</h1>
+        <p className={styles.subtitle}>
+          Gestiona tu perfil, la seguridad de tu cuenta y las preferencias del sistema.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        
-        {/* SECCIÓN 1: Configuración General */}
-        <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">
-            General
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Nombre de la Aplicación
-              </label>
-              <input
-                type="text"
-                value={systemName}
-                onChange={(e) => setSystemName(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Idioma Predeterminado
-              </label>
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="es">Español</option>
-                <option value="en">English</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        {/* SECCIÓN 2: Seguridad y Accesos */}
-        <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">
-            Seguridad y Accesos
-          </h2>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <span className="block text-sm font-medium text-gray-800">
-                  Permitir Nuevos Registros
-                </span>
-                <span className="text-xs text-gray-500">
-                  Habilita o deshabilita el formulario público de registro para nuevos usuarios.
-                </span>
-              </div>
-              <input
-                type="checkbox"
-                checked={allowRegister}
-                onChange={(e) => setAllowRegister(e.target.checked)}
-                className="w-5 h-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* SECCIÓN 3: Base de Datos (PostgreSQL en Render) */}
-        <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">
-            Mantenimiento y Respaldo (PostgreSQL)
-          </h2>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Frecuencia de Copias de Seguridad Automatizadas
-              </label>
-              <select
-                value={backupFrequency}
-                onChange={(e) => setBackupFrequency(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="daily">Cada 24 horas (Recomendado)</option>
-                <option value="weekly">Semanal</option>
-                <option value="monthly">Mensual</option>
-              </select>
-            </div>
-
-            <div className="pt-2">
-              <button
-                type="button"
-                onClick={() => alert('Iniciando respaldo de PostgreSQL...')}
-                className="px-4 py-2 text-sm bg-gray-800 text-white font-medium rounded-md hover:bg-gray-700 transition"
-              >
-                📦 Respaldar Base de Datos Ahora
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Botón de Enviar Formulario */}
-        <div className="flex justify-end">
+      <div className={styles.tabs}>
+        {TABS.map((tab) => (
           <button
-            type="submit"
-            disabled={isSaving}
-            className={`px-6 py-2 text-white font-semibold rounded-md shadow transition ${
-              isSaving ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-            }`}
+            key={tab.id}
+            type="button"
+            className={`${styles.tab} ${activeTab === tab.id ? styles.tabActive : ''}`}
+            onClick={() => setActiveTab(tab.id)}
           >
-            {isSaving ? 'Guardando...' : 'Guardar Cambios'}
+            <span className={styles.tabIcon}>{tab.icon}</span>
+            {tab.label}
           </button>
-        </div>
+        ))}
+      </div>
 
-      </form>
+      {activeTab === 'profile' && renderProfileTab()}
+      {activeTab === 'security' && renderSecurityTab()}
+      {activeTab === 'preferences' && renderPreferencesTab()}
     </div>
   );
 };

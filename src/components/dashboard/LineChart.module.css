@@ -3,11 +3,11 @@
 .chartContainer {
   position: relative;
   width: 100%;
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
   overflow: hidden;
 }
 
@@ -20,8 +20,8 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #6b7280;
-  font-size: 14px;
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
 }
 
 .noData p {
@@ -39,12 +39,12 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .chartContainer {
-    padding: 16px;
+    padding: var(--space-4);
   }
 }
 
 @media (max-width: 480px) {
   .chartContainer {
-    padding: 12px;
+    padding: var(--space-3);
   }
 }

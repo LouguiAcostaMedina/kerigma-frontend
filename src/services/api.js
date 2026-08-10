@@ -1,29 +1,16 @@
 import axios from 'axios';
-import { API_BASE_URL, ERROR_MESSAGES, STORAGE_KEYS } from '@/constants';
+import { API_BASE_URL, ERROR_MESSAGES } from '@/constants';
 
 // Crear instancia de axios con configuración base
+// La autenticación usa cookies HttpOnly (withCredentials): no hay tokens en localStorage
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json'
   }
 });
-
-// Interceptor para agregar token a todas las requests
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    console.error('Error en request interceptor:', error);
-    return Promise.reject(error);
-  }
-);
 
 // Interceptor para manejar respuestas y errores
 api.interceptors.response.use(
@@ -31,29 +18,45 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.error('Error en response interceptor:', error);
-    
+    // Cancelación (AbortController): no es un error real; se propaga como AbortError
+    // para que los hooks puedan filtrarla y evitar falsos mensajes de "error de red".
+    if (axios.isCancel(error) || error.code === 'ERR_CANCELED') {
+      const abortError = new Error('La solicitud fue cancelada');
+      abortError.name = 'AbortError';
+      return Promise.reject(abortError);
+    }
+
     if (error.response) {
       // El servidor respondió con un código de error
       const { status, data } = error.response;
-      
+      const url = error.config?.url || '';
+
+      // Llamadas de autenticación: su 401/403 se gestiona en AuthContext
+      // (login -> credenciales inválidas, /auth/me -> checkAuthStatus hace LOGOUT)
+      const isAuthCall = /\/auth\/(login|refresh|me)$/.test(url);
+
       switch (status) {
-        case 401:
-          // Token inválido o expirado
-          localStorage.removeItem(STORAGE_KEYS.TOKEN);
-          localStorage.removeItem(STORAGE_KEYS.USER);
-          window.location.href = '/login';
-          return Promise.reject(new Error(ERROR_MESSAGES.UNAUTHORIZED));
-        
+        case 401: {
+          // Sesión inválida o expirada en una llamada de negocio:
+          // se notifica a AuthContext para cerrar sesión sin recargar la página
+          if (!isAuthCall) {
+            window.dispatchEvent(new CustomEvent('auth:unauthorized'));
+          }
+          return Promise.reject(new Error(data.message || ERROR_MESSAGES.UNAUTHORIZED));
+        }
+
         case 403:
-          return Promise.reject(new Error(ERROR_MESSAGES.UNAUTHORIZED));
-        
+          return Promise.reject(new Error(data.message || ERROR_MESSAGES.UNAUTHORIZED));
+
+        case 429:
+          return Promise.reject(new Error('Demasiados intentos. Por favor, espere unos segundos antes de volver a intentar.'));
+
         case 400:
           return Promise.reject(new Error(data.message || ERROR_MESSAGES.VALIDATION_ERROR));
-        
+
         case 500:
           return Promise.reject(new Error(ERROR_MESSAGES.SERVER_ERROR));
-        
+
         default:
           return Promise.reject(new Error(data.message || 'Error desconocido'));
       }
@@ -71,52 +74,32 @@ api.interceptors.response.use(
 export const apiService = {
   // GET request
   get: async (url, config = {}) => {
-    try {
-      const response = await api.get(url, config);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await api.get(url, config);
+    return response.data;
   },
 
   // POST request
   post: async (url, data = {}, config = {}) => {
-    try {
-      const response = await api.post(url, data, config);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await api.post(url, data, config);
+    return response.data;
   },
 
   // PUT request
   put: async (url, data = {}, config = {}) => {
-    try {
-      const response = await api.put(url, data, config);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await api.put(url, data, config);
+    return response.data;
   },
 
   // DELETE request
   delete: async (url, config = {}) => {
-    try {
-      const response = await api.delete(url, config);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await api.delete(url, config);
+    return response.data;
   },
 
   // PATCH request
   patch: async (url, data = {}, config = {}) => {
-    try {
-      const response = await api.patch(url, data, config);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await api.patch(url, data, config);
+    return response.data;
   }
 };
 

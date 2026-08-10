@@ -3,9 +3,9 @@
 .statsContainer {
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  padding: 24px;
-  background: #f8fafc;
+  gap: var(--space-8);
+  padding: var(--space-6);
+  background: var(--color-bg);
   min-height: 100vh;
 }
 
@@ -13,18 +13,18 @@
 .metricsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
+  gap: var(--space-5);
 }
 
 .metricCard {
   display: flex;
   align-items: center;
-  gap: 20px;
-  background: white;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  border: 1px solid #e5e7eb;
+  gap: var(--space-5);
+  background: var(--color-surface);
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -37,12 +37,12 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-hover));
 }
 
 .metricCard:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-lg);
 }
 
 .metricIcon {
@@ -52,9 +52,11 @@
   justify-content: center;
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 50%;
-  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
+  color: var(--color-on-accent);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-md);
+  flex-shrink: 0;
 }
 
 .metricContent {
@@ -62,10 +64,10 @@
 }
 
 .metricContent h3 {
-  margin: 0 0 8px 0;
-  font-size: 0.875rem;
+  margin: 0 0 var(--space-2) 0;
+  font-size: var(--text-small);
   font-weight: 600;
-  color: #6b7280;
+  color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -73,14 +75,14 @@
 .metricValue {
   font-size: 2.25rem;
   font-weight: 700;
-  color: #111827;
-  margin-bottom: 4px;
+  color: var(--color-text);
+  margin-bottom: var(--space-1);
   line-height: 1;
 }
 
 .metricSubtext {
-  font-size: 0.875rem;
-  color: #9ca3af;
+  font-size: var(--text-small);
+  color: var(--color-text-muted);
   font-weight: 500;
 }
 
@@ -88,27 +90,27 @@
 .chartsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 24px;
+  gap: var(--space-6);
 }
 
 .chartCard {
-  background: white;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  border: 1px solid #e5e7eb;
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
   transition: all 0.3s ease;
 }
 
 .chartCard:hover {
-  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-lg);
 }
 
 .chartCard h3 {
-  margin: 0 0 20px 0;
-  font-size: 1.25rem;
+  margin: 0 0 var(--space-5) 0;
+  font-size: var(--text-h3);
   font-weight: 600;
-  color: #111827;
+  color: var(--color-text);
   text-align: center;
   position: relative;
 }
@@ -116,13 +118,13 @@
 .chartCard h3::after {
   content: '';
   position: absolute;
-  bottom: -8px;
+  bottom: calc(var(--space-2) * -1);
   left: 50%;
   transform: translateX(-50%);
   width: 40px;
   height: 3px;
-  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-  border-radius: 2px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-hover));
+  border-radius: var(--radius-sm);
 }
 
 .chartContainer {
@@ -142,13 +144,13 @@
 .summaryCards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
+  gap: var(--space-4);
 }
 
 .summaryCard {
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
   text-align: center;
   border: 2px solid transparent;
   transition: all 0.3s ease;
@@ -167,81 +169,81 @@
 }
 
 .summaryCard.success::before {
-  background: #10b981;
+  background: var(--color-success);
 }
 
 .summaryCard.warning::before {
-  background: #f59e0b;
+  background: var(--color-warning);
 }
 
 .summaryCard.info::before {
-  background: #3b82f6;
+  background: var(--color-info);
 }
 
 .summaryCard.error::before {
-  background: #ef4444;
+  background: var(--color-danger);
 }
 
 .summaryCard:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
 }
 
 .summaryCard.success:hover {
-  border-color: #10b981;
-  box-shadow: 0 8px 25px -5px rgba(16, 185, 129, 0.3);
+  border-color: var(--color-success);
+  box-shadow: 0 0 0 3px var(--color-success-soft);
 }
 
 .summaryCard.warning:hover {
-  border-color: #f59e0b;
-  box-shadow: 0 8px 25px -5px rgba(245, 158, 11, 0.3);
+  border-color: var(--color-warning);
+  box-shadow: 0 0 0 3px var(--color-warning-soft);
 }
 
 .summaryCard.info:hover {
-  border-color: #3b82f6;
-  box-shadow: 0 8px 25px -5px rgba(59, 130, 246, 0.3);
+  border-color: var(--color-info);
+  box-shadow: 0 0 0 3px var(--color-info-soft);
 }
 
 .summaryCard.error:hover {
-  border-color: #ef4444;
-  box-shadow: 0 8px 25px -5px rgba(239, 68, 68, 0.3);
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px var(--color-danger-soft);
 }
 
 .summaryCard h4 {
-  margin: 0 0 12px 0;
-  font-size: 0.875rem;
+  margin: 0 0 var(--space-3) 0;
+  font-size: var(--text-small);
   font-weight: 600;
-  color: #6b7280;
+  color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .summaryValue {
-  font-size: 2rem;
+  font-size: var(--text-h1);
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-2);
   line-height: 1;
 }
 
 .summaryCard.success .summaryValue {
-  color: #059669;
+  color: var(--color-success);
 }
 
 .summaryCard.warning .summaryValue {
-  color: #d97706;
+  color: var(--color-warning);
 }
 
 .summaryCard.info .summaryValue {
-  color: #2563eb;
+  color: var(--color-info);
 }
 
 .summaryCard.error .summaryValue {
-  color: #dc2626;
+  color: var(--color-danger);
 }
 
 .summaryPercentage {
-  font-size: 0.75rem;
-  color: #9ca3af;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -276,10 +278,25 @@
   align-items: center;
   justify-content: center;
   height: 200px;
-  color: #6b7280;
+  color: var(--color-text-muted);
 }
 
 .noData {
   text-align: center;
-  padding: 40px;
+  padding: var(--space-10);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .metricCard,
+  .chartCard,
+  .summaryCard {
+    animation: none;
+    transition: none;
+  }
+
+  .metricCard:hover,
+  .summaryCard:hover {
+    transform: none;
+  }
 }

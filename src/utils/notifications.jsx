@@ -3,6 +3,7 @@
  * Proporciona funciones para mostrar diferentes tipos de notificaciones
  */
 
+/* eslint-disable react-refresh/only-export-components */
 import { useState, useEffect, createContext, useContext } from 'react';
 import { createPortal } from 'react-dom';
 import { FaCheckCircle, FaExclamationTriangle, FaInfoCircle, FaTimes } from 'react-icons/fa';
@@ -62,6 +63,7 @@ const Toast = ({ id, type, message, duration, onRemove }) => {
       clearTimeout(showTimer);
       clearTimeout(hideTimer);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [duration]);
 
   const handleClose = () => {

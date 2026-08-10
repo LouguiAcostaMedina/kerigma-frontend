@@ -6,6 +6,7 @@
 import { BrowserRouter as Router,Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import { ROLES } from '@/constants';
 
 // Componente de Loading para lazy loading
 import Layout from '@/components/layout/Layout';
@@ -15,6 +16,8 @@ import { Suspense } from 'react';
 // Páginas de autenticación
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
+import ForgotPassword from '@/pages/ForgotPassword';
+import ResetPassword from '@/pages/ResetPassword';
 import ChangePassword from '@/pages/ChangePassword';
 import Profile from '@/pages/Profile';
 import Configuration from '@/pages/Configuration';
@@ -37,14 +40,18 @@ import NotFound from '@/pages/NotFound';
 import Unauthorized from '@/pages/Unauthorized';
 
 
+// Roles que acceden a cada módulo (valores idénticos al ENUM del backend)
+const ALL_AUTHENTICATED = [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER, ROLES.READER];
+const MANAGE_ROLES = [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER];
+const HIGHER_ROLES = [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR];
+const ADMIN_ROLES = [ROLES.SUPER_ADMIN, ROLES.ADMIN];
+
 const AppRouter = () => {
   const { isLoading } = useAuth();
 
   if (isLoading) {
     return <Loading fullScreen />;
   }
-// Definimos un array con todos los roles incluyendo el formato que manda el backend ('admin')
-  const allRoles = ['Lector', 'Líder', 'Director', 'Administrador', 'admin'];
   return (
     <Routes>
       {/* Rutas públicas (sin autenticación) */}
@@ -66,6 +73,24 @@ const AppRouter = () => {
         } 
       />
 
+      <Route
+        path="/forgot-password"
+        element={
+          <ProtectedRoute requireAuth={false}>
+            <ForgotPassword />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/reset-password/:token"
+        element={
+          <ProtectedRoute requireAuth={false}>
+            <ResetPassword />
+          </ProtectedRoute>
+        }
+      />
+
       {/* Rutas protegidas con Layout */}
       <Route path="/" element={
         <ProtectedRoute>
@@ -79,7 +104,7 @@ const AppRouter = () => {
         <Route 
           path="dashboard" 
           element={
-            <ProtectedRoute roles={['Lector', 'Líder', 'Director', 'Administrador']}>
+            <ProtectedRoute roles={ALL_AUTHENTICATED}>
               <Dashboard />
             </ProtectedRoute>
           } 
@@ -89,7 +114,7 @@ const AppRouter = () => {
         <Route 
           path="profile" 
           element={
-            <ProtectedRoute roles={['Lector', 'Líder', 'Director', 'Administrador']}>
+            <ProtectedRoute roles={ALL_AUTHENTICATED}>
               <Profile />
             </ProtectedRoute>
           } 
@@ -98,7 +123,7 @@ const AppRouter = () => {
         <Route 
           path="change-password" 
           element={
-            <ProtectedRoute roles={['Lector', 'Líder', 'Director', 'Administrador']}>
+            <ProtectedRoute roles={ALL_AUTHENTICATED}>
               <ChangePassword />
             </ProtectedRoute>
           } 
@@ -106,7 +131,7 @@ const AppRouter = () => {
 <Route 
   path="configuration" 
   element={
-    <ProtectedRoute roles={['Administrador', 'admin']}>
+    <ProtectedRoute roles={ADMIN_ROLES}>
       <Configuration />
     </ProtectedRoute>
   } 
@@ -115,7 +140,7 @@ const AppRouter = () => {
         <Route 
           path="members" 
           element={
-            <ProtectedRoute roles={['Líder', 'Director', 'Administrador']}>
+            <ProtectedRoute roles={MANAGE_ROLES}>
               <Members />
             </ProtectedRoute>
           } 
@@ -125,7 +150,7 @@ const AppRouter = () => {
         <Route 
           path="groups" 
           element={
-            <ProtectedRoute roles={['Líder', 'Director', 'Administrador']}>
+            <ProtectedRoute roles={MANAGE_ROLES}>
               <Groups />
             </ProtectedRoute>
           } 
@@ -135,7 +160,7 @@ const AppRouter = () => {
         <Route 
           path="biblical-students" 
           element={
-            <ProtectedRoute roles={['Líder', 'Director', 'Administrador']}>
+            <ProtectedRoute roles={MANAGE_ROLES}>
               <BiblicalStudents />
             </ProtectedRoute>
           } 
@@ -145,7 +170,7 @@ const AppRouter = () => {
         <Route 
           path="reports" 
           element={
-            <ProtectedRoute roles={['Lector', 'Líder', 'Director', 'Administrador']}>
+            <ProtectedRoute roles={ALL_AUTHENTICATED}>
               <Reports />
             </ProtectedRoute>
           } 
@@ -155,7 +180,7 @@ const AppRouter = () => {
         <Route 
           path="churches" 
           element={
-            <ProtectedRoute roles={['Director', 'Administrador']}>
+            <ProtectedRoute roles={HIGHER_ROLES}>
               <Churches />
             </ProtectedRoute>
           } 
@@ -165,7 +190,7 @@ const AppRouter = () => {
         <Route 
           path="users" 
           element={
-            <ProtectedRoute roles={['Administrador']}>
+            <ProtectedRoute roles={ADMIN_ROLES}>
               <Users />
             </ProtectedRoute>
           } 

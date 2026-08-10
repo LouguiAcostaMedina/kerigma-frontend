@@ -61,11 +61,19 @@ const Modal = ({
   // No renderizar si el modal no está abierto
   if (!isOpen) return null;
 
+  // Normalizar tamaños: el CSS usa extraLarge (camelCase) y full-screen vía data-size
+  const isFullScreen = size === 'full-screen';
+  const sizeClass = isFullScreen ? '' : size === 'extra-large' ? styles.extraLarge : styles[size] || '';
+
   // Contenido del modal
   const modalContent = (
-    <div className={styles.modalOverlay} onClick={handleBackdropClick}>
+    <div
+      className={styles.modalOverlay}
+      data-size={isFullScreen ? 'full-screen' : undefined}
+      onClick={handleBackdropClick}
+    >
       <div 
-        className={`${styles.modalContainer} ${styles[size]} ${className}`}
+        className={`${styles.modalContainer} ${sizeClass} ${className}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header del modal */}
@@ -103,7 +111,7 @@ Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
   title: PropTypes.string,
   children: PropTypes.node.isRequired,
-  size: PropTypes.oneOf(['small', 'medium', 'large', 'extra-large']),
+  size: PropTypes.oneOf(['small', 'medium', 'large', 'extra-large', 'full-screen']),
   showCloseButton: PropTypes.bool,
   closeOnBackdrop: PropTypes.bool,
   closeOnEscape: PropTypes.bool,

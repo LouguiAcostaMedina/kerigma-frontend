@@ -6,7 +6,7 @@
 .chartExporter {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .exportButtons {
@@ -17,13 +17,13 @@
 
 /* Modal de configuración */
 .exportConfig {
-  padding: 0.5rem 0;
+  padding: var(--space-2) 0;
 }
 
 .configSection {
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border-light);
+  margin-bottom: var(--space-8);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .configSection:last-child {
@@ -32,20 +32,20 @@
 }
 
 .configSection h4 {
-  margin: 0 0 1rem 0;
-  color: var(--text-primary);
-  font-size: 1.1rem;
+  margin: 0 0 var(--space-4) 0;
+  color: var(--color-text);
+  font-size: var(--text-h4);
   font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 /* Formatos de exportación */
 .formatGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .formatOption {
@@ -59,22 +59,22 @@
 }
 
 .formatCard {
-  padding: 1rem;
-  border: 2px solid var(--border-light);
-  border-radius: 8px;
+  padding: var(--space-4);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
   text-align: center;
-  transition: all 0.2s ease;
-  background: var(--card-bg);
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  background: var(--color-surface);
 }
 
 .formatOption input:checked + .formatCard {
-  border-color: var(--primary-400);
-  background: var(--primary-50);
-  color: var(--primary-700);
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
 }
 
 .formatCard:hover {
-  border-color: var(--primary-300);
+  border-color: var(--color-accent);
 }
 
 .formatLabel {
@@ -83,81 +83,82 @@
 }
 
 .formatDesc {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
 }
 
 /* Tamaños predefinidos */
 .presetsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
 }
 
 .presetButton {
-  padding: 0.75rem;
-  border: 2px solid var(--border-light);
-  border-radius: 6px;
-  background: var(--card-bg);
-  color: var(--text-primary);
-  font-size: 0.85rem;
+  padding: var(--space-3);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--text-small);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
 }
 
 .presetButton:hover {
-  border-color: var(--primary-300);
-  background: var(--primary-50);
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
 }
 
 .presetButton.active {
-  border-color: var(--primary-400);
-  background: var(--primary-100);
-  color: var(--primary-700);
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
   font-weight: 600;
 }
 
 .dimensionsInputs {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .inputGroup {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .inputGroup label {
   font-weight: 500;
-  color: var(--text-primary);
-  font-size: 0.9rem;
+  color: var(--color-text);
+  font-size: var(--text-small);
 }
 
 .inputGroup input,
 .inputGroup select {
-  padding: 0.5rem;
-  border: 1px solid var(--border-light);
-  border-radius: 6px;
-  font-size: 0.9rem;
-  background: var(--bg-primary);
-  color: var(--text-primary);
+  padding: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-small);
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .inputGroup input:focus,
 .inputGroup select:focus {
   outline: none;
-  border-color: var(--primary-400);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent-soft);
 }
 
 /* Opciones de fondo */
 .backgroundOptions {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 0.75rem;
+  gap: var(--space-3);
 }
 
 .backgroundOption {
@@ -174,116 +175,116 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  border: 2px solid var(--border-light);
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .backgroundOption input:checked + .backgroundPreview {
-  border-color: var(--primary-400);
-  background: var(--primary-50);
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
 }
 
 .backgroundPreview:hover {
-  border-color: var(--primary-300);
+  border-color: var(--color-accent);
 }
 
 .backgroundColor {
   width: 40px;
   height: 40px;
-  border-radius: 4px;
-  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
 }
 
 .backgroundPreview span {
-  font-size: 0.8rem;
-  color: var(--text-primary);
+  font-size: var(--text-xs);
+  color: var(--color-text);
   font-weight: 500;
 }
 
 .customColorInput {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-top: 1rem;
-  padding: 0.75rem;
-  background: var(--bg-secondary);
-  border-radius: 6px;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  padding: var(--space-3);
+  background: var(--color-surface-alt);
+  border-radius: var(--radius-sm);
 }
 
 .customColorInput label {
-  font-size: 0.9rem;
-  color: var(--text-primary);
+  font-size: var(--text-small);
+  color: var(--color-text);
 }
 
 .customColorInput input[type="color"] {
   width: 40px;
   height: 30px;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
 }
 
 /* Checkboxes */
 .checkboxGroup {
-  margin: 0.75rem 0;
+  margin: var(--space-3) 0;
 }
 
 .checkboxLabel {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   cursor: pointer;
-  font-size: 0.9rem;
-  color: var(--text-primary);
+  font-size: var(--text-small);
+  color: var(--color-text);
 }
 
 .checkboxLabel input {
   width: 16px;
   height: 16px;
-  accent-color: var(--primary-500);
+  accent-color: var(--color-accent);
 }
 
 /* Vista previa */
 .preview {
-  background: var(--bg-secondary);
-  border-radius: 8px;
-  padding: 1rem;
+  background: var(--color-surface-alt);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
 }
 
 .previewInfo {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .previewInfo div {
-  font-size: 0.9rem;
-  color: var(--text-primary);
+  font-size: var(--text-small);
+  color: var(--color-text);
 }
 
 .previewInfo strong {
-  color: var(--primary-600);
+  color: var(--color-accent);
 }
 
 /* Acciones del modal */
 .modalActions {
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-light);
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
 }
 
 /* Range slider personalizado */
 input[type="range"] {
   width: 100%;
   height: 6px;
-  border-radius: 3px;
-  background: var(--border-light);
+  border-radius: var(--radius-sm);
+  background: var(--color-border);
   outline: none;
   -webkit-appearance: none;
 }
@@ -293,19 +294,19 @@ input[type="range"]::-webkit-slider-thumb {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: var(--primary-500);
+  background: var(--color-accent);
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-sm);
 }
 
 input[type="range"]::-moz-range-thumb {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: var(--primary-500);
+  background: var(--color-accent);
   cursor: pointer;
   border: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Animaciones */
@@ -328,6 +329,24 @@ input[type="range"]::-moz-range-thumb {
   animation: fadeIn 0.4s ease-out;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .exportConfig,
+  .configSection {
+    animation: none;
+  }
+
+  .formatCard,
+  .presetButton,
+  .backgroundPreview,
+  .inputGroup input,
+  .inputGroup select,
+  .formatCard::after,
+  .presetButton::after,
+  .backgroundPreview::after {
+    transition: none;
+  }
+}
+
 /* Estados de carga */
 .chartExporter.loading {
   pointer-events: none;
@@ -338,32 +357,32 @@ input[type="range"]::-moz-range-thumb {
 @media (max-width: 768px) {
   .formatGrid {
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 0.75rem;
+    gap: var(--space-3);
   }
 
   .presetsGrid {
     grid-template-columns: 1fr;
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 
   .dimensionsInputs {
     grid-template-columns: 1fr;
-    gap: 0.75rem;
+    gap: var(--space-3);
   }
 
   .backgroundOptions {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 
   .modalActions {
     flex-direction: column-reverse;
-    gap: 0.75rem;
+    gap: var(--space-3);
   }
 
   .exportButtons {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 }
 
@@ -381,49 +400,11 @@ input[type="range"]::-moz-range-thumb {
   }
 
   .previewInfo div {
-    font-size: 0.8rem;
+    font-size: var(--text-xs);
   }
 
   .configSection h4 {
-    font-size: 1rem;
-  }
-}
-
-/* Modo oscuro */
-@media (prefers-color-scheme: dark) {
-  .chartExporter {
-    --card-bg: #1f2937;
-    --bg-primary: #374151;
-    --bg-secondary: #4b5563;
-    --text-primary: #f9fafb;
-    --text-secondary: #d1d5db;
-    --border-light: #6b7280;
-  }
-
-  .formatCard,
-  .presetButton,
-  .backgroundPreview {
-    background: #374151;
-    border-color: #6b7280;
-  }
-
-  .formatOption input:checked + .formatCard,
-  .presetButton.active,
-  .backgroundOption input:checked + .backgroundPreview {
-    background: rgba(59, 130, 246, 0.2);
-    border-color: var(--primary-400);
-  }
-
-  .customColorInput {
-    background: #374151;
-  }
-
-  .preview {
-    background: #374151;
-  }
-
-  input[type="range"] {
-    background: #6b7280;
+    font-size: var(--text-p);
   }
 }
 
@@ -444,7 +425,7 @@ input[type="range"]::-moz-range-thumb {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-text) 20%, transparent), transparent);
   transition: left 0.5s ease;
 }
 

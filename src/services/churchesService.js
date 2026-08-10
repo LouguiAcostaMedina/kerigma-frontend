@@ -11,12 +11,26 @@ export const churchesService = {
   /**
    * Obtener lista de iglesias con filtros y paginación
    */
-  getChurches: async (params = {}) => {
+  getChurches: async (params = {}, signal) => {
     try {
-      const response = await apiClient.get('/churches', { params });
+      const response = await apiClient.get('/churches', { params, signal });
       return response.data;
     } catch (error) {
+      if (error.name === 'AbortError' || error.message?.includes('cancelada')) return;
       console.error('Error fetching churches:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Obtener iglesias públicas (sin auth) para el registro
+   */
+  getPublicChurches: async (signal) => {
+    try {
+      const response = await apiClient.get('/churches/public', { signal });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching public churches:', error);
       throw error;
     }
   },

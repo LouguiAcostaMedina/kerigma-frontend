@@ -16,7 +16,8 @@ import { showNotification } from '@/utils/notifications';
 import {
   FiFileText, FiPlus, FiPlay, FiDownload, FiCalendar, FiShare2,
   FiTrendingUp, FiBarChart, FiPieChart, FiActivity, FiClock,
-  FiFilter, FiSearch, FiRefreshCw, FiLayers, FiBookOpen
+  FiFilter, FiSearch, FiRefreshCw, FiLayers, FiBookOpen, FiCopy,
+  FiTrash2, FiX
 } from 'react-icons/fi';
 import styles from './Reports.module.css';
 
@@ -32,7 +33,6 @@ export const Reports = () => {
     loading,
     executing,
     exporting,
-    hasReports,
     isEmpty,
     fetchPredefinedReports,
     fetchCustomReports,
@@ -49,7 +49,7 @@ export const Reports = () => {
     clearReportData
   } = useReports();
 
-  const { user, hasPermission } = useAuth();
+  const { user, hasAnyRole } = useAuth();
 
   // ===================== ESTADO LOCAL =====================
   const [activeTab, setActiveTab] = useState('predefined');
@@ -69,6 +69,7 @@ export const Reports = () => {
   // ===================== EFECTOS =====================
   useEffect(() => {
     loadInitialData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -83,6 +84,7 @@ export const Reports = () => {
     } else if (activeTab === 'templates') {
       fetchReportTemplates();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
   // ===================== FUNCIONES =====================
@@ -237,7 +239,7 @@ export const Reports = () => {
             icon={<FiDownload />}
             title="Exportar reporte"
           />
-          {hasPermission(['admin', 'director']) && (
+          {hasAnyRole(['admin', 'director']) && (
             <Button
               variant="ghost"
               size="sm"
@@ -323,7 +325,7 @@ export const Reports = () => {
             icon={<FiShare2 />}
             title="Compartir reporte"
           />
-          {(report.author?.id === user?.id || hasPermission(['admin'])) && (
+          {(report.author?.id === user?.id || hasAnyRole(['admin'])) && (
             <Button
               variant="ghost"
               size="sm"
@@ -342,7 +344,7 @@ export const Reports = () => {
   const getReportIcon = (category) => {
     const icons = {
       'membership': <FiTrendingUp />,
-      'groups': <FiBarChart3 />,
+      'groups': <FiBarChart />,
       'students': <FiBookOpen />,
       'baptisms': <FiActivity />,
       'metrics': <FiPieChart />
@@ -404,7 +406,7 @@ export const Reports = () => {
               Actualizar
             </Button>
             
-            {hasPermission(['admin', 'director', 'leader']) && (
+            {hasAnyRole(['admin', 'director', 'leader']) && (
               <Button
                 variant="primary"
                 icon={<FiPlus />}
@@ -424,7 +426,7 @@ export const Reports = () => {
             className={`${styles.tab} ${activeTab === 'predefined' ? styles.active : ''}`}
             onClick={() => setActiveTab('predefined')}
           >
-            <FiTemplate />
+            <FiCopy />
             Predefinidos
             <span className={styles.badge}>{predefinedReports.length}</span>
           </button>
@@ -447,7 +449,7 @@ export const Reports = () => {
             <span className={styles.badge}>{sharedReports.length}</span>
           </button>
           
-          {hasPermission(['admin', 'director']) && (
+          {hasAnyRole(['admin', 'director']) && (
             <button
               className={`${styles.tab} ${activeTab === 'scheduled' ? styles.active : ''}`}
               onClick={() => setActiveTab('scheduled')}
@@ -462,7 +464,7 @@ export const Reports = () => {
             className={`${styles.tab} ${activeTab === 'templates' ? styles.active : ''}`}
             onClick={() => setActiveTab('templates')}
           >
-            <FiTemplate />
+            <FiCopy />
             Plantillas
             <span className={styles.badge}>{reportTemplates.length}</span>
           </button>
@@ -522,7 +524,7 @@ export const Reports = () => {
             <FiFileText className={styles.emptyIcon} />
             <h3>No hay reportes disponibles</h3>
             <p>Comienza creando tu primer reporte personalizado</p>
-            {hasPermission(['admin', 'director', 'leader']) && (
+            {hasAnyRole(['admin', 'director', 'leader']) && (
               <Button
                 variant="primary"
                 icon={<FiPlus />}

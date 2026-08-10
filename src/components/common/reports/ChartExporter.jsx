@@ -3,7 +3,7 @@
  * Soporta PNG, JPEG, SVG, PDF y configuraciones avanzadas
  */
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { FaDownload, FaImage, FaFilePdf, FaCog, FaPalette, FaRuler } from 'react-icons/fa';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -35,8 +35,6 @@ const ChartExporter = ({
     filename: chartTitle.toLowerCase().replace(/\s+/g, '-'),
     dpi: 300
   });
-
-  const canvasRef = useRef(null);
 
   // Formatos de exportación disponibles
   const exportFormats = [
@@ -99,7 +97,7 @@ const ChartExporter = ({
       restoreElementStyles(element, originalStyles);
 
       // Descargar archivo
-      downloadFile(result.data, result.filename, result.mimeType);
+      downloadFile(result.data, result.filename);
 
       showNotification('Gráfico exportado exitosamente', 'success');
       onExportComplete && onExportComplete(result);
@@ -248,7 +246,7 @@ const ChartExporter = ({
   };
 
   // Descargar archivo
-  const downloadFile = (dataUrl, filename, mimeType) => {
+  const downloadFile = (dataUrl, filename) => {
     const link = document.createElement('a');
     link.download = filename;
     link.href = dataUrl;

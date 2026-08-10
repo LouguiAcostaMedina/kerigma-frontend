@@ -30,17 +30,21 @@ const ProtectedRoute = ({
       replace 
     />;
   }
+// Si se especificaron roles y el usuario no pertenece a la lista autorizada
+  if (roles.length > 0 && isAuthenticated) {
+    const userRole = user?.role || user?.rol || '';
+    const hasAccess = hasAnyRole(roles) || roles.some(r => r.toLowerCase() === userRole.toLowerCase());
 
-  // Si se especificaron roles y el usuario no tiene ninguno de ellos
-  if (roles.length > 0 && isAuthenticated && !hasAnyRole(roles)) {
-    return <Navigate 
-      to="/unauthorized" 
-      state={{ from: location, requiredRoles: roles }} 
-      replace 
-    />;
+    if (!hasAccess) {
+      return <Navigate 
+        to="/dashboard" 
+        state={{ from: location }} 
+        replace 
+      />;
+    }
   }
 
-  // Si se requiere no estar autenticado (ej: página de login)
+  // Si se requiere no estar autenticado (ej: página de login) y ya tienes sesión activa
   if (!requireAuth && isAuthenticated) {
     const from = location.state?.from?.pathname || '/dashboard';
     return <Navigate to={from} replace />;

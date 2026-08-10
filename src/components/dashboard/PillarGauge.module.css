@@ -1,0 +1,84 @@
+/* Estilos para el componente PillarGauge */
+
+.gaugeCard {
+  background: var(--card-bg);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+  border: var(--card-border);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.gaugeCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.gaugeWrap {
+  position: relative;
+  width: 170px;
+  height: 170px;
+  margin-bottom: var(--space-5);
+}
+
+.gaugeCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.gaugeValue {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.gaugeInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.gaugeTitle {
+  font-family: var(--font-sans);
+  font-size: var(--text-h4);
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-accent);
+}
+
+.gaugeDesc {
+  font-size: var(--text-small);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.gaugeDetail {
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--color-text);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+}
+
+@media (max-width: 480px) {
+  .gaugeWrap {
+    width: 140px;
+    height: 140px;
+  }
+
+  .gaugeValue {
+    font-size: 24px;
+  }
+}

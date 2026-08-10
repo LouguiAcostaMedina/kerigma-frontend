@@ -1,6 +1,7 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import authService from '@/services/authService';
-import { SUCCESS_MESSAGES, ERROR_MESSAGES } from '@/constants';
+import { SUCCESS_MESSAGES, ERROR_MESSAGES, STORAGE_KEYS, ROLE_PERMISSIONS } from '@/constants';
 
 // Estados posibles de autenticación
 const AUTH_STATES = {
@@ -94,52 +95,75 @@ const authReducer = (state, action) => {
   }
 };
 
-// Crear el contexto de autenticación
 export const AuthContext = createContext(null);
 
-// Provider del contexto de autenticación
+// La sesión viaja en cookies HttpOnly (no legibles por JS). Para no disparar
+// GET /auth/me (401) en cada arranque sin sesión, se persiste un marcador simple
+// en localStorage tras un login/registro exitoso y se limpia al cerrar sesión.
+const setSessionMarker = () => localStorage.setItem(STORAGE_KEYS.SESSION_MARKER, '1');
+const clearSessionMarker = () => localStorage.removeItem(STORAGE_KEYS.SESSION_MARKER);
+
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  // Verificar autenticación al cargar la aplicación
   useEffect(() => {
     checkAuthStatus();
+
+    // Sesión inválida/expirada detectada por el interceptor de axios (evento de api.js).
+    // Cierra sesión en el contexto y deja que ProtectedRoute redirija al login sin recargar la página.
+    const handleUnauthorized = () => {
+      clearSessionMarker();
+      dispatch({ type: AUTH_ACTIONS.LOGOUT });
+    };
+    window.addEventListener('auth:unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
   }, []);
 
-  // Verificar el estado de autenticación actual
   const checkAuthStatus = async () => {
+    // Sin marcador de sesión no hay cookie que validar: no llamar a /auth/me.
+    if (!localStorage.getItem(STORAGE_KEYS.SESSION_MARKER)) {
+      dispatch({ type: AUTH_ACTIONS.LOGOUT });
+      return;
+    }
+
     try {
       dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true });
 
-      if (authService.isAuthenticated()) {
-        const user = authService.getCurrentUser();
-        if (user) {
-          dispatch({ type: AUTH_ACTIONS.LOGIN_SUCCESS, payload: user });
-        } else {
-          dispatch({ type: AUTH_ACTIONS.LOGOUT });
-        }
+      // La sesión se valida contra el backend vía GET /auth/me (cookies HttpOnly)
+      const response = await authService.getProfile();
+      const user = authService.getCurrentUser() || response?.data?.user || null;
+
+      if (user) {
+        dispatch({ type: AUTH_ACTIONS.LOGIN_SUCCESS, payload: user });
       } else {
+        clearSessionMarker();
         dispatch({ type: AUTH_ACTIONS.LOGOUT });
       }
-    } catch (error) {
-      console.error('Error verificando autenticación:', error);
+    } catch {
+      clearSessionMarker();
       dispatch({ type: AUTH_ACTIONS.LOGOUT });
     }
   };
 
-  // Función para iniciar sesión
   const login = async (credentials) => {
     try {
       dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true });
 
-      const response = await authService.login(credentials);
-      
-      if (response.user) {
-        dispatch({ type: AUTH_ACTIONS.LOGIN_SUCCESS, payload: response.user });
-        return { success: true, message: SUCCESS_MESSAGES.LOGIN_SUCCESS };
-      } else {
-        throw new Error('Respuesta inválida del servidor');
+      const result = await authService.login(credentials);
+
+      if (result.success && result.user) {
+        setSessionMarker();
+        dispatch({ type: AUTH_ACTIONS.LOGIN_SUCCESS, payload: result.user });
+        return {
+          success: true,
+          user: result.user,
+          message: result.message || SUCCESS_MESSAGES.LOGIN_SUCCESS
+        };
       }
+
+      const errorMessage = result.error || ERROR_MESSAGES.INVALID_CREDENTIALS;
+      dispatch({ type: AUTH_ACTIONS.LOGIN_FAILURE, payload: errorMessage });
+      return { success: false, message: errorMessage };
     } catch (error) {
       const errorMessage = error.message || ERROR_MESSAGES.INVALID_CREDENTIALS;
       dispatch({ type: AUTH_ACTIONS.LOGIN_FAILURE, payload: errorMessage });
@@ -147,13 +171,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Función para registrar nuevo usuario
   const register = async (userData) => {
     try {
       dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true });
-
-      const response = await authService.register(userData);
-      
+      await authService.register(userData);
+      setSessionMarker();
       dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
       return { success: true, message: 'Usuario registrado exitosamente' };
     } catch (error) {
@@ -163,23 +185,21 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Función para cerrar sesión
-  const logout = () => {
+  const logout = async () => {
     try {
-      authService.logout();
-      dispatch({ type: AUTH_ACTIONS.LOGOUT });
+      await authService.logout();
     } catch (error) {
       console.error('Error en logout:', error);
+    } finally {
+      clearSessionMarker();
+      dispatch({ type: AUTH_ACTIONS.LOGOUT });
     }
   };
 
-  // Función para cambiar contraseña
   const changePassword = async (passwordData) => {
     try {
       dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true });
-
       await authService.changePassword(passwordData);
-      
       dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
       return { success: true, message: SUCCESS_MESSAGES.PASSWORD_CHANGED };
     } catch (error) {
@@ -189,14 +209,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Función para actualizar perfil
   const updateProfile = async (profileData) => {
     try {
       dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true });
-
-      const updatedUser = await authService.updateProfile(profileData);
-      
-      dispatch({ type: AUTH_ACTIONS.UPDATE_USER, payload: updatedUser });
+      const response = await authService.updateProfile(profileData);
+      const updatedUser = response?.data?.user || response?.data || null;
+      if (updatedUser) {
+        dispatch({
+          type: AUTH_ACTIONS.UPDATE_USER,
+          payload: { ...updatedUser, church: state.user?.church || updatedUser.church || null },
+        });
+      }
+      dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
       return { success: true, message: SUCCESS_MESSAGES.UPDATE_SUCCESS };
     } catch (error) {
       const errorMessage = error.message || 'Error al actualizar perfil';
@@ -205,31 +229,99 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Verificar si el usuario tiene un rol específico
+  // 🛠️ MODIFICACIÓN DE ROL POR JERARQUÍA REHABILITADA (Reconoce tanto 'role' como 'roles')
   const hasRole = (role) => {
-    return authService.hasRole(role);
+    if (!state.user) return false;
+    const userRole = state.user.role || state.user.roles || state.user.rol;
+    if (!userRole) return false;
+
+    const userRolesArray = Array.isArray(userRole) ? userRole : [userRole];
+
+    const normalize = (r) => {
+      if (!r) return '';
+      const clean = r.toLowerCase().trim();
+      if (clean === 'super_admin') return 'superadministrador';
+      if (clean === 'admin') return 'administrador';
+      if (clean === 'reader') return 'lector';
+      if (clean === 'leader') return 'lider';
+      return clean;
+    };
+
+    // Estructura jerárquica idéntica para validar accesos por umbral (ej: super_admin tiene nivel 5, accede a todo)
+    const roleHierarchy = {
+      'superadministrador': 5,
+      'administrador': 4,
+      'director': 3,
+      'lider': 2,
+      'lector': 1
+    };
+
+    const targetNormalized = normalize(role);
+    const targetLevel = roleHierarchy[targetNormalized] || 0;
+
+    return userRolesArray.some(r => {
+      const currentNormalized = normalize(r);
+      // Retorna true si coincide el rol exacto o si tiene un nivel jerárquico superior al requerido
+      return currentNormalized === targetNormalized || (roleHierarchy[currentNormalized] || 0) >= targetLevel;
+    });
   };
 
-  // Verificar si el usuario tiene cualquiera de los roles especificados
   const hasAnyRole = (roles) => {
-    return authService.hasAnyRole(roles);
+    if (!state.user || !roles) return false;
+    return roles.some(role => hasRole(role));
   };
 
-  // Limpiar errores
+  // Normaliza el rol del usuario a la clave canónica del ENUM del backend
+  const getUserRoles = () => {
+    if (!state.user) return [];
+    const userRole = state.user.role || state.user.roles || state.user.rol;
+    if (!userRole) return [];
+
+    const normalize = (r) => {
+      const clean = String(r).toLowerCase().trim();
+      if (clean === 'super_admin' || clean === 'superadministrador') return 'super_admin';
+      if (clean === 'admin' || clean === 'administrador') return 'admin';
+      if (clean === 'director') return 'director';
+      if (clean === 'leader' || clean === 'lider') return 'leader';
+      if (clean === 'reader' || clean === 'lector') return 'reader';
+      return clean;
+    };
+
+    return (Array.isArray(userRole) ? userRole : [userRole]).map(normalize);
+  };
+
+  const hasPermission = (required = []) => {
+    if (!state.user) return false;
+
+    const roles = getUserRoles();
+    if (roles.includes('super_admin')) return true;
+
+    // Acumula los permisos declarados para los roles del usuario
+    const permSet = new Set();
+    roles.forEach((r) => {
+      (ROLE_PERMISSIONS[r] || []).forEach((p) => permSet.add(p));
+    });
+
+    const can = (permission) => {
+      if (permSet.has('*') || permSet.has(permission)) return true;
+      const dot = permission.lastIndexOf('.');
+      return dot > 0 && permSet.has(`${permission.slice(0, dot + 1)}*`);
+    };
+
+    const requiredList = Array.isArray(required) ? required : [required];
+    return requiredList.length > 0 && requiredList.every((p) => can(p));
+  };
+
   const clearError = () => {
     dispatch({ type: AUTH_ACTIONS.CLEAR_ERROR });
   };
 
-  // Valor del contexto que se proporcionará a los componentes hijos
   const contextValue = {
-    // Estado
     user: state.user,
     isAuthenticated: state.isAuthenticated,
     isLoading: state.isLoading,
     error: state.error,
     authState: state.authState,
-
-    // Funciones
     login,
     register,
     logout,
@@ -237,6 +329,7 @@ export const AuthProvider = ({ children }) => {
     updateProfile,
     hasRole,
     hasAnyRole,
+    hasPermission,
     clearError,
     checkAuthStatus
   };
@@ -248,35 +341,28 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Hook personalizado para usar el contexto de autenticación
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  
   if (!context) {
     throw new Error('useAuth debe ser usado dentro de un AuthProvider');
   }
-  
   return context;
 };
 
-// Hook para verificar roles
 export const useRole = (requiredRole) => {
   const { hasRole, user } = useAuth();
-  
   return {
     hasRole: hasRole(requiredRole),
-    userRole: user?.roles,
+    userRole: user?.role || user?.roles || user?.rol,
     user
   };
 };
 
-// Hook para verificar múltiples roles
 export const useRoles = (requiredRoles) => {
   const { hasAnyRole, user } = useAuth();
-  
   return {
     hasAnyRole: hasAnyRole(requiredRoles),
-    userRoles: user?.roles,
+    userRoles: user?.role ? [user.role] : (user?.roles || (user?.rol ? [user.rol] : [])),
     user
   };
 };

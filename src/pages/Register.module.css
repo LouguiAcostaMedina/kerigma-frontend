@@ -5,11 +5,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  padding: 20px;
+  background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-surface) 100%);
+  padding: var(--space-5);
   position: relative;
   overflow: hidden;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-sans);
 }
 
 .registerContainer::before {
@@ -19,33 +19,29 @@
   left: 0;
   right: 0;
   height: 6px;
-  background: linear-gradient(90deg, #004a86, #d4af37);
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-hover));
   z-index: 1;
 }
 
-
-
-
-
 .registerCard {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  padding:020px;
- max-width: 600px;
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-5);
+  max-width: 600px;
   position: relative;
   z-index: 2;
-  border: 1px solid rgba(0, 74, 134, 0.1);
+  border: 1px solid var(--color-border-soft);
 }
 
 .registerHeader {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: var(--space-8);
   position: relative;
 }
 
 .churchLogo {
- margin: 0 auto 20px;
+  margin: 0 auto var(--space-5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -57,16 +53,16 @@
 }
 
 .title {
-  font-size: 28px;
+  font-size: var(--text-h1);
   font-weight: 700;
-  color: #004a86;
-  margin: 0 0 8px 0;
-  font-family: 'Merriweather', serif;
+  color: var(--color-text);
+  margin: 0 0 var(--space-2) 0;
+  font-family: var(--font-serif);
 }
 
 .subtitle {
-  font-size: 16px;
-  color: #6c757d;
+  font-size: var(--text-p);
+  color: var(--color-text-muted);
   margin: 0;
   letter-spacing: 0.5px;
 }
@@ -74,13 +70,13 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--space-6);
 }
 
 .row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: var(--space-4);
 }
 
 .inputGroup {
@@ -90,8 +86,8 @@
 }
 
 .label {
-  font-size: 14px;
-  color: #495057;
+  font-size: var(--text-small);
+  color: var(--color-text);
   margin-bottom: 6px;
   font-weight: 500;
 }
@@ -104,12 +100,12 @@
 
 .passwordToggle {
   position: absolute;
-  right: 12px;
+  right: var(--space-3);
   background: none;
   border: none;
   cursor: pointer;
-  color: #6c757d;
-  padding: 8px;
+  color: var(--color-text-muted);
+  padding: var(--space-2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -118,17 +114,17 @@
 }
 
 .passwordToggle:hover {
-  color: #004a86;
+  color: var(--color-primary-text);
 }
 
 .select {
   width: 100%;
-  padding: 14px 16px;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
+  padding: 14px var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   font-size: 15px;
   transition: all 0.3s;
-  background-color: #f8f9fa;
+  background-color: var(--color-surface-alt);
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236c757d' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -138,37 +134,55 @@
 
 .select:focus {
   outline: none;
-  border-color: #004a86;
-  box-shadow: 0 0 0 3px rgba(0, 74, 134, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-ring);
+}
+
+.selectWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.selectIcon {
+  position: absolute;
+  left: var(--space-4);
+  color: var(--color-text-muted);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.selectWrapper .select {
+  padding-left: 40px;
 }
 
 .error {
-  color: #dc3545;
+  color: var(--color-danger);
   font-size: 13px;
   margin-top: 6px;
   display: block;
 }
 
 .registerFooter {
-  margin-top: 24px;
+  margin-top: var(--space-6);
   text-align: center;
 }
 
 .loginLink {
-  font-size: 14px;
-  color: #6c757d;
+  font-size: var(--text-small);
+  color: var(--color-text-muted);
   margin: 0;
 }
 
 .link {
-  color: #004a86;
+  color: var(--color-primary-text);
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s ease;
 }
 
 .link:hover {
-  color: #003366;
+  color: var(--color-accent-hover);
   text-decoration: underline;
 }
 
@@ -178,19 +192,19 @@
   left: 0;
   right: 0;
   text-align: center;
-  font-size: 14px;
-  color: #6c757d;
+  font-size: var(--text-small);
+  color: var(--color-text-muted);
   font-style: italic;
-  padding: 0 20px;
+  padding: 0 var(--space-5);
   max-width: 600px;
   margin: 0 auto;
 }
 
 .inspirationText span {
   display: block;
-  margin-top: 8px;
+  margin-top: var(--space-2);
   font-weight: 600;
-  color: #004a86;
+  color: var(--color-primary-text);
 }
 
 .natureElements {
@@ -206,7 +220,7 @@
 
 .leaf {
   position: absolute;
-  background: #004a86;
+  background: var(--color-accent);
   border-radius: 50% 0;
 }
 
@@ -241,41 +255,41 @@
 
 .inputContainer input {
   width: 100%;
-  padding: 14px 16px 14px 40px;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
+  padding: 14px var(--space-4) 14px 40px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   font-size: 15px;
   transition: all 0.3s;
-  background-color: #f8f9fa;
+  background-color: var(--color-surface-alt);
 }
 
 .inputContainer input:focus {
   outline: none;
-  border-color: #004a86;
-  box-shadow: 0 0 0 3px rgba(0, 74, 134, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-ring);
 }
 
 .inputContainer .icon {
   position: absolute;
-  left: 14px;
+  left: var(--space-4);
   top: 50%;
   transform: translateY(-50%);
-  color: #6c757d;
+  color: var(--color-text-muted);
 }
 
 .inputContainer .error {
-  color: #dc3545;
+  color: var(--color-danger);
   font-size: 13px;
-  margin-top: 6px;
+  margin-top: var(--space-2);
   display: block;
 }
 
 /* Estilos para botón */
 .btn {
-  padding: 14px 24px;
-  border-radius: 8px;
+  padding: 14px var(--space-6);
+  border-radius: var(--radius-md);
   font-weight: 600;
-  font-size: 16px;
+  font-size: var(--text-p);
   cursor: pointer;
   transition: all 0.3s;
   text-align: center;
@@ -283,19 +297,20 @@
 }
 
 .btnPrimary {
-  background: linear-gradient(135deg, #004a86 0%, #003366 100%);
-  color: white;
-  box-shadow: 0 4px 12px rgba(0, 74, 134, 0.2);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  box-shadow: var(--shadow-sm);
 }
 
 .btnPrimary:hover {
-  background: linear-gradient(135deg, #003366 0%, #002244 100%);
+  background: var(--color-accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0, 74, 134, 0.3);
+  box-shadow: var(--shadow-md);
 }
 
 .btnPrimary:disabled {
-  background: #6c757d;
+  background: var(--color-border-soft);
+  color: var(--color-text-secondary);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
@@ -306,30 +321,30 @@
 }
 
 .btnLarge {
-  padding: 15px 20px;
+  padding: 15px var(--space-5);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .registerContainer {
-    padding: 16px;
+    padding: var(--space-4);
   }
   
   .registerCard {
-    padding: 30px;
+    padding: var(--space-8);
   }
   
   .row {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: var(--space-3);
   }
   
   .title {
-    font-size: 24px;
+    font-size: var(--text-h1);
   }
   
   .subtitle {
-    font-size: 14px;
+    font-size: var(--text-small);
   }
   
   .churchLogo {
@@ -340,6 +355,6 @@
 
 @media (max-width: 480px) {
   .registerCard {
-    padding: 24px;
+    padding: var(--space-6);
   }
 }

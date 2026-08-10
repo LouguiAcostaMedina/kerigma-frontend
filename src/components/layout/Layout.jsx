@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import './Layout.css';
 
-// Layout principal que contiene la estructura base de la aplicación
 const Layout = ({ children }) => {
   const { user, isAuthenticated } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
-  // Si no está autenticado, no mostrar el layout
   if (!isAuthenticated) {
     return (
       <div className="app-container">
@@ -18,41 +18,42 @@ const Layout = ({ children }) => {
     );
   }
 
-  // Toggle del sidebar para móviles
-  const toggleSidebar = () => {
+  const toggleMobileSidebar = () => {
     setSidebarOpen(!sidebarOpen);
+  };
+
+  const toggleCollapse = () => {
+    setIsCollapsed(!isCollapsed);
   };
 
   return (
     <div className="app-container">
-      {/* Sidebar */}
-      <Sidebar 
-        isOpen={sidebarOpen} 
+      <Sidebar
+        isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
+        isCollapsed={isCollapsed}
+        onToggleCollapse={toggleCollapse}
       />
-      
-      {/* Overlay para móviles cuando el sidebar está abierto */}
+
       {sidebarOpen && (
-        <div 
+        <div
           className="sidebar-overlay"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      {/* Contenido principal */}
-      <div className="main-content">
-        {/* Header */}
-        <Header 
-          onMenuClick={toggleSidebar}
+      <div className={`main-content ${isCollapsed ? 'main-content--collapsed' : ''}`}>
+        <Header
+          onMenuClick={toggleMobileSidebar}
+          onToggleCollapse={toggleCollapse}
+          isCollapsed={isCollapsed}
           user={user}
         />
-        
-        {/* Área de contenido */}
+
         <main className="content-area">
-          {children}
+          <Outlet />
         </main>
-        
-        {/* Footer */}
+
         <footer className="app-footer">
           <div className="footer-content">
             <p>&copy; 2025 Sistema de Gestión Eclesiástica. Todos los derechos reservados.</p>

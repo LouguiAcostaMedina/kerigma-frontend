@@ -1,0 +1,58 @@
+/* Estilos para el componente GoalsComparisonChart */
+
+.chartContainer {
+  background: var(--card-bg);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+  border: var(--card-border);
+  box-shadow: var(--shadow-md);
+  height: 420px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chartContainer canvas {
+  flex: 1;
+}
+
+.empty {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--text-p);
+  padding: var(--space-10) 0;
+  margin: 0;
+}
+
+.legendMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.goalTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-text);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: var(--space-1) var(--space-2);
+}
+
+.goalDot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-pill);
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .chartContainer {
+    height: 480px;
+    padding: var(--space-5);
+  }
+}

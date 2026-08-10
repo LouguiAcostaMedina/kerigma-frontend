@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Line, Bar, Doughnut, Radar } from 'react-chartjs-2';
 import Button  from '../common/Button';
 import Modal from '../common/Modal';
-import  Loading  from '@/components/common/Loading';
 import  ChartExporter  from '@/components/common/reports/ChartExporter';
-import { showNotification } from '../../utils/notifications';
 import styles from './ChurchDashboard.module.css';
 
 export const ChurchDashboard = ({ 
@@ -12,7 +10,6 @@ export const ChurchDashboard = ({
   members = [], 
   groups = [], 
   students = [],
-  activities = [],
   isOpen = false, 
   onClose 
 }) => {
@@ -75,8 +72,8 @@ export const ChurchDashboard = ({
         {
           label: 'Miembros',
           data: memberData,
-          borderColor: 'rgba(59, 130, 246, 1)',
-          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          borderColor: 'rgba(226, 166, 63, 1)',
+          backgroundColor: 'rgba(226, 166, 63, 0.1)',
           borderWidth: 3,
           fill: true,
           tension: 0.4
@@ -84,8 +81,8 @@ export const ChurchDashboard = ({
         {
           label: 'Grupos',
           data: groupData,
-          borderColor: 'rgba(34, 197, 94, 1)',
-          backgroundColor: 'rgba(34, 197, 94, 0.1)',
+          borderColor: 'rgba(52, 211, 153, 1)',
+          backgroundColor: 'rgba(52, 211, 153, 0.1)',
           borderWidth: 3,
           fill: false,
           tension: 0.4
@@ -118,13 +115,13 @@ export const ChurchDashboard = ({
         Math.floor(metrics.activeMembers * 0.05)
       ],
       backgroundColor: [
-        'rgba(239, 68, 68, 0.8)',
+        'rgba(248, 113, 113, 0.8)',
         'rgba(251, 191, 36, 0.8)',
-        'rgba(34, 197, 94, 0.8)',
-        'rgba(59, 130, 246, 0.8)',
-        'rgba(147, 51, 234, 0.8)',
-        'rgba(236, 72, 153, 0.8)',
-        'rgba(75, 85, 99, 0.8)'
+        'rgba(52, 211, 153, 0.8)',
+        'rgba(226, 166, 63, 0.8)',
+        'rgba(192, 132, 252, 0.8)',
+        'rgba(244, 114, 182, 0.8)',
+        'rgba(150, 139, 118, 0.8)'
       ]
     }]
   }), [metrics.activeMembers]);
@@ -140,13 +137,13 @@ export const ChurchDashboard = ({
         {
           label: 'Domingo',
           data: weeks.map(() => baseAttendance + Math.floor(Math.random() * 20 - 10)),
-          backgroundColor: 'rgba(59, 130, 246, 0.8)',
+          backgroundColor: 'rgba(226, 166, 63, 0.8)',
           borderRadius: 6
         },
         {
           label: 'Miércoles',
           data: weeks.map(() => Math.floor(baseAttendance * 0.6) + Math.floor(Math.random() * 15 - 7)),
-          backgroundColor: 'rgba(34, 197, 94, 0.8)',
+          backgroundColor: 'rgba(52, 211, 153, 0.8)',
           borderRadius: 6
         },
         {
@@ -169,14 +166,14 @@ export const ChurchDashboard = ({
       datasets: [{
         label: 'Grupos por Tipo',
         data: data,
-        backgroundColor: 'rgba(99, 102, 241, 0.2)',
-        borderColor: 'rgba(99, 102, 241, 1)',
+        backgroundColor: 'rgba(226, 166, 63, 0.2)',
+        borderColor: 'rgba(226, 166, 63, 1)',
         borderWidth: 2,
         fill: true,
-        pointBackgroundColor: 'rgba(99, 102, 241, 1)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(99, 102, 241, 1)'
+        pointBackgroundColor: 'rgba(226, 166, 63, 1)',
+        pointBorderColor: '#f3ece0',
+        pointHoverBackgroundColor: '#f3ece0',
+        pointHoverBorderColor: 'rgba(226, 166, 63, 1)'
       }]
     };
   }, [metrics.activeGroups]);
@@ -189,9 +186,9 @@ export const ChurchDashboard = ({
         position: 'top',
       },
       tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        titleColor: 'white',
-        bodyColor: 'white',
+        backgroundColor: 'rgba(20, 17, 11, 0.95)',
+        titleColor: '#f3ece0',
+        bodyColor: '#f3ece0',
       }
     },
     scales: {
@@ -200,7 +197,7 @@ export const ChurchDashboard = ({
       },
       y: {
         beginAtZero: true,
-        grid: { color: 'rgba(0, 0, 0, 0.1)' }
+        grid: { color: 'rgba(243, 236, 224, 0.08)' }
       }
     }
   };

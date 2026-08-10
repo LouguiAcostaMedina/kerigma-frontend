@@ -1,11 +1,11 @@
 // Register.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash, FaPhone, FaBuilding } from 'react-icons/fa';
-import { ROLES } from '@/constants/roles';
+import { churchesService } from '@/services/churchesService';
 import styles from './Register.module.css';
 
 const Register = () => {
@@ -16,7 +16,6 @@ const Register = () => {
     telefono: '',
     password: '',
     confirmPassword: '',
-    rol: 'Lector',
     iglesiaId: ''
   });
   
@@ -24,9 +23,31 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
+  const [churches, setChurches] = useState([]);
+  const [loadingChurches, setLoadingChurches] = useState(true);
 
   const { register } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const fetchChurches = async () => {
+      try {
+        setLoadingChurches(true);
+        const response = await churchesService.getPublicChurches(controller.signal);
+        const data = response?.data || response;
+        setChurches(Array.isArray(data) ? data : []);
+      } catch (err) {
+        if (err?.name !== 'CanceledError' && err?.code !== 'ERR_CANCELED') {
+          console.error('Error cargando iglesias:', err);
+        }
+      } finally {
+        setLoadingChurches(false);
+      }
+    };
+    fetchChurches();
+    return () => controller.abort();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,7 +87,7 @@ const Register = () => {
 
     if (!formData.telefono) {
       newErrors.telefono = 'El teléfono es requerido';
-    } else if (!/^\d{8,15}$/.test(formData.telefono.replace(/[\s\-\(\)]/g, ''))) {
+    } else if (!/^\d{8,15}$/.test(formData.telefono.replace(/[\s\-()]/g, ''))) {
       newErrors.telefono = 'El teléfono debe tener entre 8 y 15 dígitos';
     }
 
@@ -99,13 +120,12 @@ const Register = () => {
 
     try {
       const userData = {
-        nombre: formData.nombre.trim(),
-        apellido: formData.apellido.trim(),
+        firstName: formData.nombre.trim(),
+        lastName: formData.apellido.trim(),
         email: formData.email.trim(),
-        telefono: formData.telefono.trim(),
+        phone: formData.telefono.trim(),
         password: formData.password,
-        rol: formData.rol,
-        iglesiaId: parseInt(formData.iglesiaId)
+        churchId: formData.iglesiaId
       };
 
       const result = await register(userData);
@@ -113,7 +133,7 @@ const Register = () => {
       if (result.success) {
         navigate('/login', { 
           state: { 
-            message: 'Registro exitoso. Puedes iniciar sesión ahora.' 
+            message: 'Tu cuenta fue creada y está pendiente de aprobación por un administrador. Te notificaremos cuando puedas iniciar sesión.' 
           } 
         });
       }
@@ -242,36 +262,28 @@ const Register = () => {
             </div>
           </div>
 
-          <div className={styles.row}>
-            <div className={styles.inputGroup}>
-              <label className={styles.label}>Rol del usuario</label>
+          <div className={styles.inputGroup}>
+            <label className={styles.label}>Iglesia</label>
+            <div className={styles.selectWrapper}>
+              <FaBuilding className={styles.selectIcon} />
               <select
-                name="rol"
-                value={formData.rol}
+                name="iglesiaId"
+                value={formData.iglesiaId}
                 onChange={handleChange}
                 className={styles.select}
+                disabled={loadingChurches}
               >
-                {Object.entries(ROLES).map(([key, value]) => (
-                  <option key={key} value={value}>
-                    {value}
+                <option value="">
+                  {loadingChurches ? 'Cargando iglesias...' : '-- Selecciona tu iglesia --'}
+                </option>
+                {churches.map((church) => (
+                  <option key={church.id} value={church.id}>
+                    {church.name}{church.city ? ` - ${church.city}` : ''}
                   </option>
                 ))}
               </select>
-              {errors.rol && <span className={styles.error}>{errors.rol}</span>}
             </div>
-
-            <div className={styles.inputGroup}>
-              <Input
-                type="number"
-                name="iglesiaId"
-                placeholder="ID de Iglesia"
-                value={formData.iglesiaId}
-                onChange={handleChange}
-                error={errors.iglesiaId}
-                icon={<FaBuilding />}
-                min="1"
-              />
-            </div>
+            {errors.iglesiaId && <span className={styles.error}>{errors.iglesiaId}</span>}
           </div>
 
           <Button
@@ -280,7 +292,7 @@ const Register = () => {
             size="large"
             fullWidth
             loading={isSubmitting}
-            disabled={isSubmitting}
+            disabled={isSubmitting || loadingChurches}
           >
             {isSubmitting ? 'Registrando...' : 'Crear Cuenta'}
           </Button>

@@ -1,119 +1,89 @@
-# 📌 Sistema de Gestión Misionera – Frontend  
+# Frontend - Sistema de Gestión Misionera (SGM)
 
-![React](https://img.shields.io/badge/React-18.0.0-blue?style=for-the-badge&logo=react)  
-![Status](https://img.shields.io/badge/Status-En%20Desarrollo-orange?style=for-the-badge)
+SPA en **React 19 + Vite 7 + react-router-dom 7**. Dashboard con Chart.js y exportaciones
+con jsPDF / xlsx-js-style. Consume la API REST del backend (`backend/`).
 
-El **Sistema de Gestión Misionera (SGM)** es una aplicación web desarrollada en **React** para la gestión integral de la obra misionera de la iglesia.  
-Incluye módulos de **miembros, grupos, estudiantes bíblicos y dashboard interactivo** con autenticación basada en **roles jerárquicos** y funcionalidades avanzadas como **importación/exportación, reportes y métricas en tiempo real**.  
+## Requisitos
 
----
+- Node.js 20+
+- Backend en ejecución (ver `backend/README.md`)
 
-## ✨ Características principales  
+## Configuración
 
-### 🔐 Sistema de Autenticación  
-- ✅ Login con **JWT** y manejo de errores  
-- ✅ Registro de usuarios con validación  
-- ✅ Cambio de contraseña con verificación  
-- ✅ Perfil editable con **código QR**  
-- ✅ Rutas protegidas por roles jerárquicos  
+1. Crear `iglesia-frontend/.env` con las variables de entorno (`.env` no se sube al repo):
 
-### 📊 Dashboard Principal  
-- ✅ Métricas dinámicas con **Chart.js**  
-- ✅ Tarjetas con estadísticas y animaciones  
-- ✅ Filtros avanzados por período  
-- ✅ Cache inteligente para optimización  
+   ```bash
+   VITE_API_URL=http://localhost:5000/api/v1
+   ```
 
-### 🗃️ CRUD Completo  
-#### 👥 Miembros  
-- CRUD completo, filtros y búsqueda avanzada  
-- Importación desde **Excel** y exportación **Excel/PDF**  
-- Asignación a grupos y gestión de estados  
+   Variable principal: `VITE_API_URL` (leída en `src/constants/index.js`).
+   Si no se define, se usa el fallback `http://localhost:5000/api/v1`.
+   Otras opcionales: `VITE_WS_URL`, `VITE_APP_NAME`, `VITE_API_TIMEOUT`, `VITE_ENABLE_LOGS`.
 
-#### 👨‍👩‍👧 Grupos  
-- Gestión completa con estadísticas y duplicación  
-- Asignación de líderes y control de reuniones  
+2. Instalar dependencias:
 
-#### 📖 Estudiantes Bíblicos  
-- Seguimiento de progreso, niveles y bautismos  
-- Graduación y conversión a miembros  
-- Sistema de recordatorios y seguimiento  
+   ```bash
+   npm install
+   ```
 
-### 🧩 Componentes Reutilizables  
-- `DataTable` genérica con paginación, filtros y acciones  
-- `Modal` dinámico reutilizable  
-- `Button`, `Loading` y `NotificationSystem`  
+3. Ejecutar:
 
-### ⚡ Funcionalidades Avanzadas  
-- Roles jerárquicos: **Administrador → Director → Líder → Lector**  
-- Permisos granulares por acción  
-- Paginación del servidor y búsqueda en tiempo real  
-- Exportación/Importación con filtros aplicados  
-- Manejo robusto de errores  
+   ```bash
+   npm run dev
+   ```
 
----
+   La app estará disponible en `http://localhost:5173`.
 
-## 📂 Estructura del Proyecto  
+## Comandos
 
-```bash
+| Comando         | Descripción                     |
+|-----------------|---------------------------------|
+| `npm run dev`   | Servidor de desarrollo Vite     |
+| `npm run build` | `vite build` -> `dist/`         |
+| `npm run lint`  | `eslint .` (debe quedar en 0)   |
+| `npm run preview` | Previsualizar build            |
+
+## Estructura
+
+```
 src/
+├── main.jsx / App.jsx        # Bootstrap y composición
 ├── components/
-│   ├── auth/                 # Rutas protegidas
-│   ├── common/               # Componentes genéricos
-│   ├── dashboard/            # Dashboard y métricas
-│   ├── members/              # Gestión de miembros
-│   └── AppRouter.jsx         # Configuración de rutas
-├── hooks/                    # Hooks personalizados
-├── pages/                    # Páginas principales
-├── services/                 # Servicios API
-├── utils/                    # Notificaciones y helpers
-└── App.jsx                   # Componente principal
+│   ├── AppRouter.jsx         # Configuración de rutas y lazy loading
+│   ├── auth/                 # Rutas protegidas (ProtectedRoute)
+│   ├── common/               # DataTable, Modal, Button, Loading, reports/*
+│   ├── dashboard/            # KPIs, gráficas, pilares, check-in QR
+│   ├── forms/                # ChurchForm, ChurchStats, UserForm, UserStats, BulkActions
+│   └── layout/               # Header, Sidebar, Layout
+├── contexts/
+│   └── AuthContext.jsx       # Sesión, usuario y permisos
+├── hooks/                    # useAuth, useChurches, useGroups, useMembers, useStudents, useUsers, useReports
+├── pages/                    # Login, Register, Dashboard, Members, Groups, Churches, Users, ...
+├── services/                 # api.js (axios), apiClient.js y servicios por módulo
+├── constants/                # API_BASE_URL, roles, mensajes, paginación
+└── utils/                    # notifications, dashboardExport, helpers
+```
 
-## 🚀 Instalación y Uso  
+## Roles
 
-### 1️⃣ Clonar repositorio  
-```bash
-git clone https://github.com/tuusuario/sistema-gestion-misionera-frontend.git
-cd sistema-gestion-misionera-frontend
+| Rol           | `ROLES`      |
+|---------------|--------------|
+| Administrador | `administrador` |
+| Director      | `director`      |
+| Líder         | `lider`         |
+| Lector        | `lector`        |
 
-2️⃣ Instalar dependencias
-npm install
+Los permisos por acción se derivan del `role` del usuario en cada página (ej.:
+`['administrador', 'director'].includes(user?.role)`).
 
-3️⃣ Ejecutar en modo desarrollo
-npm run dev
+## Consumo de la API
 
+- Instancia axios con `withCredentials` (cookies HttpOnly) en `src/services/api.js`.
+- Interceptor de respuestas redirige a `/login` en `401` (excepto llamadas de auth).
+- Envelope esperado del backend: `{ ok, data }` / `{ ok, error }`.
 
-La app estará disponible en 👉 http://localhost:5173
+## Documentación
 
-📦 Dependencias principales
-npm install chart.js react-chartjs-2 react-icons qrcode xlsx jspdf jspdf-autotable html2canvas
-
-📊 Próximos módulos
-
-📑 Sistema de Reportes Avanzados
-
-⛪ Gestión de Iglesias
-
-👥 Administración de Usuarios
-
-⚡ Métricas en Tiempo Real (WebSockets)
-
-🔔 Notificaciones Push
-
-🏆 Características destacadas
-
-✅ Arquitectura modular y escalable
-
-✅ Código limpio y documentado
-
-✅ Optimización con lazy loading y cache
-
-✅ Diseño moderno y accesible
-
-✅ Listo para producción con build optimizado
-
-🔗 Backend
-
-Este frontend está diseñado para conectarse a un backend en Node.js + Express + PostgreSQL.
-
-👉 Repositorio backend: (pendiente agregar)
-
+- `AGENTS.md` — contexto para agentes de IA.
+- `REGLAS.md` — reglas de codificación.
+- `APIDOCUMENTATION.md` — endpoints usados y convenciones.

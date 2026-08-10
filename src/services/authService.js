@@ -1,35 +1,47 @@
 import { apiService } from './api';
-import { STORAGE_KEYS } from '@/constants';
 
-// Servicio de autenticación para manejar login, registro y gestión de tokens
+// Servicio de autenticación basado en cookies HttpOnly (withCredentials).
+// No se guardan tokens ni usuario en localStorage; la sesión se recupera vía GET /auth/me.
 class AuthService {
   constructor() {
     this.endpoints = {
-      LOGIN: '/auth/signin',
+      LOGIN: '/auth/login',
       REGISTER: '/auth/signup',
       REFRESH_TOKEN: '/auth/refresh',
+      ME: '/auth/me',
+      LOGOUT: '/auth/logout',
       CHANGE_PASSWORD: '/auth/change-password',
       FORGOT_PASSWORD: '/auth/forgot-password',
-      RESET_PASSWORD: '/auth/reset-password'
+      RESET_PASSWORD: '/auth/reset-password',
+      PROFILE: '/auth/profile'
     };
+
+    // Sesión en memoria: se pierde al recargar, se restaura con checkAuthStatus -> GET /auth/me
+    this.currentUser = null;
   }
 
   // Iniciar sesión con email y contraseña
   async login(credentials) {
     try {
-      const { email, password } = credentials;
       const response = await apiService.post(this.endpoints.LOGIN, {
-        email,
-        password
+        email: credentials.email,
+        password: credentials.password
       });
 
-      // Guardar token y datos del usuario
-      if (response.accessToken) {
-        localStorage.setItem(STORAGE_KEYS.TOKEN, response.accessToken);
-        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response.user));
+      // Envelope del backend: { success, data: { user }, message }
+      const data = response?.data || response;
+      const user = data?.user || (data?.email ? data : null);
+
+      if (user) {
+        this.currentUser = user;
+        return {
+          success: true,
+          user,
+          message: response?.message || 'Inicio de sesión exitoso'
+        };
       }
 
-      return response;
+      return { success: false, error: 'Respuesta del servidor incompleta' };
     } catch (error) {
       console.error('Error en login:', error);
       throw error;
@@ -40,6 +52,11 @@ class AuthService {
   async register(userData) {
     try {
       const response = await apiService.post(this.endpoints.REGISTER, userData);
+      const data = response?.data || response;
+      const user = data?.user || null;
+      if (user) {
+        this.currentUser = user;
+      }
       return response;
     } catch (error) {
       console.error('Error en registro:', error);
@@ -47,74 +64,59 @@ class AuthService {
     }
   }
 
-  // Cerrar sesión
-  logout() {
+  // Cerrar sesión (limpia las cookies HttpOnly en el servidor)
+  async logout() {
     try {
-      localStorage.removeItem(STORAGE_KEYS.TOKEN);
-      localStorage.removeItem(STORAGE_KEYS.USER);
-      
-      // Redirect to login page
-      window.location.href = '/login';
+      await apiService.post(this.endpoints.LOGOUT);
     } catch (error) {
       console.error('Error en logout:', error);
+    } finally {
+      this.currentUser = null;
     }
   }
 
-  // Obtener token actual
+  // Obtener token actual: no se almacena en el cliente, las cookies son HttpOnly
   getToken() {
-    return localStorage.getItem(STORAGE_KEYS.TOKEN);
+    return null;
   }
 
-  // Obtener datos del usuario actual
+  // Obtener datos del usuario actual (solo memoria)
   getCurrentUser() {
-    try {
-      const userData = localStorage.getItem(STORAGE_KEYS.USER);
-      return userData ? JSON.parse(userData) : null;
-    } catch (error) {
-      console.error('Error obteniendo usuario actual:', error);
-      return null;
-    }
+    return this.currentUser;
   }
 
-  // Verificar si el usuario está autenticado
+  // Verificar si el usuario está autenticado (sesión en memoria)
   isAuthenticated() {
-    const token = this.getToken();
-    const user = this.getCurrentUser();
-    
-    if (!token || !user) {
-      return false;
-    }
-
-    // Verificar si el token no ha expirado (simple check)
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      const currentTime = Date.now() / 1000;
-      
-      return payload.exp > currentTime;
-    } catch (error) {
-      console.error('Error verificando token:', error);
-      return false;
-    }
+    return Boolean(this.currentUser);
   }
 
-  // Verificar si el usuario tiene un rol específico
+  // 🛠️ CORRECCIÓN DE ROL: Soporta tanto single-role como multi-role, singular y plural
   hasRole(requiredRole) {
     const user = this.getCurrentUser();
-    if (!user || !user.roles) {
-      return false;
-    }
+    if (!user) return false;
 
-    // Si el usuario tiene múltiples roles, verificar si incluye el requerido
-    if (Array.isArray(user.roles)) {
-      return user.roles.includes(requiredRole);
-    }
+    // Extrae de forma segura el rol independientemente de si viene como 'role' o 'roles'
+    const userRole = user.role || user.roles;
+    if (!userRole) return false;
 
-    // Si es un solo rol
-    return user.roles === requiredRole;
+    const userRolesArray = Array.isArray(userRole) ? userRole : [userRole];
+
+    // Normalizador idéntico al del contexto para evitar falsos negativos ingles/español
+    const normalize = (r) => {
+      if (!r) return '';
+      const clean = r.toLowerCase().trim();
+      if (clean === 'admin') return 'administrador';
+      if (clean === 'reader') return 'lector';
+      if (clean === 'leader') return 'lider';
+      return clean;
+    };
+
+    return userRolesArray.some(r => normalize(r) === normalize(requiredRole));
   }
 
   // Verificar si el usuario tiene cualquiera de los roles especificados
   hasAnyRole(roles) {
+    if (!roles) return false;
     if (!Array.isArray(roles)) {
       return this.hasRole(roles);
     }
@@ -165,31 +167,27 @@ class AuthService {
     }
   }
 
-  // Renovar token de acceso
+  // Renovar sesión: el refresh token viaja en la cookie HttpOnly
   async refreshToken() {
     try {
       const response = await apiService.post(this.endpoints.REFRESH_TOKEN);
-      
-      if (response.accessToken) {
-        localStorage.setItem(STORAGE_KEYS.TOKEN, response.accessToken);
-      }
-      
       return response;
     } catch (error) {
       console.error('Error renovando token:', error);
-      this.logout();
+      this.currentUser = null;
       throw error;
     }
   }
 
-  // Obtener información del perfil del usuario
+  // Obtener información del perfil del usuario (GET /auth/me con cookies)
   async getProfile() {
     try {
-      const response = await apiService.get('/auth/profile');
-      
-      // Actualizar datos del usuario en localStorage
-      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response));
-      
+      const response = await apiService.get(this.endpoints.ME);
+      const data = response?.data || response;
+      const user = data?.user || null;
+      if (user) {
+        this.currentUser = { ...user, church: data?.church || user.church || null };
+      }
       return response;
     } catch (error) {
       console.error('Error obteniendo perfil:', error);
@@ -200,11 +198,12 @@ class AuthService {
   // Actualizar perfil del usuario
   async updateProfile(profileData) {
     try {
-      const response = await apiService.put('/auth/profile', profileData);
-      
-      // Actualizar datos del usuario en localStorage
-      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response));
-      
+      const response = await apiService.put(this.endpoints.PROFILE, profileData);
+      const data = response?.data || response;
+      const user = data?.user || (data?.email ? data : null);
+      if (user) {
+        this.currentUser = user;
+      }
       return response;
     } catch (error) {
       console.error('Error actualizando perfil:', error);

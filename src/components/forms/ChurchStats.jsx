@@ -31,7 +31,7 @@ ChartJS.register(
   Filler
 );
 
-export const ChurchStats = ({ churches = [], members = [], groups = [], students = [] }) => {
+export const ChurchStats = ({ churches = [] }) => {
   // Calculamos las estadísticas principales
   const stats = useMemo(() => {
     const totalChurches = churches.length;
@@ -74,16 +74,16 @@ export const ChurchStats = ({ churches = [], members = [], groups = [], students
       label: 'Estado de Iglesias',
       data: [stats.activeChurches, stats.inactiveChurches, stats.inConstruction, stats.inPlanning],
       backgroundColor: [
-        'rgba(34, 197, 94, 0.8)',
-        'rgba(239, 68, 68, 0.8)',
+        'rgba(52, 211, 153, 0.8)',
+        'rgba(248, 113, 113, 0.8)',
         'rgba(251, 191, 36, 0.8)',
-        'rgba(59, 130, 246, 0.8)'
+        'rgba(226, 166, 63, 0.8)'
       ],
       borderColor: [
-        'rgba(34, 197, 94, 1)',
-        'rgba(239, 68, 68, 1)',
+        'rgba(52, 211, 153, 1)',
+        'rgba(248, 113, 113, 1)',
         'rgba(251, 191, 36, 1)',
-        'rgba(59, 130, 246, 1)'
+        'rgba(226, 166, 63, 1)'
       ],
       borderWidth: 2
     }]
@@ -101,8 +101,8 @@ export const ChurchStats = ({ churches = [], members = [], groups = [], students
       datasets: [{
         label: 'Capacidad',
         data: sortedChurches.map(c => parseInt(c.capacity)),
-        backgroundColor: 'rgba(99, 102, 241, 0.8)',
-        borderColor: 'rgba(99, 102, 241, 1)',
+        backgroundColor: 'rgba(226, 166, 63, 0.8)',
+        borderColor: 'rgba(226, 166, 63, 1)',
         borderWidth: 2,
         borderRadius: 8,
         borderSkipped: false,
@@ -127,14 +127,14 @@ export const ChurchStats = ({ churches = [], members = [], groups = [], students
         label: 'Iglesias por Ciudad',
         data: topCities.map(([, count]) => count),
         backgroundColor: [
-          'rgba(239, 68, 68, 0.8)',
+          'rgba(248, 113, 113, 0.8)',
           'rgba(251, 191, 36, 0.8)',
-          'rgba(34, 197, 94, 0.8)',
-          'rgba(59, 130, 246, 0.8)',
-          'rgba(147, 51, 234, 0.8)',
-          'rgba(236, 72, 153, 0.8)',
-          'rgba(20, 184, 166, 0.8)',
-          'rgba(245, 101, 101, 0.8)'
+          'rgba(52, 211, 153, 0.8)',
+          'rgba(226, 166, 63, 0.8)',
+          'rgba(192, 132, 252, 0.8)',
+          'rgba(244, 114, 182, 0.8)',
+          'rgba(45, 212, 191, 0.8)',
+          'rgba(248, 113, 113, 0.8)'
         ],
         borderWidth: 0
       }]
@@ -176,14 +176,14 @@ export const ChurchStats = ({ churches = [], members = [], groups = [], students
       datasets: [{
         label: 'Instalaciones',
         data: Object.values(facilitiesCount),
-        backgroundColor: 'rgba(34, 197, 94, 0.2)',
-        borderColor: 'rgba(34, 197, 94, 1)',
+        backgroundColor: 'rgba(52, 211, 153, 0.2)',
+        borderColor: 'rgba(52, 211, 153, 1)',
         borderWidth: 2,
         fill: true,
-        pointBackgroundColor: 'rgba(34, 197, 94, 1)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(34, 197, 94, 1)'
+        pointBackgroundColor: 'rgba(52, 211, 153, 1)',
+        pointBorderColor: '#f3ece0',
+        pointHoverBackgroundColor: '#f3ece0',
+        pointHoverBorderColor: 'rgba(52, 211, 153, 1)'
       }]
     };
   }, [churches]);
@@ -211,8 +211,8 @@ export const ChurchStats = ({ churches = [], members = [], groups = [], students
         {
           label: 'Iglesias Fundadas',
           data: growthValues,
-          borderColor: 'rgba(99, 102, 241, 1)',
-          backgroundColor: 'rgba(99, 102, 241, 0.1)',
+          borderColor: 'rgba(226, 166, 63, 1)',
+          backgroundColor: 'rgba(226, 166, 63, 0.1)',
           borderWidth: 3,
           fill: true,
           tension: 0.4,
@@ -231,10 +231,10 @@ export const ChurchStats = ({ churches = [], members = [], groups = [], students
         position: 'top',
       },
       tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        titleColor: 'white',
-        bodyColor: 'white',
-        borderColor: 'rgba(255, 255, 255, 0.1)',
+        backgroundColor: 'rgba(20, 17, 11, 0.95)',
+        titleColor: '#f3ece0',
+        bodyColor: '#f3ece0',
+        borderColor: 'rgba(243, 236, 224, 0.1)',
         borderWidth: 1
       }
     },
@@ -247,7 +247,7 @@ export const ChurchStats = ({ churches = [], members = [], groups = [], students
       y: {
         beginAtZero: true,
         grid: {
-          color: 'rgba(0, 0, 0, 0.1)'
+          color: 'rgba(243, 236, 224, 0.08)'
         }
       }
     }

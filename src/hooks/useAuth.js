@@ -1,34 +1,49 @@
 /**
  * Hook personalizado para manejar la autenticación
  * Proporciona métodos para login, logout, registro y verificación de roles
+ * Delega toda la lógica al AuthContext (autenticación por cookies HttpOnly)
  */
 
 import { useContext } from 'react';
 import { AuthContext } from '@/contexts/AuthContext';
-import authService  from '@/services/authService';
 import { showToast } from '@/utils/notifications';
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  
+
   if (!context) {
     throw new Error('useAuth debe ser usado dentro de un AuthProvider');
   }
 
-  const { user, isAuthenticated, isLoading, login: setLogin, logout: setLogout, updateUser } = context;
+  const {
+    user,
+    isAuthenticated,
+    isLoading,
+    login: contextLogin,
+    register: contextRegister,
+    logout: contextLogout,
+    hasRole: contextHasRole,
+    hasAnyRole: contextHasAnyRole,
+    hasPermission: contextHasPermission,
+    changePassword: contextChangePassword,
+    updateProfile: contextUpdateProfile
+  } = context;
 
   // Función de login
   const login = async (credentials) => {
     try {
-      const response = await authService.login(credentials);
-      const { token, user: userData } = response.data;
-      
-      setLogin(token, userData);
-      showToast('Inicio de sesión exitoso', 'success');
-      
-      return { success: true, user: userData };
+      const result = await contextLogin(credentials);
+
+      if (result && result.success) {
+        showToast(result.message || 'Inicio de sesión exitoso', 'success');
+        return { success: true, user: result.user };
+      }
+
+      const message = result?.message || 'Error al iniciar sesión';
+      showToast(message, 'error');
+      return { success: false, message };
     } catch (error) {
-      const message = error.response?.data?.message || 'Error al iniciar sesión';
+      const message = error.response?.data?.message || error.message || 'Error al iniciar sesión';
       showToast(message, 'error');
       return { success: false, message };
     }
@@ -37,11 +52,16 @@ export const useAuth = () => {
   // Función de registro
   const register = async (userData) => {
     try {
-      const response = await authService.register(userData);
-      showToast('Usuario registrado exitosamente', 'success');
-      return { success: true, data: response.data };
+      const result = await contextRegister(userData);
+      if (result && result.success) {
+        showToast(result.message || 'Usuario registrado exitosamente', 'success');
+        return { success: true, data: result.data };
+      }
+      const message = result?.message || 'Error al registrar usuario';
+      showToast(message, 'error');
+      return { success: false, message };
     } catch (error) {
-      const message = error.response?.data?.message || 'Error al registrar usuario';
+      const message = error.response?.data?.message || error.message || 'Error al registrar usuario';
       showToast(message, 'error');
       return { success: false, message };
     }
@@ -49,40 +69,30 @@ export const useAuth = () => {
 
   // Función de logout
   const logout = () => {
-    setLogout();
-    showToast('Sesión cerrada exitosamente', 'info');
+    try {
+      contextLogout();
+      showToast('Sesión cerrada exitosamente', 'info');
+    } catch (error) {
+      console.error('Error en logout:', error);
+    }
   };
 
   // Verificar si el usuario tiene un rol específico
-  const hasRole = (requiredRole) => {
-    if (!user || !user.rol) return false;
-    
-    const roleHierarchy = {
-      'Administrador': 4,
-      'Director': 3,
-      'Líder': 2,
-      'Lector': 1
-    };
-    
-    const userRoleLevel = roleHierarchy[user.rol];
-    const requiredRoleLevel = roleHierarchy[requiredRole];
-    
-    return userRoleLevel >= requiredRoleLevel;
-  };
+  const hasRole = (requiredRole) => contextHasRole(requiredRole);
 
   // Verificar si el usuario tiene al menos uno de los roles especificados
-  const hasAnyRole = (roles) => {
-    return roles.some(role => hasRole(role));
-  };
+  const hasAnyRole = (roles) => contextHasAnyRole(roles);
 
   // Cambiar contraseña
   const changePassword = async (passwordData) => {
     try {
-      await authService.changePassword(passwordData);
-      showToast('Contraseña cambiada exitosamente', 'success');
-      return { success: true };
+      const result = await contextChangePassword(passwordData);
+      if (result && result.success) {
+        showToast('Contraseña cambiada exitosamente', 'success');
+      }
+      return result;
     } catch (error) {
-      const message = error.response?.data?.message || 'Error al cambiar contraseña';
+      const message = error.response?.data?.message || error.message || 'Error al cambiar contraseña';
       showToast(message, 'error');
       return { success: false, message };
     }
@@ -91,12 +101,13 @@ export const useAuth = () => {
   // Actualizar perfil de usuario
   const updateProfile = async (profileData) => {
     try {
-      const response = await authService.updateProfile(profileData);
-      updateUser(response.data);
-      showToast('Perfil actualizado exitosamente', 'success');
-      return { success: true, user: response.data };
+      const result = await contextUpdateProfile(profileData);
+      if (result && result.success) {
+        showToast('Perfil actualizado exitosamente', 'success');
+      }
+      return result;
     } catch (error) {
-      const message = error.response?.data?.message || 'Error al actualizar perfil';
+      const message = error.response?.data?.message || error.message || 'Error al actualizar perfil';
       showToast(message, 'error');
       return { success: false, message };
     }
@@ -111,6 +122,7 @@ export const useAuth = () => {
     logout,
     hasRole,
     hasAnyRole,
+    hasPermission: contextHasPermission,
     changePassword,
     updateProfile
   };

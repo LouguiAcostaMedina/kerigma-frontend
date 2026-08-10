@@ -50,7 +50,7 @@ const Unauthorized = () => {
               </p>
               {user && (
                 <p className={styles.userRole}>
-                  <strong>Tu rol actual:</strong> {user.rol}
+                  <strong>Tu rol actual:</strong> {user.role}
                 </p>
               )}
             </div>

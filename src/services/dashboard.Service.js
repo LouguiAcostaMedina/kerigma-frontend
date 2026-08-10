@@ -17,6 +17,28 @@ export const dashboardService = {
     }
   },
 
+  // Salud espiritual del trimestre (pilares) - Sprint 3
+  getSpiritualHealth: async () => {
+    try {
+      const response = await apiClient.get('/dashboard/spiritual-health');
+      return response?.data ?? null;
+    } catch (error) {
+      console.error('Error fetching spiritual health:', error);
+      throw error;
+    }
+  },
+
+  // KPIs principales del dashboard - Sprint 3
+  getDashboardKpis: async () => {
+    try {
+      const response = await apiClient.get('/dashboard/kpis');
+      return response?.data ?? null;
+    } catch (error) {
+      console.error('Error fetching dashboard KPIs:', error);
+      throw error;
+    }
+  },
+
 
   
   // Obtener datos para gráficos de crecimiento mensual

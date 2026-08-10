@@ -2,8 +2,8 @@
 
 .dashboard {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  padding: 20px;
+  background: var(--color-bg);
+  padding: var(--space-page);
   animation: fadeIn 0.5s ease-in;
 }
 
@@ -23,12 +23,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
-  background: white;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-md);
 }
 
 .welcomeSection {
@@ -36,49 +37,47 @@
 }
 
 .title {
-  font-size: 28px;
+  font-family: var(--font-serif);
+  font-size: var(--text-h2);
   font-weight: 700;
-  color: #1f2937;
-  margin: 0 0 8px 0;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-text);
+  margin: 0 0 var(--space-2) 0;
 }
 
 .subtitle {
-  font-size: 16px;
-  color: #6b7280;
+  font-size: var(--text-p);
+  color: var(--color-text-muted);
   margin: 0;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .headerActions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--space-4);
+  flex-wrap: wrap;
 }
 
 .periodSelector {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: #f9fafb;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  gap: var(--space-2);
+  background: var(--color-surface-alt);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
 }
 
 .filterIcon {
-  color: #6b7280;
-  font-size: 14px;
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
 }
 
 .periodSelect {
   background: none;
   border: none;
-  font-size: 14px;
-  color: #374151;
+  font-size: var(--text-small);
+  color: var(--color-text);
   cursor: pointer;
   outline: none;
   font-weight: 500;
@@ -87,23 +86,22 @@
 .refreshButton {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-size: 14px;
+  gap: var(--space-2);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  border: 1px solid var(--color-border);
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-small);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
 }
 
 .refreshButton:hover:not(:disabled) {
-  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  background: var(--color-accent-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  box-shadow: var(--shadow-md);
 }
 
 .refreshButton:disabled {
@@ -113,8 +111,53 @@
 }
 
 .refreshIcon {
-  font-size: 14px;
+  font-size: var(--text-small);
   transition: transform 0.3s ease;
+}
+
+.exportBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.exportButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-small);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: auto;
+  min-height: auto;
+}
+
+.exportButton:hover:not(:disabled) {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-on-accent);
+  transform: translateY(-1px);
+}
+
+.exportButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.exportIcon {
+  font-size: var(--text-small);
+  color: var(--color-primary-text);
+}
+
+.exportButton:hover .exportIcon {
+  color: var(--color-on-accent);
 }
 
 .spinning {
@@ -132,60 +175,109 @@
 
 /* Sections */
 .statsSection {
-  margin-bottom: 32px;
+  margin-bottom: var(--space-8);
 }
 
-.chartsSection {
-  margin-bottom: 32px;
+.pillarsSection {
+  margin-bottom: var(--space-8);
+}
+
+.goalsSection {
+  margin-bottom: var(--space-8);
+}
+
+.pillarsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+/* Quarter Banner */
+.quarterBanner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-accent);
+  color: var(--color-text);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--space-8);
+}
+
+.quarterIcon {
+  font-size: var(--icon-size-md);
+  flex-shrink: 0;
+  color: var(--color-accent);
+}
+
+.quarterInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.quarterInfo strong {
+  font-family: var(--font-serif);
+  font-size: var(--text-p);
+}
+
+.quarterInfo span {
+  font-size: var(--text-small);
+  color: var(--color-text-muted);
 }
 
 .sectionHeader {
-  margin-bottom: 24px;
+  margin-bottom: var(--space-4);
 }
 
 .sectionTitle {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 20px;
-  font-weight: 600;
-  color: #1f2937;
+  gap: var(--space-3);
+  font-family: var(--font-serif);
+  font-size: var(--text-h2);
+  font-weight: 700;
+  color: var(--color-text);
   margin: 0;
 }
 
 .sectionIcon {
-  color: #3b82f6;
-  font-size: 18px;
+  color: var(--color-accent);
+  font-size: var(--icon-size-sm);
 }
 
 /* Reader Message */
 .readerMessage {
-  margin-top: 32px;
+  margin-top: var(--space-8);
   display: flex;
   justify-content: center;
 }
 
 .messageCard {
-  background: white;
-  padding: 32px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
+  background: var(--card-bg);
+  padding: var(--space-8);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
   max-width: 500px;
   text-align: center;
 }
 
 .messageCard h3 {
-  font-size: 20px;
+  font-family: var(--font-serif);
+  font-size: var(--text-h3);
   font-weight: 600;
-  color: #1f2937;
-  margin: 0 0 16px 0;
+  color: var(--color-text);
+  margin: 0 0 var(--space-4) 0;
 }
 
 .messageCard p {
-  color: #6b7280;
+  color: var(--color-text-muted);
   line-height: 1.6;
-  margin: 0 0 12px 0;
+  margin: 0 0 var(--space-3) 0;
 }
 
 .messageCard p:last-child {
@@ -203,21 +295,21 @@
 }
 
 .loadingContainer p {
-  margin-top: 16px;
-  color: #6b7280;
-  font-size: 16px;
+  margin-top: var(--space-4);
+  color: var(--color-text-muted);
+  font-size: var(--text-p);
   font-weight: 500;
 }
 
 /* Responsive Design */
 @media (max-width: 1024px) {
   .dashboard {
-    padding: 16px;
+    padding: var(--space-4);
   }
 
   .header {
     flex-direction: column;
-    gap: 16px;
+    gap: var(--space-4);
     align-items: flex-start;
   }
 
@@ -227,58 +319,76 @@
   }
 
   .title {
-    font-size: 24px;
+    font-size: var(--text-h1);
   }
 }
 
 @media (max-width: 768px) {
   .dashboard {
-    padding: 12px;
+    padding: var(--space-3);
   }
 
   .header {
-    padding: 20px;
+    padding: var(--space-5);
   }
 
   .headerActions {
     flex-direction: column;
     align-items: stretch;
-    gap: 12px;
+    gap: var(--space-3);
   }
 
   .periodSelector,
-  .refreshButton {
+  .refreshButton,
+  .exportButton {
     justify-content: center;
   }
 
+  .exportBar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .title {
-    font-size: 22px;
+    font-size: 1.25rem;
   }
 
   .subtitle {
-    font-size: 14px;
+    font-size: var(--text-small);
   }
 
   .sectionTitle {
-    font-size: 18px;
+    font-size: var(--text-h3);
   }
 }
 
 @media (max-width: 480px) {
   .dashboard {
-    padding: 8px;
+    padding: var(--space-2);
   }
 
   .header {
-    padding: 16px;
+    padding: var(--space-4);
   }
 
   .title {
-    font-size: 20px;
+    font-size: var(--text-h3);
   }
 
   .messageCard {
-    padding: 24px;
-    margin: 0 8px;
+    padding: var(--space-6);
+    margin: 0 var(--space-2);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .dashboard,
+  .refreshButton,
+  .exportButton,
+  .spinning,
+  .quarterBanner {
+    animation: none;
+    transition: none;
   }
 }

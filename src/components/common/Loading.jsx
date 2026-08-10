@@ -4,7 +4,7 @@ import './Loading.css';
 // Componente de loading spinner reutilizable
 const Loading = ({ 
   size = 'medium', 
-  color = '#3B82F6', 
+  color = 'var(--color-accent)', 
   text = 'Cargando...', 
   overlay = false,
   className = '' 
@@ -51,7 +51,7 @@ const Loading = ({
 };
 
 // Componente de loading para botones
-export const ButtonLoading = ({ size = 'small', color = '#ffffff' }) => (
+export const ButtonLoading = ({ size = 'small', color = 'var(--color-on-accent)' }) => (
   <div 
     className={`loading-spinner loading-spinner--${size} loading-spinner--button`}
     style={{ borderTopColor: color }}

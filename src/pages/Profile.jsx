@@ -11,6 +11,7 @@ import Input from '@/components/common/Input';
 import Loading from '@/components/common/Loading';
 import { QRCodeSVG } from 'qrcode.react';
 import html2canvas from 'html2canvas';
+import { ROLE_LABELS } from '@/constants';
 import { 
   FaUser, 
   FaEnvelope, 
@@ -33,10 +34,10 @@ const Profile = () => {
   const qrRef = useRef(null);
   
   const [formData, setFormData] = useState({
-    nombre: user?.nombre || '',
-    apellido: user?.apellido || '',
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
     email: user?.email || '',
-    telefono: user?.telefono || ''
+    phone: user?.phone || ''
   });
   
   const [errors, setErrors] = useState({});
@@ -66,12 +67,12 @@ const Profile = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.nombre.trim()) {
-      newErrors.nombre = 'El nombre es requerido';
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = 'El nombre es requerido';
     }
 
-    if (!formData.apellido.trim()) {
-      newErrors.apellido = 'El apellido es requerido';
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = 'El apellido es requerido';
     }
 
     if (!formData.email) {
@@ -80,8 +81,8 @@ const Profile = () => {
       newErrors.email = 'El email no es válido';
     }
 
-    if (!formData.telefono) {
-      newErrors.telefono = 'El teléfono es requerido';
+    if (formData.phone && !/^\d{7,20}$/.test(formData.phone.trim())) {
+      newErrors.phone = 'El teléfono debe contener entre 7 y 20 dígitos';
     }
 
     setErrors(newErrors);
@@ -94,7 +95,11 @@ const Profile = () => {
 
     setIsUpdating(true);
     try {
-      const result = await updateProfile(formData);
+      const result = await updateProfile({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phone: formData.phone
+      });
       if (result.success) {
         setIsEditing(false);
       }
@@ -108,10 +113,10 @@ const Profile = () => {
   // Cancelar edición
   const handleCancel = () => {
     setFormData({
-      nombre: user.nombre,
-      apellido: user.apellido,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
-      telefono: user.telefono
+      phone: user.phone
     });
     setErrors({});
     setIsEditing(false);
@@ -128,7 +133,7 @@ const Profile = () => {
       });
       
       const link = document.createElement('a');
-      link.download = `perfil-${user.nombre}-${user.apellido}.png`;
+      link.download = `perfil-${user.firstName}-${user.lastName}.png`;
       link.href = canvas.toDataURL();
       link.click();
     } catch (error) {
@@ -139,12 +144,14 @@ const Profile = () => {
   // Datos para el QR (información básica del usuario)
   const qrData = JSON.stringify({
     id: user.id,
-    nombre: `${user.nombre} ${user.apellido}`,
+    nombre: user.fullName || `${user.firstName} ${user.lastName}`.trim(),
     email: user.email,
-    rol: user.rol,
-    iglesia: user.iglesia?.nombre || 'N/A',
+    rol: user.role,
+    iglesia: user.church?.name || 'N/A',
     fecha: new Date().toISOString()
   });
+
+  const roleLabel = ROLE_LABELS[user.role] || user.role || 'Usuario';
 
   return (
     <div className={styles.profileContainer}>
@@ -153,16 +160,16 @@ const Profile = () => {
           <div className={styles.avatarSection}>
             <div className={styles.avatar}>
               <span className={styles.avatarText}>
-                {user.nombre.charAt(0)}{user.apellido.charAt(0)}
+                {user.firstName?.charAt(0)}{user.lastName?.charAt(0)}
               </span>
             </div>
             <div className={styles.userInfo}>
               <h1 className={styles.userName}>
-                {user.nombre} {user.apellido}
+                {user.firstName} {user.lastName}
               </h1>
-              <span className={styles.userRole}>{user.rol}</span>
+              <span className={styles.userRole}>{roleLabel}</span>
               <span className={styles.userChurch}>
-                {user.iglesia?.nombre || 'Sin iglesia asignada'}
+                {user.church?.name || 'Sin iglesia asignada'}
               </span>
             </div>
           </div>
@@ -216,12 +223,11 @@ const Profile = () => {
         {showQR && (
           <div className={styles.qrSection}>
             <div className={styles.qrContainer} ref={qrRef}>
-              <QRCode
+              <QRCodeSVG
                 value={qrData}
                 size={200}
                 level="M"
                 includeMargin={true}
-                renderAs="canvas"
               />
               <div className={styles.qrInfo}>
                 <h3>Código QR del Perfil</h3>
@@ -249,16 +255,16 @@ const Profile = () => {
                 {isEditing ? (
                   <Input
                     type="text"
-                    name="nombre"
-                    value={formData.nombre}
+                    name="firstName"
+                    value={formData.firstName}
                     onChange={handleChange}
-                    error={errors.nombre}
+                    error={errors.firstName}
                     icon={<FaUser />}
                   />
                 ) : (
                   <div className={styles.fieldValue}>
                     <FaUser className={styles.fieldIcon} />
-                    <span>{user.nombre}</span>
+                    <span>{user.firstName}</span>
                   </div>
                 )}
               </div>
@@ -268,16 +274,16 @@ const Profile = () => {
                 {isEditing ? (
                   <Input
                     type="text"
-                    name="apellido"
-                    value={formData.apellido}
+                    name="lastName"
+                    value={formData.lastName}
                     onChange={handleChange}
-                    error={errors.apellido}
+                    error={errors.lastName}
                     icon={<FaUser />}
                   />
                 ) : (
                   <div className={styles.fieldValue}>
                     <FaUser className={styles.fieldIcon} />
-                    <span>{user.apellido}</span>
+                    <span>{user.lastName}</span>
                   </div>
                 )}
               </div>
@@ -307,16 +313,16 @@ const Profile = () => {
               {isEditing ? (
                 <Input
                   type="tel"
-                  name="telefono"
-                  value={formData.telefono}
+                  name="phone"
+                  value={formData.phone}
                   onChange={handleChange}
-                  error={errors.telefono}
+                  error={errors.phone}
                   icon={<FaPhone />}
                 />
               ) : (
                 <div className={styles.fieldValue}>
                   <FaPhone className={styles.fieldIcon} />
-                  <span>{user.telefono}</span>
+                  <span>{user.phone || 'Sin teléfono registrado'}</span>
                 </div>
               )}
             </div>
@@ -329,7 +335,7 @@ const Profile = () => {
               <label className={styles.label}>Rol</label>
               <div className={styles.fieldValue}>
                 <FaUser className={styles.fieldIcon} />
-                <span className={styles.roleValue}>{user.rol}</span>
+                <span className={styles.roleValue}>{roleLabel}</span>
               </div>
             </div>
 
@@ -337,7 +343,7 @@ const Profile = () => {
               <label className={styles.label}>Iglesia</label>
               <div className={styles.fieldValue}>
                 <FaBuilding className={styles.fieldIcon} />
-                <span>{user.iglesia?.nombre || 'Sin iglesia asignada'}</span>
+                <span>{user.church?.name || 'Sin iglesia asignada'}</span>
               </div>
             </div>
           </div>

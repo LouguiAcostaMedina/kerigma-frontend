@@ -6,12 +6,16 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useGroups } from '@/hooks/useGroups';
+import { ROLES } from '@/constants';
 import DataTable from '@/components/common/DataTable';
 import Modal from '@/components/common/Modal';
 import Button from '@/components/common/Button';
+import BulkImportModal from '@/components/common/BulkImportModal';
+import GroupForm from '@/components/forms/GroupForm';
 import { 
   FaPlus, 
   FaDownload, 
+  FaUpload, 
   FaSearch, 
   FaUsers,
   FaTrash,
@@ -23,15 +27,16 @@ import { showNotification } from '@/utils/notifications';
 import styles from './Groups.module.css';
 
 const Groups = () => {
-  const { user } = useAuth();
+  const { hasRole } = useAuth();
   const {
     groups,
     loading,
     pagination,
     fetchGroups,
+    createGroup,
+    updateGroup,
     deleteGroup,
     deleteMultipleGroups,
-    updateGroupStatus,
     duplicateGroup,
     exportToExcel,
     exportToPDF
@@ -43,7 +48,8 @@ const Groups = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showMembersModal, setShowMembersModal] = useState(false);
+  const [, setShowMembersModal] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
 
@@ -63,6 +69,7 @@ const Groups = () => {
   // Cargar datos iniciales
   useEffect(() => {
     loadGroups();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, sortConfig]);
 
   // Función para cargar grupos
@@ -213,15 +220,6 @@ const Groups = () => {
     }
   };
 
-  const handleStatusChange = async (group, newStatus) => {
-    try {
-      await updateGroupStatus(group.id, newStatus);
-      await loadGroups(pagination.currentPage);
-    } catch (error) {
-      console.error('Error updating group status:', error);
-    }
-  };
-
   const handleDuplicate = async (group) => {
     try {
       await duplicateGroup(group.id);
@@ -257,12 +255,34 @@ const Groups = () => {
     }
   };
 
+  const handleCreateGroup = async (data) => {
+    try {
+      await createGroup(data);
+      setShowCreateModal(false);
+      await loadGroups(1);
+    } catch (error) {
+      console.error('Error creating group:', error);
+    }
+  };
+
+  const handleUpdateGroup = async (data) => {
+    try {
+      await updateGroup(selectedGroup.id, data);
+      setShowEditModal(false);
+      setSelectedGroup(null);
+      await loadGroups(pagination.currentPage);
+    } catch (error) {
+      console.error('Error updating group:', error);
+    }
+  };
+
   // Verificar permisos
-  const canCreate = ['administrador', 'director', 'lider'].includes(user?.role);
-  const canEdit = ['administrador', 'director', 'lider'].includes(user?.role);
-  const canDelete = ['administrador', 'director'].includes(user?.role);
+  const canCreate = [ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER].some(r => hasRole(r));
+  const canEdit = [ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER].some(r => hasRole(r));
+  const canDelete = [ROLES.ADMIN, ROLES.DIRECTOR].some(r => hasRole(r));
   const canExport = true; // Todos pueden exportar
-  const canDuplicate = ['administrador', 'director'].includes(user?.role);
+  const canImport = [ROLES.ADMIN, ROLES.DIRECTOR].some(r => hasRole(r));
+  const canDuplicate = [ROLES.ADMIN, ROLES.DIRECTOR].some(r => hasRole(r));
 
   return (
     <div className={styles.groupsPage}>
@@ -370,6 +390,17 @@ const Groups = () => {
             </>
           )}
 
+          {/* Importar */}
+          {canImport && (
+            <Button
+              variant="outline"
+              size="small"
+              onClick={() => setShowImportModal(true)}
+            >
+              <FaUpload /> Importar
+            </Button>
+          )}
+
           {/* Eliminar múltiples */}
           {canDelete && selectedGroups.length > 0 && (
             <Button
@@ -472,8 +503,62 @@ const Groups = () => {
         </Modal>
       )}
 
-      {/* Aquí irían los otros modales: Create, Edit, View, Members */}
-      {/* Los implementaremos en el siguiente paso */}
+      <BulkImportModal
+        isOpen={showImportModal}
+        onClose={() => setShowImportModal(false)}
+        entity="groups"
+        onImported={() => loadGroups(1)}
+      />
+
+      {/* Modal crear grupo */}
+      <Modal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        title="Nuevo Grupo"
+        size="large"
+      >
+        <GroupForm
+          mode="create"
+          onSubmit={handleCreateGroup}
+          onCancel={() => setShowCreateModal(false)}
+          isLoading={loading}
+        />
+      </Modal>
+
+      {/* Modal editar grupo */}
+      <Modal
+        isOpen={showEditModal}
+        onClose={() => { setShowEditModal(false); setSelectedGroup(null); }}
+        title="Editar Grupo"
+        size="large"
+      >
+        {selectedGroup && (
+          <GroupForm
+            mode="edit"
+            initialData={selectedGroup}
+            onSubmit={handleUpdateGroup}
+            onCancel={() => { setShowEditModal(false); setSelectedGroup(null); }}
+            isLoading={loading}
+          />
+        )}
+      </Modal>
+
+      {/* Modal ver grupo */}
+      <Modal
+        isOpen={showViewModal}
+        onClose={() => { setShowViewModal(false); setSelectedGroup(null); }}
+        title="Detalles del Grupo"
+        size="large"
+      >
+        {selectedGroup && (
+          <GroupForm
+            mode="view"
+            initialData={selectedGroup}
+            onCancel={() => { setShowViewModal(false); setSelectedGroup(null); }}
+            isLoading={loading}
+          />
+        )}
+      </Modal>
     </div>
   );
 };

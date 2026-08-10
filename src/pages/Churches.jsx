@@ -40,7 +40,6 @@ import {
   FaCheck,
 } from 'react-icons/fa';
 import { useChurches } from '../hooks/useChurches';
-import { useAuth } from '../hooks/useAuth';
 import DataTable from '../components/common/DataTable';
 import Modal from '../components/common/Modal';
 import Button from '../components/common/Button';
@@ -59,7 +58,7 @@ const fmtDate = (d) => {
     const dt = typeof d === 'string' || typeof d === 'number' ? new Date(d) : d;
     if (Number.isNaN(dt.getTime())) return 'No especificada';
     return dt.toLocaleDateString();
-  } catch (e) {
+  } catch {
     return 'No especificada';
   }
 };
@@ -193,12 +192,8 @@ const saveSavedViews = (views) => {
 };
 
 const Churches = () => {
-  const { hasPermission } = useAuth();
-
   const {
     churches,
-    church,
-    stats,
     pagination,
     filters,
     sortConfig,
@@ -207,12 +202,10 @@ const Churches = () => {
     showModal,
     modalMode,
     formData,
-    formErrors,
     canCreate,
     canUpdate,
     canDelete,
     fetchChurches,
-    fetchChurch,
     createChurch,
     updateChurch,
     deleteChurch,
@@ -225,7 +218,6 @@ const Churches = () => {
     openEditModal,
     openViewModal,
     closeModal,
-    setFormData,
     refreshData,
   } = useChurches();
 
@@ -334,7 +326,6 @@ const Churches = () => {
         exportToCSV(rows, 'iglesias_excel.csv');
       }
     } catch (e) {
-      // eslint-disable-next-line no-console
       console.error('Error exporting churches:', e);
     } finally {
       setExportLoading(false);
@@ -345,7 +336,6 @@ const Churches = () => {
   const handleManageSettings = (church) => {
     // Aquí se abriría un modal o página para configuraciones específicas
     // Puedes conectar con un componente <ChurchSettings/> si lo creas.
-    // eslint-disable-next-line no-console
     console.log('Managing settings for:', church);
   };
 
@@ -931,7 +921,7 @@ const Churches = () => {
       </div>
 
       {/* Estadísticas */}
-      <ChurchStats stats={stats} />
+      <ChurchStats churches={churches} />
 
       {/* Filtros */}
       {showFilters && renderFilters()}
@@ -978,11 +968,11 @@ const Churches = () => {
             />
             {/* Navegación simple adicional (opcional) */}
             <div className={styles.paginationLite}>
-              <Button size="sm" variant="ghost" onClick={() => changePage(Math.max(1, (pagination?.page || 1) - 1))} icon={<FaChevronLeft />}>Anterior</Button>
+              <Button size="sm" variant="ghost" onClick={() => changePage(Math.max(1, (pagination?.currentPage || 1) - 1))} icon={<FaChevronLeft />}>Anterior</Button>
               <span>
-                Página {pagination?.page || 1} de {pagination?.totalPages || 1}
+                Página {pagination?.currentPage || 1} de {pagination?.totalPages || 1}
               </span>
-              <Button size="sm" variant="ghost" onClick={() => changePage(Math.min(pagination?.totalPages || 1, (pagination?.page || 1) + 1))} icon={<FaChevronRight />}>Siguiente</Button>
+              <Button size="sm" variant="ghost" onClick={() => changePage(Math.min(pagination?.totalPages || 1, (pagination?.currentPage || 1) + 1))} icon={<FaChevronRight />}>Siguiente</Button>
             </div>
           </div>
         ) : (
@@ -1006,26 +996,13 @@ const Churches = () => {
       </Modal>
 
       {/* Modal de iglesia (crear/editar/ver) */}
-      <Modal
+      <ChurchForm
+        church={modalMode === 'create' ? null : formData}
         isOpen={showModal}
         onClose={closeModal}
-        title={
-          modalMode === 'create' ? 'Nueva Iglesia' :
-          modalMode === 'edit' ? 'Editar Iglesia' :
-          'Detalles de la Iglesia'
-        }
-        size="large"
-      >
-        <ChurchForm
-          mode={modalMode}
-          data={formData}
-          errors={formErrors}
-          loading={loading}
-          onChange={setFormData}
-          onSubmit={modalMode === 'create' ? createChurch : (data) => updateChurch(formData.id, data)}
-          onCancel={closeModal}
-        />
-      </Modal>
+        onSave={modalMode === 'create' ? createChurch : (data) => updateChurch(formData.id, data)}
+        isLoading={loading}
+      />
     </div>
   );
 };
