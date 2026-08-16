@@ -116,51 +116,9 @@ export const ENDPOINTS = {
     CHARTS: '/dashboard/charts'
   },
 
-  // Miembros
-  MEMBERS: {
-    BASE: '/members',
-    EXPORT: '/members/export',
-    IMPORT: '/members/import',
-    PHOTO: (id) => `/members/${id}/photo`,
-    STATUS: (id) => `/members/${id}/status`,
-    ASSIGN_GROUP: (id) => `/members/${id}/assign-group`
-  },
-
-  // Grupos
-  GROUPS: {
-    BASE: '/groups',
-    EXPORT: '/groups/export',
-    IMPORT: '/groups/import',
-    DUPLICATE: (id) => `/groups/${id}/duplicate`,
-    MEMBERS: (id) => `/groups/${id}/members`,
-    STATS: (id) => `/groups/${id}/stats`,
-    STATUS: (id) => `/groups/${id}/status`
-  },
-
-  // Estudiantes Bíblicos
-  STUDENTS: {
-    BASE: '/biblical-students',
-    EXPORT: '/biblical-students/export',
-    IMPORT: '/biblical-students/import',
-    PROGRESS: (id) => `/biblical-students/${id}/progress`,
-    SESSIONS: (id) => `/biblical-students/${id}/sessions`,
-    LESSONS: '/biblical-students/lessons',
-    ASSIGN_LESSON: (studentId, lessonId) => `/biblical-students/${studentId}/lessons/${lessonId}`,
-    COMPLETE_LESSON: (studentId, lessonId) => `/biblical-students/${studentId}/lessons/${lessonId}/complete`,
-    BAPTIZE: (id) => `/biblical-students/${id}/baptize`,
-    CONVERT: (id) => `/biblical-students/${id}/convert-to-member`,
-    GRADUATE: (id) => `/biblical-students/${id}/graduate`,
-    REMINDER: (id) => `/biblical-students/${id}/reminder`,
-    STATUS: (id) => `/biblical-students/${id}/status`,
-    LEVEL: (id) => `/biblical-students/${id}/level`
-  },
-
   // Iglesias
   CHURCHES: {
-    BASE: '/churches',
-    STATS: (id) => `/churches/${id}/stats`,
-    GROUPS: (id) => `/churches/${id}/groups`,
-    MEMBERS: (id) => `/churches/${id}/members`
+    BASE: '/churches'
   },
 
   // Usuarios

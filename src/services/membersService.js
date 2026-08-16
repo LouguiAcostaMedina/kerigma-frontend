@@ -83,17 +83,6 @@ export const membersService = {
     }
   },
 
-  // Obtener estadísticas de miembros
-  getMembersStats: async () => {
-    try {
-      const response = await api.get('/members/stats');
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching members stats:', error);
-      throw error;
-    }
-  },
-
   // Exportar miembros a Excel
   exportToExcel: async (filters = {}) => {
     try {
@@ -122,28 +111,6 @@ export const membersService = {
     }
   },
 
-  // Buscar miembros por criterios específicos
-  searchMembers: async (searchCriteria) => {
-    try {
-      const response = await api.post('/members/search', searchCriteria);
-      return response.data;
-    } catch (error) {
-      console.error('Error searching members:', error);
-      throw error;
-    }
-  },
-
-  // Obtener historial de un miembro
-  getMemberHistory: async (id) => {
-    try {
-      const response = await api.get(`/members/${id}/history`);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching member history:', error);
-      throw error;
-    }
-  },
-
   // Actualizar el estado de un miembro (activo/inactivo)
   updateMemberStatus: async (id, status) => {
     try {
@@ -164,24 +131,6 @@ export const membersService = {
       return response.data;
     } catch (error) {
       console.error('Error assigning member to group:', error);
-      throw error;
-    }
-  },
-
-  // Importar miembros desde Excel
-  importFromExcel: async (file) => {
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      const response = await api.post('/members/import/excel', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error importing members from Excel:', error);
       throw error;
     }
   }

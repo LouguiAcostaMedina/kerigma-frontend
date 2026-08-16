@@ -16,7 +16,6 @@ const ForgotPassword = () => {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [resetLink, setResetLink] = useState('');
 
   const validate = () => {
     if (!email.trim()) {
@@ -37,12 +36,7 @@ const ForgotPassword = () => {
 
     setIsSubmitting(true);
     try {
-      const result = await authService.forgotPassword(email.trim());
-      const token = result?.data?.resetToken ?? result?.resetToken ?? null;
-      if (token) {
-        const base = window.location.origin;
-        setResetLink(`${base}/reset-password/${token}`);
-      }
+      await authService.forgotPassword(email.trim());
       setSubmitted(true);
     } catch (err) {
       console.error('Error en recuperación de contraseña:', err);
@@ -67,13 +61,6 @@ const ForgotPassword = () => {
           <div className={styles.successBox}>
             Si el correo está registrado, recibirás instrucciones para restablecer tu contraseña.
           </div>
-          {resetLink && (
-            <div className={styles.devBox}>
-              <strong>Modo desarrollo:</strong> como el sistema aún no envía correos, usa este enlace
-              temporal: <br />
-              <a href={resetLink}>{resetLink}</a>
-            </div>
-          )}
           <div className={styles.footer}>
             <Link to="/login" className={styles.link}>
               Volver al inicio de sesión

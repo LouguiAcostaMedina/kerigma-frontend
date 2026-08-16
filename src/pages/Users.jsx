@@ -8,6 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { FaUsers, FaUserPlus, FaFilter, FaDownload, FaUpload, FaTrash, FaEdit, FaEye, FaEnvelope, FaKey, FaToggleOn, FaToggleOff, FaSearch, FaSort } from 'react-icons/fa';
 import { useUsers } from '../hooks/useUsers';
 import { useChurches } from '../hooks/useChurches';
+import { ROLE_OPTIONS, ROLE_LABELS } from '@/constants/roles';
 import DataTable from '../components/common/DataTable';
 import Modal from '../components/common/Modal';
 import Button from '../components/common/Button';
@@ -211,15 +212,7 @@ const Users = () => {
   ];
 
   // Funciones auxiliares
-  const getRoleLabel = (role) => {
-    const roleLabels = {
-      admin: 'Administrador',
-      director: 'Director',
-      leader: 'Líder',
-      reader: 'Lector'
-    };
-    return roleLabels[role] || role;
-  };
+  const getRoleLabel = (role) => ROLE_LABELS[role] || role;
 
   const getStatusLabel = (status) => {
     const statusLabels = {
@@ -269,10 +262,9 @@ const Users = () => {
             onChange={(e) => applyFilters({ role: e.target.value })}
           >
             <option value="">Todos los roles</option>
-            <option value="admin">Administrador</option>
-            <option value="director">Director</option>
-            <option value="leader">Líder</option>
-            <option value="reader">Lector</option>
+            {ROLE_OPTIONS.map(role => (
+              <option key={role.value} value={role.value}>{role.label}</option>
+            ))}
           </select>
         </div>
 

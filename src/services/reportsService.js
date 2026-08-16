@@ -186,60 +186,6 @@ export const reportsService = {
     }
   },
 
-  /**
-   * Obtener reporte de bautismos y conversiones
-   */
-  getBaptismConversionReport: async (params = {}) => {
-    try {
-      const response = await apiClient.get('/reports/metrics/baptism-conversion', { params });
-      return unwrap(response.data);
-    } catch (error) {
-      console.error('Error fetching baptism conversion report:', error);
-      throw error;
-    }
-  },
-
-  /**
-   * Obtener reporte de rendimiento de líderes
-   */
-  getLeaderPerformanceReport: async (params = {}) => {
-    try {
-      const response = await apiClient.get('/reports/metrics/leader-performance', { params });
-      return unwrap(response.data);
-    } catch (error) {
-      console.error('Error fetching leader performance report:', error);
-      throw error;
-    }
-  },
-
-  // ===================== REPORTES COMPARATIVOS =====================
-
-  /**
-   * Obtener reporte comparativo entre períodos
-   */
-  getComparativeReport: async (params) => {
-    try {
-      const response = await apiClient.post('/reports/comparative', params);
-      return unwrap(response.data);
-    } catch (error) {
-      console.error('Error fetching comparative report:', error);
-      throw error;
-    }
-  },
-
-  /**
-   * Obtener reporte comparativo entre iglesias
-   */
-  getChurchComparativeReport: async (params) => {
-    try {
-      const response = await apiClient.post('/reports/comparative/churches', params);
-      return unwrap(response.data);
-    } catch (error) {
-      console.error('Error fetching church comparative report:', error);
-      throw error;
-    }
-  },
-
   // ===================== EXPORTACIÓN DE REPORTES =====================
 
   /**
@@ -407,34 +353,6 @@ export const reportsService = {
       return unwrap(response.data);
     } catch (error) {
       console.error('Error fetching popular reports:', error);
-      throw error;
-    }
-  },
-
-  // ===================== CONFIGURACIÓN Y PERMISOS =====================
-
-  /**
-   * Obtener configuración de reportes del usuario
-   */
-  getUserReportConfig: async () => {
-    try {
-      const response = await apiClient.get('/reports/config');
-      return unwrap(response.data);
-    } catch (error) {
-      console.error('Error fetching user report config:', error);
-      throw error;
-    }
-  },
-
-  /**
-   * Actualizar configuración de reportes del usuario
-   */
-  updateUserReportConfig: async (config) => {
-    try {
-      const response = await apiClient.put('/reports/config', config);
-      return unwrap(response.data);
-    } catch (error) {
-      console.error('Error updating user report config:', error);
       throw error;
     }
   },

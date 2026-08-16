@@ -12,7 +12,6 @@ import { showNotification } from '../utils/notifications';
 export const useUsers = (initialFilters = {}) => {
   // Estados principales
   const [users, setUsers] = useState([]);
-  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [pagination, setPagination] = useState({
@@ -115,42 +114,6 @@ export const useUsers = (initialFilters = {}) => {
     }
   }, [filters, pagination.limit, sortConfig, cache, lastFetch, hasPermission]);
 
-  // Cargar usuario por ID
-  const fetchUser = useCallback(async (id) => {
-    if (!hasPermission('users.read')) {
-      setError('No tienes permisos para ver este usuario');
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const cacheKey = `user_${id}`;
-      
-      if (cache.has(cacheKey) && lastFetch && Date.now() - lastFetch < 300000) {
-        setUser(cache.get(cacheKey));
-        setLoading(false);
-        return;
-      }
-
-      const userData = await usersService.getUserById(id);
-      setUser(userData);
-      
-      // Actualizar cache
-      const newCache = new Map(cache);
-      newCache.set(cacheKey, userData);
-      setCache(newCache);
-      
-    } catch (error) {
-      console.error('Error fetching user:', error);
-      setError(error.message || 'Error al cargar usuario');
-      showNotification('Error al cargar usuario', 'error');
-    } finally {
-      setLoading(false);
-    }
-  }, [cache, lastFetch, hasPermission]);
-
   // Crear usuario
   const createUser = useCallback(async (userData) => {
     if (!hasPermission('users.create')) {
@@ -206,11 +169,6 @@ export const useUsers = (initialFilters = {}) => {
       // Actualizar lista local
       setUsers(prev => prev.map(u => u.id === id ? updatedUser : u));
       
-      // Actualizar usuario actual si es el mismo
-      if (user && user.id === id) {
-        setUser(updatedUser);
-      }
-      
       // Limpiar cache
       setCache(new Map());
       
@@ -232,7 +190,7 @@ export const useUsers = (initialFilters = {}) => {
     } finally {
       setLoading(false);
     }
-  }, [user, hasPermission]);
+  }, [hasPermission]);
 
   // Eliminar usuario
   const deleteUser = useCallback(async (id) => {
@@ -482,7 +440,6 @@ export const useUsers = (initialFilters = {}) => {
   return {
     // Datos
     users,
-    user,
     stats,
     pagination,
     filters,
@@ -506,7 +463,6 @@ export const useUsers = (initialFilters = {}) => {
     
     // Operaciones CRUD
     fetchUsers,
-    fetchUser,
     createUser,
     updateUser,
     deleteUser,

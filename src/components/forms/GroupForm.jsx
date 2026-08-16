@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import Button from '../common/Button';
 import Loading from '../common/Loading';
 import { usersService } from '../../services/usersService';
+import { TEACHER_ROLES } from '@/constants/roles';
 import styles from './GroupForm.module.css';
 
 const TYPE_OPTIONS = [
@@ -52,8 +53,6 @@ const STATUS_OPTIONS = [
   { value: 'completed', label: 'Completado' },
   { value: 'cancelled', label: 'Cancelado' }
 ];
-
-const TEACHER_ROLES = ['leader', 'pastor', 'director'];
 
 const EMPTY_FORM = {
   name: '',

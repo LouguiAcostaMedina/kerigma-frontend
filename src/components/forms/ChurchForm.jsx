@@ -4,6 +4,7 @@ import Modal from '../common/Modal';
 import Button  from '../common/Button';
 import Loading from '../common/Loading';
 import { showNotification } from '../../utils/notifications';
+import { PASTOR_ROLES, LEADER_ROLES } from '@/constants/roles';
 import styles from './ChurchForm.module.css';
 
 export const ChurchForm = ({ 
@@ -229,8 +230,8 @@ export const ChurchForm = ({
     onClose();
   };
 
-  const pastors = users.filter(user => ['director', 'admin', 'super_admin'].includes(user.role));
-  const leaders = users.filter(user => ['leader', 'director', 'admin', 'super_admin'].includes(user.role));
+  const pastors = users.filter(user => PASTOR_ROLES.includes(user.role));
+  const leaders = users.filter(user => LEADER_ROLES.includes(user.role));
 
   const tabs = [
     { id: 'basic', label: 'Información Básica', icon: '🏛️' },

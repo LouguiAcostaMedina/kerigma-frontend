@@ -4,7 +4,8 @@
  */
 
 import React from 'react';
-import { FaUsers, FaUserCheck, FaUserTimes, FaUserClock, FaChartLine, FaUserShield, FaUserTie, FaUserCog } from 'react-icons/fa';
+import { FaUsers, FaUserCheck, FaUserTimes, FaUserClock, FaChartLine, FaUserShield, FaUserTie, FaUserCog, FaCrown } from 'react-icons/fa';
+import { ROLES, ROLE_LABELS } from '@/constants/roles';
 import styles from './UserStats.module.css';
 
 const UserStats = ({ stats = {} }) => {
@@ -61,10 +62,11 @@ const UserStats = ({ stats = {} }) => {
 
   // Estadísticas por rol
   const roleStats = [
-    { role: 'admin', label: 'Administradores', icon: <FaUserShield />, count: byRole.admin || 0 },
-    { role: 'director', label: 'Directores', icon: <FaUserTie />, count: byRole.director || 0 },
-    { role: 'leader', label: 'Líderes', icon: <FaUserCog />, count: byRole.leader || 0 },
-    { role: 'reader', label: 'Lectores', icon: <FaUsers />, count: byRole.reader || 0 }
+    { role: ROLES.SUPER_ADMIN, label: `${ROLE_LABELS[ROLES.SUPER_ADMIN]}es`, icon: <FaCrown />, count: byRole[ROLES.SUPER_ADMIN] || 0 },
+    { role: ROLES.ADMIN, label: `${ROLE_LABELS[ROLES.ADMIN]}es`, icon: <FaUserShield />, count: byRole[ROLES.ADMIN] || 0 },
+    { role: ROLES.DIRECTOR, label: `${ROLE_LABELS[ROLES.DIRECTOR]}es`, icon: <FaUserTie />, count: byRole[ROLES.DIRECTOR] || 0 },
+    { role: ROLES.LEADER, label: `${ROLE_LABELS[ROLES.LEADER]}es`, icon: <FaUserCog />, count: byRole[ROLES.LEADER] || 0 },
+    { role: ROLES.READER, label: `${ROLE_LABELS[ROLES.READER]}es`, icon: <FaUsers />, count: byRole[ROLES.READER] || 0 }
   ];
 
   // Top iglesias por número de usuarios

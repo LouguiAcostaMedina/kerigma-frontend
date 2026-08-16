@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaUpload, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Button from '../common/Button';
 import Loading from '../common/Loading';
+import { ROLE_OPTIONS } from '@/constants/roles';
 import styles from './UserForm.module.css';
 
 const UserForm = ({
@@ -190,12 +191,7 @@ const UserForm = ({
     </div>
   );
 
-  const roleOptions = [
-    { value: 'admin', label: 'Administrador' },
-    { value: 'director', label: 'Director' },
-    { value: 'leader', label: 'Líder' },
-    { value: 'reader', label: 'Lector' }
-  ];
+  const roleOptions = ROLE_OPTIONS;
 
   const statusOptions = [
     { value: 'active', label: 'Activo' },

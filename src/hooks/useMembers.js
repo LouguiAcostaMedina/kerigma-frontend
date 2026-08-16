@@ -364,36 +364,6 @@ export const useMembers = () => {
     }
   }, []);
 
-  // Importar desde Excel
-  const importFromExcel = useCallback(async (file) => {
-    setLoading(true);
-    
-    try {
-      const response = await membersService.importFromExcel(file);
-      
-      showNotification({
-        type: 'success',
-        title: 'Éxito',
-        message: `${response.imported} miembro(s) importado(s) correctamente`
-      });
-
-      // Recargar datos
-      await fetchMembers();
-
-      return response;
-    } catch (err) {
-      console.error('Error importing from Excel:', err);
-      showNotification({
-        type: 'error',
-        title: 'Error',
-        message: err.response?.data?.message || 'Error al importar desde Excel'
-      });
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchMembers]);
-
   // Limpiar estado
   const clearMember = useCallback(() => {
     setMember(null);
@@ -433,7 +403,6 @@ export const useMembers = () => {
     // Importar/Exportar
     exportToExcel,
     exportToPDF,
-    importFromExcel,
     
     // Utilidades
     clearMember,

@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { FaTimes, FaCheck, FaBan, FaTrash, FaUserTag, FaEnvelope, FaDownload, FaChevronDown } from 'react-icons/fa';
 import Button from '../common/Button';
 import Modal from '../common/Modal';
+import { ROLE_OPTIONS } from '@/constants/roles';
 import styles from './BulkActions.module.css';
 
 const BulkActions = ({ 
@@ -55,12 +56,7 @@ const BulkActions = ({
           type: 'select',
           label: 'Nuevo rol',
           required: true,
-          options: [
-            { value: 'admin', label: 'Administrador' },
-            { value: 'director', label: 'Director' },
-            { value: 'leader', label: 'Líder' },
-            { value: 'reader', label: 'Lector' }
-          ]
+          options: ROLE_OPTIONS
         }
       ]
     },

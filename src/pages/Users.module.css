@@ -185,6 +185,11 @@
   letter-spacing: 0.5px;
 }
 
+.badgesuper_admin {
+  background: var(--color-warning, #b8860b);
+  color: #fff;
+}
+
 .badgeadmin {
   background: var(--color-danger);
   color: var(--color-on-danger);

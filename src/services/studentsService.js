@@ -118,19 +118,6 @@ export const studentsService = {
     }
   },
 
-  // Asignar instructor a estudiante
-  assignInstructor: async (studentId, instructorId) => {
-    try {
-      const response = await apiClient.post(`/students/${studentId}/assign-instructor`, {
-        instructorId
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error assigning instructor to student:', error);
-      throw error;
-    }
-  },
-
   // Obtener progreso de un estudiante
   getStudentProgress: async (id) => {
     try {
@@ -228,17 +215,6 @@ export const studentsService = {
     }
   },
 
-  // Obtener reportes de estudiante
-  getStudentReports: async (id) => {
-    try {
-      const response = await apiClient.get(`/students/${id}/reports`);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching student reports:', error);
-      throw error;
-    }
-  },
-
   // Exportar estudiantes a Excel
   exportToExcel: async (filters = {}) => {
     try {
@@ -290,17 +266,6 @@ export const studentsService = {
       return response.data;
     } catch (error) {
       console.error('Error sending reminder:', error);
-      throw error;
-    }
-  },
-
-  // Obtener estudiantes próximos a graduarse
-  getGraduationCandidates: async () => {
-    try {
-      const response = await apiClient.get('/students/graduation-candidates');
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching graduation candidates:', error);
       throw error;
     }
   },
