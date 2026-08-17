@@ -11,7 +11,7 @@ import Input from '@/components/common/Input';
 import Loading from '@/components/common/Loading';
 import { QRCodeSVG } from 'qrcode.react';
 import html2canvas from 'html2canvas';
-import { ROLE_LABELS } from '@/constants';
+import { useCatalog } from '@/hooks/useCatalog';
 import { 
   FaUser, 
   FaEnvelope, 
@@ -28,6 +28,7 @@ import styles from './Profile.module.css';
 
 const Profile = () => {
   const { user, updateProfile, isLoading } = useAuth();
+  const { roleLabels } = useCatalog();
   const [isEditing, setIsEditing] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [showQR, setShowQR] = useState(false);
@@ -151,7 +152,7 @@ const Profile = () => {
     fecha: new Date().toISOString()
   });
 
-  const roleLabel = ROLE_LABELS[user.role] || user.role || 'Usuario';
+  const roleLabel = roleLabels[user.role] || user.role || 'Usuario';
 
   return (
     <div className={styles.profileContainer}>

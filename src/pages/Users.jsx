@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { FaUsers, FaUserPlus, FaFilter, FaDownload, FaUpload, FaTrash, FaEdit, FaEye, FaEnvelope, FaKey, FaToggleOn, FaToggleOff, FaSearch, FaSort } from 'react-icons/fa';
 import { useUsers } from '../hooks/useUsers';
 import { useChurches } from '../hooks/useChurches';
-import { ROLE_OPTIONS, ROLE_LABELS } from '@/constants/roles';
+import { useCatalog } from '@/hooks/useCatalog';
 import DataTable from '../components/common/DataTable';
 import Modal from '../components/common/Modal';
 import Button from '../components/common/Button';
@@ -61,6 +61,7 @@ const Users = () => {
   } = useUsers();
 
   const { churches, fetchChurches } = useChurches();
+  const { roleOptions, roleLabels } = useCatalog();
   
   const [showFilters, setShowFilters] = useState(false);
   const [exportLoading, setExportLoading] = useState(false);
@@ -212,7 +213,7 @@ const Users = () => {
   ];
 
   // Funciones auxiliares
-  const getRoleLabel = (role) => ROLE_LABELS[role] || role;
+  const getRoleLabel = (role) => roleLabels[role] || role;
 
   const getStatusLabel = (status) => {
     const statusLabels = {
@@ -262,7 +263,7 @@ const Users = () => {
             onChange={(e) => applyFilters({ role: e.target.value })}
           >
             <option value="">Todos los roles</option>
-            {ROLE_OPTIONS.map(role => (
+            {roleOptions.map(role => (
               <option key={role.value} value={role.value}>{role.label}</option>
             ))}
           </select>

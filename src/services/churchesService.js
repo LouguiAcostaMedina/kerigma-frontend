@@ -62,6 +62,21 @@ export const churchesService = {
   },
 
   /**
+   * Obtener iglesias cercanas por coordenadas
+   */
+  getNearbyChurches: async ({ latitude, longitude, radiusKm = 10, limit = 5 } = {}) => {
+    try {
+      const response = await apiClient.get('/churches/nearby', {
+        params: { latitude, longitude, radiusKm, limit },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching nearby churches:', error);
+      throw error;
+    }
+  },
+
+  /**
    * Eliminar iglesia
    */
   deleteChurch: async (id) => {

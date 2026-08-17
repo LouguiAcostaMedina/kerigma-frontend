@@ -295,6 +295,20 @@ export const useChurches = () => {
     fetchChurches(buildParams());
   }, [fetchChurches, buildParams]);
 
+  // ===================== IGLESIAS CERCANAS =====================
+  const fetchNearby = useCallback(async ({ latitude, longitude, radiusKm = 10, limit = 5 } = {}) => {
+    setLoading(true);
+    try {
+      const data = await churchesService.getNearbyChurches({ latitude, longitude, radiusKm, limit });
+      return Array.isArray(data) ? data : (data?.churches || []);
+    } catch (err) {
+      console.error('Error fetching nearby churches:', err);
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   // ===================== RETURN HOOK =====================
   return {
     // ===================== ESTADO =====================
@@ -335,6 +349,9 @@ export const useChurches = () => {
     openCreateModal,
     openEditModal,
     openViewModal,
-    closeModal
+    closeModal,
+
+    // ===================== IGLESIAS CERCANAS =====================
+    fetchNearby
   };
 };

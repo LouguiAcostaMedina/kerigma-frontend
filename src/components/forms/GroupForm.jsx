@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 import Button from '../common/Button';
 import Loading from '../common/Loading';
 import { usersService } from '../../services/usersService';
-import { TEACHER_ROLES } from '@/constants/roles';
+import { useCatalog } from '@/hooks/useCatalog';
 import styles from './GroupForm.module.css';
 
 const TYPE_OPTIONS = [
@@ -77,6 +77,7 @@ const GroupForm = ({
   isLoading = false
 }) => {
   const isReadOnly = mode === 'view';
+  const { teacherRoles } = useCatalog();
   const [formData, setFormData] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState({});
   const [teacherOptions, setTeacherOptions] = useState([]);
@@ -115,7 +116,7 @@ const GroupForm = ({
         const result = await usersService.getUsers({ page: 1, limit: 100 });
         if (cancelled) return;
         const list = Array.isArray(result) ? result : (result?.users || []);
-        const teachers = list.filter(user => TEACHER_ROLES.includes(user?.role));
+        const teachers = list.filter(user => teacherRoles.includes(user?.role));
         setTeacherOptions(teachers);
       } catch (error) {
         if (!cancelled) {
@@ -128,7 +129,7 @@ const GroupForm = ({
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [teacherRoles]);
 
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));

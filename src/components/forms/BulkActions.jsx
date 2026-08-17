@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { FaTimes, FaCheck, FaBan, FaTrash, FaUserTag, FaEnvelope, FaDownload, FaChevronDown } from 'react-icons/fa';
 import Button from '../common/Button';
 import Modal from '../common/Modal';
-import { ROLE_OPTIONS } from '@/constants/roles';
+import { useCatalog } from '@/hooks/useCatalog';
 import styles from './BulkActions.module.css';
 
 const BulkActions = ({ 
@@ -20,6 +20,7 @@ const BulkActions = ({
   const [modalConfig, setModalConfig] = useState({});
   const [operationData, setOperationData] = useState({});
   const [showDropdown, setShowDropdown] = useState(false);
+  const { roleOptions } = useCatalog();
 
   const selectedCount = selectedUsers.length;
 
@@ -56,7 +57,7 @@ const BulkActions = ({
           type: 'select',
           label: 'Nuevo rol',
           required: true,
-          options: ROLE_OPTIONS
+          options: roleOptions
         }
       ]
     },

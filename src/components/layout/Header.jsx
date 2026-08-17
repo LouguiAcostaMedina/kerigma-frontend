@@ -2,13 +2,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { textUtils } from '@/utils';
-import { ROLE_LABELS } from '@/constants';
+import { useCatalog } from '@/hooks/useCatalog';
 import { getInitialTheme, applyTheme, toggleTheme } from '@/utils/theme';
 import './Header.css';
 
 const Header = ({ onMenuClick, onToggleCollapse, isCollapsed, user }) => {
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const { roleLabels } = useCatalog();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef(null);
   const [theme, setTheme] = useState(getInitialTheme);
@@ -107,7 +108,7 @@ const Header = ({ onMenuClick, onToggleCollapse, isCollapsed, user }) => {
                 {textUtils.capitalizeWords(getUserName(user))}
               </span>
               <span className="user-role">
-                {ROLE_LABELS[userRole] || textUtils.capitalize(userRole)}
+                {roleLabels[userRole] || textUtils.capitalize(userRole)}
               </span>
             </div>
             <div className="user-avatar" onClick={toggleUserMenu}>
@@ -129,7 +130,7 @@ const Header = ({ onMenuClick, onToggleCollapse, isCollapsed, user }) => {
                     {user?.email || 'No email'}
                   </p>
                   <p className="dropdown-role">
-                    {ROLE_LABELS[userRole] || textUtils.capitalize(userRole)}
+                    {roleLabels[userRole] || textUtils.capitalize(userRole)}
                   </p>
                 </div>
               </div>

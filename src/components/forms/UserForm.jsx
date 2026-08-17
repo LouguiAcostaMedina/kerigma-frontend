@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaUpload, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Button from '../common/Button';
 import Loading from '../common/Loading';
-import { ROLE_OPTIONS } from '@/constants/roles';
+import { useCatalog } from '@/hooks/useCatalog';
 import styles from './UserForm.module.css';
 
 const UserForm = ({
@@ -20,6 +20,7 @@ const UserForm = ({
   onSubmit,
   onCancel
 }) => {
+  const { roleOptions } = useCatalog();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -190,8 +191,6 @@ const UserForm = ({
       )}
     </div>
   );
-
-  const roleOptions = ROLE_OPTIONS;
 
   const statusOptions = [
     { value: 'active', label: 'Activo' },

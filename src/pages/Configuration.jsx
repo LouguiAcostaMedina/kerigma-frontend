@@ -5,7 +5,7 @@ import Button from '@/components/common/Button';
 import Input, { Select } from '@/components/common/Input';
 import Loading from '@/components/common/Loading';
 import { showToast } from '@/utils/notifications';
-import { ROLE_LABELS } from '@/constants';
+import { useCatalog } from '@/hooks/useCatalog';
 import {
   FaUserCircle,
   FaShieldAlt,
@@ -33,6 +33,7 @@ const SETTINGS_KEY = 'app_settings';
 const Configuration = () => {
   const { user, updateProfile, isLoading } = useAuth();
   const navigate = useNavigate();
+  const { roleLabels } = useCatalog();
 
   const [activeTab, setActiveTab] = useState('profile');
   const [profileForm, setProfileForm] = useState({ firstName: '', lastName: '', phone: '' });
@@ -72,7 +73,7 @@ const Configuration = () => {
     return <Loading fullScreen />;
   }
 
-  const roleLabel = ROLE_LABELS[user.role] || user.role || 'Usuario';
+  const roleLabel = roleLabels[user.role] || user.role || 'Usuario';
   const userFullName = user.fullName || [user.firstName, user.lastName].filter(Boolean).join(' ');
   const churchName = user.church?.name || 'Sin iglesia asignada';
 

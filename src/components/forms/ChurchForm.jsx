@@ -4,7 +4,7 @@ import Modal from '../common/Modal';
 import Button  from '../common/Button';
 import Loading from '../common/Loading';
 import { showNotification } from '../../utils/notifications';
-import { PASTOR_ROLES, LEADER_ROLES } from '@/constants/roles';
+import { useCatalog } from '@/hooks/useCatalog';
 import styles from './ChurchForm.module.css';
 
 export const ChurchForm = ({ 
@@ -15,6 +15,7 @@ export const ChurchForm = ({
   isLoading = false 
 }) => {
   const { users, loading: usersLoading, fetchUsers } = useUsers();
+  const { pastorRoles, leaderRoles } = useCatalog();
   const [formData, setFormData] = useState({
     name: '',
     address: '',
@@ -230,8 +231,8 @@ export const ChurchForm = ({
     onClose();
   };
 
-  const pastors = users.filter(user => PASTOR_ROLES.includes(user.role));
-  const leaders = users.filter(user => LEADER_ROLES.includes(user.role));
+  const pastors = users.filter(user => pastorRoles.includes(user.role));
+  const leaders = users.filter(user => leaderRoles.includes(user.role));
 
   const tabs = [
     { id: 'basic', label: 'Información Básica', icon: '🏛️' },
