@@ -201,3 +201,72 @@ input[type='color'] {
   color: var(--color-text-muted);
   text-align: center;
 }
+
+/* ============================================================
+   ACCESIBILIDAD — Focus-visible global
+   ============================================================ */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-accent-ring);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   MODO ALTO CONTRASTE / TEXTO GRANDE
+   Activado con data-contrast="high" en <html>.
+   Pensado para adultos mayores de la congregación.
+   ============================================================ */
+:root[data-contrast="high"] {
+  --text-h1: 2.1rem;
+  --text-h2: 1.8rem;
+  --text-h3: 1.5rem;
+  --text-h4: 1.3rem;
+  --text-p: 1.15rem;
+  --text-small: 1rem;
+  --text-xs: 0.875rem;
+
+  --btn-primary-padding: 0.85rem 1.7rem;
+  --btn-primary-min-height: 52px;
+}
+
+:root[data-contrast="high"] .btn {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+:root[data-contrast="high"] a {
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+:root[data-contrast="high"] .table thead th {
+  font-size: var(--text-small);
+  letter-spacing: 0.03em;
+}
+
+:root[data-contrast="high"] .table tbody td {
+  padding: 14px 18px;
+}
+
+/* Skip-to-content link para navegación por teclado */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-4);
+  z-index: 9999;
+  padding: var(--space-3) var(--space-6);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: 700;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  text-decoration: none;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+}

@@ -61,9 +61,11 @@ const Modal = ({
   // No renderizar si el modal no está abierto
   if (!isOpen) return null;
 
-  // Normalizar tamaños: el CSS usa extraLarge (camelCase) y full-screen vía data-size
-  const isFullScreen = size === 'full-screen';
-  const sizeClass = isFullScreen ? '' : size === 'extra-large' ? styles.extraLarge : styles[size] || '';
+  // Normalizar tamaños: aceptar 'fullscreen' y 'full-screen', mapear 'xl'/'md'/'sm' a válidos
+  const SIZE_ALIASES = { fullscreen: 'full-screen', xl: 'extra-large', md: 'medium', sm: 'small' };
+  const normalizedSize = SIZE_ALIASES[size] || size;
+  const isFullScreen = normalizedSize === 'full-screen';
+  const sizeClass = isFullScreen ? '' : normalizedSize === 'extra-large' ? styles.extraLarge : styles[normalizedSize] || '';
 
   // Contenido del modal
   const modalContent = (
@@ -111,7 +113,7 @@ Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
   title: PropTypes.string,
   children: PropTypes.node.isRequired,
-  size: PropTypes.oneOf(['small', 'medium', 'large', 'extra-large', 'full-screen']),
+  size: PropTypes.oneOf(['small', 'sm', 'medium', 'md', 'large', 'xl', 'extra-large', 'fullscreen', 'full-screen']),
   showCloseButton: PropTypes.bool,
   closeOnBackdrop: PropTypes.bool,
   closeOnEscape: PropTypes.bool,

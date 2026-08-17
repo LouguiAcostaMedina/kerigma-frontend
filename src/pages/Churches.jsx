@@ -18,7 +18,6 @@ import {
   FaChurch,
   FaPlus,
   FaFilter,
-  FaDownload,
   FaEdit,
   FaEye,
   FaTrash,
@@ -39,14 +38,18 @@ import {
   FaChevronRight,
   FaCheck,
 } from 'react-icons/fa';
-import { useChurches } from '../hooks/useChurches';
-import DataTable from '../components/common/DataTable';
-import Modal from '../components/common/Modal';
-import Button from '../components/common/Button';
-import Loading from '../components/common/Loading';
-import {ChurchForm} from '../components/forms/ChurchForm';
-import {ChurchStats} from '../components/forms/ChurchStats';
-import {ChurchDashboard} from '../components/dashboard/ChurchDashboard';
+import { useChurches } from '@/hooks/useChurches';
+import DataTable from '@/components/common/DataTable';
+import Modal from '@/components/common/Modal';
+import Button from '@/components/common/Button';
+import Loading from '@/components/common/Loading';
+import {ChurchForm} from '@/components/forms/ChurchForm';
+import {ChurchStats} from '@/components/forms/ChurchStats';
+import {ChurchDashboard} from '@/components/dashboard/ChurchDashboard';
+import { downloadBlob, dateStamp } from '@/utils/downloadBlob';
+import ExportMenu from '@/components/common/ExportMenu';
+import PageHeader from '@/components/common/PageHeader';
+import EmptyState from '@/components/common/EmptyState';
 import styles from './Churches.module.css';
 
 /**
@@ -91,30 +94,15 @@ const useDebounced = (value, delay = 400) => {
 /**
  * Util: exportar a CSV
  */
-const exportToCSV = (rows, filename = 'iglesias.csv') => {
+const exportToCSV = (rows, filename = `iglesias_${dateStamp()}.csv`) => {
   if (!Array.isArray(rows) || rows.length === 0) {
-    // Generar CSV vacío con encabezados mínimos
     const blob = new Blob(['name,code,city,state,status,memberCount,activeMembers\n'], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadBlob(blob, filename);
     return;
   }
   const headers = [
-    'name',
-    'code',
-    'address',
-    'city',
-    'state',
-    'phone',
-    'email',
-    'status',
-    'memberCount',
-    'activeMembers',
-    'foundedDate',
+    'name', 'code', 'address', 'city', 'state', 'phone', 'email',
+    'status', 'memberCount', 'activeMembers', 'foundedDate',
   ];
   const esc = (s) => {
     if (s === undefined || s === null) return '';
@@ -128,45 +116,21 @@ const exportToCSV = (rows, filename = 'iglesias.csv') => {
     lines.push(row.join(','));
   }
   const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
+  downloadBlob(blob, filename);
 };
 
-/**
- * Util: exportar a JSON
- */
-const exportToJSON = (rows, filename = 'iglesias.json') => {
+const exportToJSON = (rows, filename = `iglesias_${dateStamp()}.json`) => {
   const pretty = JSON.stringify(rows ?? [], null, 2);
   const blob = new Blob([pretty], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
+  downloadBlob(blob, filename);
 };
 
-/**
- * Util: placeholder para exportar a PDF.
- * Si ya tienes un servicio backend que genera PDF, reemplaza esta función
- * por la llamada al servicio y descarga el archivo.
- */
-const exportToPDF = async (rows, filename = 'iglesias.pdf') => {
-  // Placeholder: crea un PDF mínimo como blob (texto plano). Sustituir por lib real.
+const exportToPDF = async (rows, filename = `iglesias_${dateStamp()}.pdf`) => {
   const content = `IGLESIAS (RESUMEN)\n\n${(rows || [])
     .map((r, i) => `${i + 1}. ${r.name} — ${r.city}, ${r.state} — ${getStatusLabel(r.status)} — ${r.memberCount || 0} miembros`)
     .join('\n')}`;
   const blob = new Blob([content], { type: 'application/pdf' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
+  downloadBlob(blob, filename);
 };
 
 /**
@@ -224,7 +188,6 @@ const Churches = () => {
   // UI State
   const [showFilters, setShowFilters] = useState(false);
   const [selectedView, setSelectedView] = useState('list'); // list | cards
-  const [exportLoading, setExportLoading] = useState(false);
   const [showDashboard, setShowDashboard] = useState(null); // churchId | null
   const [selectedIds, setSelectedIds] = useState(new Set());
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
@@ -314,21 +277,14 @@ const Churches = () => {
 
   // Exportaciones
   const handleExport = async (format) => {
-    setExportLoading(true);
     try {
       const rows = churches || [];
       if (format === 'csv') exportToCSV(rows);
       else if (format === 'json') exportToJSON(rows);
       else if (format === 'pdf') await exportToPDF(rows);
-      else if (format === 'excel') {
-        // Si tienes un exportador a Excel en el backend, inviértelo aquí.
-        // Por ahora, exportamos CSV como alternativa.
-        exportToCSV(rows, 'iglesias_excel.csv');
-      }
+      else if (format === 'xlsx') exportToCSV(rows, `iglesias_${dateStamp()}.csv`);
     } catch (e) {
       console.error('Error exporting churches:', e);
-    } finally {
-      setExportLoading(false);
     }
   };
 
@@ -868,44 +824,10 @@ const Churches = () => {
             Filtros
           </Button>
 
-          <div className={styles.exportButtons}>
-            <Button
-              variant="outline"
-              onClick={() => handleExport('csv')}
-              disabled={exportLoading}
-              icon={<FaDownload />}
-              title="Exportar CSV"
-            >
-              CSV
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => handleExport('excel')}
-              disabled={exportLoading}
-              icon={<FaDownload />}
-              title="Exportar Excel (CSV alternativo)"
-            >
-              Excel
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => handleExport('json')}
-              disabled={exportLoading}
-              icon={<FaDownload />}
-              title="Exportar JSON"
-            >
-              JSON
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => handleExport('pdf')}
-              disabled={exportLoading}
-              icon={<FaDownload />}
-              title="Exportar PDF"
-            >
-              PDF
-            </Button>
-          </div>
+          <ExportMenu
+            formats={['csv', 'xlsx', 'json', 'pdf']}
+            onExport={handleExport}
+          />
 
           {canCreate && (
             <Button

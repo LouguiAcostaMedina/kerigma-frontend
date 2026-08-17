@@ -6,17 +6,19 @@
 
 import React, { useState, useEffect } from 'react';
 import { FaUsers, FaUserPlus, FaFilter, FaDownload, FaUpload, FaTrash, FaEdit, FaEye, FaEnvelope, FaKey, FaToggleOn, FaToggleOff, FaSearch, FaSort } from 'react-icons/fa';
-import { useUsers } from '../hooks/useUsers';
-import { useChurches } from '../hooks/useChurches';
+import { useUsers } from '@/hooks/useUsers';
+import { useChurches } from '@/hooks/useChurches';
 import { useCatalog } from '@/hooks/useCatalog';
-import DataTable from '../components/common/DataTable';
-import Modal from '../components/common/Modal';
-import Button from '../components/common/Button';
-import Loading from '../components/common/Loading';
-import UserForm from '../components/forms/UserForm';
-import UserStats from '../components/forms/UserStats';
-import BulkActions from '../components/forms/BulkActions';
-import BulkImportModal from '../components/common/BulkImportModal';
+import DataTable from '@/components/common/DataTable';
+import Modal from '@/components/common/Modal';
+import Button from '@/components/common/Button';
+import Loading from '@/components/common/Loading';
+import UserForm from '@/components/forms/UserForm';
+import UserStats from '@/components/forms/UserStats';
+import BulkActions from '@/components/forms/BulkActions';
+import BulkImportModal from '@/components/common/BulkImportModal';
+import ExportMenu from '@/components/common/ExportMenu';
+import PageHeader from '@/components/common/PageHeader';
 import styles from './Users.module.css';
 
 const Users = () => {
@@ -64,7 +66,6 @@ const Users = () => {
   const { roleOptions, roleLabels } = useCatalog();
   
   const [showFilters, setShowFilters] = useState(false);
-  const [exportLoading, setExportLoading] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
 
   // Cargar iglesias para los filtros
@@ -227,15 +228,12 @@ const Users = () => {
 
   // Exportar usuarios
   const handleExport = async (format) => {
-    setExportLoading(true);
     try {
       const params = { ...filters, format };
       // Aquí iría la lógica de exportación
       console.log('Exportando usuarios:', params);
     } catch (error) {
       console.error('Error exporting users:', error);
-    } finally {
-      setExportLoading(false);
     }
   };
 
@@ -352,24 +350,10 @@ const Users = () => {
             Filtros
           </Button>
           
-          <div className={styles.exportButtons}>
-            <Button
-              variant="outline"
-              onClick={() => handleExport('excel')}
-              disabled={exportLoading}
-              icon={<FaDownload />}
-            >
-              Excel
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => handleExport('pdf')}
-              disabled={exportLoading}
-              icon={<FaDownload />}
-            >
-              PDF
-            </Button>
-          </div>
+          <ExportMenu
+            formats={['xlsx', 'pdf']}
+            onExport={handleExport}
+          />
 
           {canCreate && (
             <Button
