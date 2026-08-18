@@ -1,0 +1,77 @@
+{
+  "app": { "name": "SGM - Sistema de Gestión Misionera", "version": "v2.0.0" },
+  "nav": {
+    "dashboard": "Dashboard",
+    "users": "Usuarios",
+    "churches": "Iglesias",
+    "members": "Miembros",
+    "groups": "Grupos",
+    "calendar": "Calendario",
+    "ministries": "Ministerios",
+    "reports": "Reportes",
+    "officialReports": "Reportes Oficiales",
+    "notifications": "Notificaciones",
+    "tithesOfferings": "Diezmos y Ofrendas",
+    "auditLog": "Bitácora",
+    "hierarchy": "Jerarquía",
+    "settings": "Configuración",
+    "profile": "Perfil",
+    "logout": "Cerrar Sesión",
+    "bibleStudents": "Estudiantes Bíblicos",
+    "pastoralCare": "Cuidado Pastoral",
+    "baptismPipeline": "Pipeline de Bautismo",
+    "documents": "Documentos"
+  },
+  "auth": {
+    "login": "Iniciar Sesión",
+    "loggingIn": "Iniciando sesión...",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "noAccount": "¿No tienes cuenta?",
+    "register": "Regístrate",
+    "registerHere": "Regístrate aquí",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "emailRequired": "El email es requerido",
+    "emailInvalid": "El email no es válido",
+    "passwordRequired": "La contraseña es requerida",
+    "churchName": "Iglesia Adventista",
+    "systemName": "Sistema de Gestión Misionera",
+    "inspirationText": "\"Porque de tal manera amó Dios al mundo, que ha dado a su Hijo unigénito, para que todo aquel que en él cree, no se pierda, mas tenga vida eterna\"",
+    "inspirationAuthor": "Juan 3:16"
+  },
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Buscar",
+    "loading": "Cargando...",
+    "noData": "No hay datos disponibles",
+    "confirm": "Confirmar",
+    "yes": "Sí",
+    "no": "No",
+    "active": "Activo",
+    "inactive": "Inactivo"
+  },
+  "members": {
+    "title": "Miembros",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo",
+    "phone": "Teléfono",
+    "status": "Estado",
+    "newMember": "Nuevo Miembro"
+  },
+  "dashboard": {
+    "welcome": "Bienvenido",
+    "totalMembers": "Total de Miembros",
+    "activeGroups": "Grupos Activos",
+    "recentActivity": "Actividad Reciente"
+  },
+  "demo": {
+    "banner": "MODO DEMO — Datos ficticios, sin conexión a producción"
+  }
+}

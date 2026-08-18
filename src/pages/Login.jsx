@@ -1,6 +1,7 @@
 // Login.jsx
 import { useState, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import Button from "@/components/common/Button";
 import Input from "@/components/common/Input";
@@ -19,6 +20,7 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
 
   const from = location.state?.from?.pathname || "/dashboard";
   const infoMessage = location.state?.message;
@@ -44,13 +46,13 @@ const Login = () => {
     const newErrors = {};
 
     if (!formData.email || !formData.email.trim()) {
-      newErrors.email = "El email es requerido";
+      newErrors.email = t('auth.emailRequired');
     } else if (!/\S+@\S+\.\S+/.test(formData.email.trim())) {
-      newErrors.email = "El email no es válido";
+      newErrors.email = t('auth.emailInvalid');
     }
 
     if (!formData.password) {
-      newErrors.password = "La contraseña es requerida";
+      newErrors.password = t('auth.passwordRequired');
     }
 
     setErrors(newErrors);
@@ -114,8 +116,8 @@ const Login = () => {
               className={styles.logoImage}
             />
           </div>
-          <h1 className={styles.title}>Iglesia Adventista</h1>
-          <p className={styles.subtitle}>Sistema de Gestión Misionera</p>
+          <h1 className={styles.title}>{t('auth.churchName')}</h1>
+          <p className={styles.subtitle}>{t('auth.systemName')}</p>
         </div>
 
         <form onSubmit={(e) => { e.preventDefault(); handleSubmit(e); }} className={styles.form} noValidate>
@@ -129,7 +131,7 @@ const Login = () => {
             <Input
               type="email"
               name="email"
-              placeholder="Correo electrónico"
+              placeholder={t('auth.email')}
               value={formData.email}
               onChange={handleChange}
               error={errors.email}
@@ -145,7 +147,7 @@ const Login = () => {
               <Input
                 type={showPassword ? "text" : "password"}
                 name="password"
-                placeholder="Contraseña"
+                placeholder={t('auth.password')}
                 value={formData.password}
                 onChange={handleChange}
                 error={errors.password}
@@ -158,7 +160,7 @@ const Login = () => {
                 className={styles.passwordToggle}
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={
-                  showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                  showPassword ? t('auth.hidePassword') : t('auth.showPassword')
                 }
                 disabled={isSubmitting}
               >
@@ -175,28 +177,26 @@ const Login = () => {
             loading={isSubmitting}
             disabled={isSubmitting} // 🛡️ Congela físicamente el botón para evitar clics dobles
           >
-            {isSubmitting ? "Iniciando sesión..." : "Iniciar Sesión"}
+            {isSubmitting ? t('auth.loggingIn') : t('auth.login')}
           </Button>
         </form>
 
         <div className={styles.loginFooter}>
           <p className={styles.registerLink}>
-            ¿No tienes cuenta?{" "}
+            {t('auth.noAccount')}{" "}
             <Link to="/register" className={styles.link}>
-              Regístrate aquí
+              {t('auth.registerHere')}
             </Link>
           </p>
           <Link to="/forgot-password" className={styles.forgotLink}>
-            ¿Olvidaste tu contraseña?
+            {t('auth.forgotPassword')}
           </Link>
         </div>
       </div>
 
       <div className={styles.inspirationText}>
-        "Porque de tal manera amó Dios al mundo, que ha dado a su Hijo
-        unigénito, para que todo aquel que en él cree, no se pierda, mas tenga
-        vida eterna"
-        <span>Juan 3:16</span>
+        {t('auth.inspirationText')}
+        <span>{t('auth.inspirationAuthor')}</span>
       </div>
 
       <div className={styles.natureElements}>

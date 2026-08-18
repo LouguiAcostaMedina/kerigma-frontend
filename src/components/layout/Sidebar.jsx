@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
-import { ROLES, ROLE_LABELS } from '@/constants';
+import { ROLES } from '@/constants';
 import { FiMenu } from 'react-icons/fi';
 import './Sidebar.css';
 
@@ -9,130 +10,131 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
   const { user, hasAnyRole } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
 
   const menuItems = [
     {
       id: 'dashboard',
-      title: 'Dashboard',
+      title: t('nav.dashboard'),
       icon: '📊',
       path: '/dashboard',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER, ROLES.READER]
     },
     {
       id: 'users',
-      title: 'Usuarios',
+      title: t('nav.users'),
       icon: '👥',
       path: '/users',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN]
     },
     {
       id: 'churches',
-      title: 'Iglesias',
+      title: t('nav.churches'),
       icon: '⛪',
       path: '/churches',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR]
     },
     {
       id: 'groups',
-      title: 'Grupos',
+      title: t('nav.groups'),
       icon: '👨‍👩‍👧‍👦',
       path: '/groups',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER]
     },
     {
       id: 'members',
-      title: 'Miembros',
+      title: t('nav.members'),
       icon: '👤',
       path: '/members',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER, ROLES.READER]
     },
     {
       id: 'bible-students',
-      title: 'Estudiantes Bíblicos',
+      title: t('nav.bibleStudents'),
       icon: '📖',
       path: '/biblical-students',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER, ROLES.READER]
     },
     {
       id: 'calendar',
-      title: 'Calendario',
+      title: t('nav.calendar'),
       icon: '📅',
       path: '/calendar',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER]
     },
     {
       id: 'reports',
-      title: 'Reportes',
+      title: t('nav.reports'),
       icon: '📈',
       path: '/reports',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR]
     },
     {
       id: 'official-reports',
-      title: 'Reportes Oficiales',
+      title: t('nav.officialReports'),
       icon: '📜',
       path: '/official-reports',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR]
     },
     {
       id: 'notifications',
-      title: 'Notificaciones',
+      title: t('nav.notifications'),
       icon: '🔔',
       path: '/notifications',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR]
     },
     {
       id: 'tithes-offerings',
-      title: 'Diezmos y Ofrendas',
+      title: t('nav.tithesOfferings'),
       icon: '💰',
       path: '/tithes-offerings',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.TESORERO]
     },
     {
       id: 'audit-log',
-      title: 'Bitácora',
+      title: t('nav.auditLog'),
       icon: '📋',
       path: '/audit-log',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN]
     },
     {
       id: 'hierarchy',
-      title: 'Jerarquía',
+      title: t('nav.hierarchy'),
       icon: '🏛️',
       path: '/hierarchy',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN]
     },
     {
       id: 'ministries',
-      title: 'Ministerios',
+      title: t('nav.ministries'),
       icon: '🙏',
       path: '/ministries',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER, ROLES.READER]
     },
     {
       id: 'pastoral-care',
-      title: 'Cuidado Pastoral',
+      title: t('nav.pastoralCare'),
       icon: '🐑',
       path: '/pastoral-care',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR]
     },
     {
       id: 'baptism-pipeline',
-      title: 'Pipeline de Bautismo',
+      title: t('nav.baptismPipeline'),
       icon: '💧',
       path: '/baptism-pipeline',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER, ROLES.READER]
     },
     {
       id: 'documents',
-      title: 'Documentos',
+      title: t('nav.documents'),
       icon: '📂',
       path: '/documents',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER, ROLES.READER]
     },
     {
       id: 'settings',
-      title: 'Configuración',
+      title: t('nav.settings'),
       icon: '⚙️',
       path: '/configuration',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN]
@@ -159,12 +161,12 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
     <>
       <aside className={`sidebar ${isOpen ? 'sidebar--open' : ''} ${isCollapsed ? 'sidebar--collapsed' : ''}`}>
         <div className="sidebar-header">
-          <div className="sidebar-logo" title={isCollapsed ? 'SGE - Sistema de Gestión Eclesiástica' : undefined}>
+          <div className="sidebar-logo" title={isCollapsed ? t('app.name') : undefined}>
             <div className="logo-icon">⛪</div>
             {!isCollapsed && (
               <div className="logo-text">
-                <h3>SGE</h3>
-                <p>Sistema de Gestión Eclesiástica</p>
+                <h3>SGM</h3>
+                <p>{t('app.name')}</p>
               </div>
             )}
           </div>
@@ -172,8 +174,8 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
           <button
             className="sidebar-collapse-btn"
             onClick={onToggleCollapse}
-            aria-label={isCollapsed ? 'Desplegar menú' : 'Contraer menú'}
-            title={isCollapsed ? 'Desplegar' : 'Contraer'}
+            aria-label={isCollapsed ? t('nav.dashboard') : t('nav.dashboard')}
+            title={isCollapsed ? t('nav.dashboard') : t('nav.dashboard')}
           >
             <FiMenu size={20} />
           </button>
@@ -181,7 +183,7 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
           <button
             className="sidebar-close"
             onClick={onClose}
-            aria-label="Cerrar menú"
+            aria-label={t('common.cancel')}
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

@@ -1,0 +1,77 @@
+{
+  "app": { "name": "SGM - Church Management System", "version": "v2.0.0" },
+  "nav": {
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "churches": "Churches",
+    "members": "Members",
+    "groups": "Groups",
+    "calendar": "Calendar",
+    "ministries": "Ministries",
+    "reports": "Reports",
+    "officialReports": "Official Reports",
+    "notifications": "Notifications",
+    "tithesOfferings": "Tithes & Offerings",
+    "auditLog": "Audit Log",
+    "hierarchy": "Hierarchy",
+    "settings": "Settings",
+    "profile": "Profile",
+    "logout": "Log Out",
+    "bibleStudents": "Bible Students",
+    "pastoralCare": "Pastoral Care",
+    "baptismPipeline": "Baptism Pipeline",
+    "documents": "Documents"
+  },
+  "auth": {
+    "login": "Log In",
+    "loggingIn": "Logging in...",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "register": "Sign Up",
+    "registerHere": "Sign up here",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Email is invalid",
+    "passwordRequired": "Password is required",
+    "churchName": "Adventist Church",
+    "systemName": "Church Management System",
+    "inspirationText": "\"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life\"",
+    "inspirationAuthor": "John 3:16"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "loading": "Loading...",
+    "noData": "No data available",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "members": {
+    "title": "Members",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone",
+    "status": "Status",
+    "newMember": "New Member"
+  },
+  "dashboard": {
+    "welcome": "Welcome",
+    "totalMembers": "Total Members",
+    "activeGroups": "Active Groups",
+    "recentActivity": "Recent Activity"
+  },
+  "demo": {
+    "banner": "DEMO MODE — Fictitious data, no production connection"
+  }
+}

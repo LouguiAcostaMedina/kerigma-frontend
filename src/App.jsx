@@ -6,6 +6,7 @@
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import AppRouter from '@/components/AppRouter';
+import DemoBanner from '@/components/common/DemoBanner';
 import { ToastContainer } from '@/utils/notifications';
 import '@/assets/styles/globals.css';
 
@@ -14,6 +15,7 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <div className="App">
+          <DemoBanner />
           <AppRouter />
           <ToastContainer />
         </div>
