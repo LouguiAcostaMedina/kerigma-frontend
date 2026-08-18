@@ -18,6 +18,7 @@ import UserStats from '@/components/forms/UserStats';
 import BulkActions from '@/components/forms/BulkActions';
 import BulkImportModal from '@/components/common/BulkImportModal';
 import ExportMenu from '@/components/common/ExportMenu';
+import { RoleSelect } from '@/components/common/RoleSelect';
 import PageHeader from '@/components/common/PageHeader';
 import styles from './Users.module.css';
 
@@ -63,7 +64,7 @@ const Users = () => {
   } = useUsers();
 
   const { churches, fetchChurches } = useChurches();
-  const { roleOptions, roleLabels } = useCatalog();
+  const { roleLabels } = useCatalog();
   
   const [showFilters, setShowFilters] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
@@ -256,15 +257,7 @@ const Users = () => {
         
         <div className={styles.filterGroup}>
           <label>Rol</label>
-          <select
-            value={filters.role}
-            onChange={(e) => applyFilters({ role: e.target.value })}
-          >
-            <option value="">Todos los roles</option>
-            {roleOptions.map(role => (
-              <option key={role.value} value={role.value}>{role.label}</option>
-            ))}
-          </select>
+          <RoleSelect value={filters.role || ''} onChange={(val) => applyFilters({ role: val })} placeholder="Todos los roles" />
         </div>
 
         <div className={styles.filterGroup}>

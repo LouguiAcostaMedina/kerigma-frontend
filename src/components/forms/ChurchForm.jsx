@@ -3,6 +3,7 @@ import { useUsers } from '../../hooks/useUsers';
 import Modal from '../common/Modal';
 import Button  from '../common/Button';
 import Loading from '../common/Loading';
+import { FormFooter } from '@/components/common/FormFooter';
 import { showNotification } from '../../utils/notifications';
 import { useCatalog } from '@/hooks/useCatalog';
 import styles from './ChurchForm.module.css';
@@ -682,24 +683,11 @@ export const ChurchForm = ({
             </div>
           )}
 
-          <div className={styles.actions}>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={handleClose}
-              disabled={isLoading}
-            >
-              Cancelar
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              disabled={isLoading}
-              isLoading={isLoading}
-            >
-              {church ? 'Actualizar' : 'Crear'} Iglesia
-            </Button>
-          </div>
+          <FormFooter
+            onCancel={handleClose}
+            saving={isLoading}
+            labels={{ submit: church ? 'Actualizar Iglesia' : 'Crear Iglesia' }}
+          />
         </form>
       </div>
     </Modal>

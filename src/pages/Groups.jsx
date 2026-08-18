@@ -23,6 +23,7 @@ import {
   FaCalendarAlt,
   FaUser
 } from 'react-icons/fa';
+import { PageHeader } from '@/components/common/PageHeader';
 import { showNotification } from '@/utils/notifications';
 import styles from './Groups.module.css';
 
@@ -287,35 +288,29 @@ const Groups = () => {
   return (
     <div className={styles.groupsPage}>
       {/* Header */}
-      <div className={styles.pageHeader}>
-        <div className={styles.headerInfo}>
-          <h1 className={styles.pageTitle}>
-            <FaUsers className={styles.titleIcon} />
-            Gestión de Grupos
-          </h1>
-          <p className={styles.pageDescription}>
-            Administra los grupos de la iglesia y sus actividades
-          </p>
-        </div>
+      <PageHeader
+        title="Gestión de Grupos"
+        subtitle="Administra los grupos de la iglesia y sus actividades"
+        icon={<FaUsers />}
+      />
 
-        {/* Estadísticas rápidas */}
-        <div className={styles.quickStats}>
-          <div className={styles.statCard}>
-            <span className={styles.statNumber}>{pagination.total}</span>
-            <span className={styles.statLabel}>Total Grupos</span>
-          </div>
-          <div className={styles.statCard}>
-            <span className={styles.statNumber}>
-              {groups.filter(g => g.status === 'active').length}
-            </span>
-            <span className={styles.statLabel}>Activos</span>
-          </div>
-          <div className={styles.statCard}>
-            <span className={styles.statNumber}>
-              {groups.reduce((sum, g) => sum + (g.membersCount || 0), 0)}
-            </span>
-            <span className={styles.statLabel}>Miembros Total</span>
-          </div>
+      {/* Estadísticas rápidas */}
+      <div className={styles.quickStats}>
+        <div className={styles.statCard}>
+          <span className={styles.statNumber}>{pagination.total}</span>
+          <span className={styles.statLabel}>Total Grupos</span>
+        </div>
+        <div className={styles.statCard}>
+          <span className={styles.statNumber}>
+            {groups.filter(g => g.status === 'active').length}
+          </span>
+          <span className={styles.statLabel}>Activos</span>
+        </div>
+        <div className={styles.statCard}>
+          <span className={styles.statNumber}>
+            {groups.reduce((sum, g) => sum + (g.membersCount || 0), 0)}
+          </span>
+          <span className={styles.statLabel}>Miembros Total</span>
         </div>
       </div>
 

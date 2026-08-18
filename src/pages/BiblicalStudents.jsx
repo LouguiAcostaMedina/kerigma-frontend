@@ -25,6 +25,7 @@ import {
   FaBook,
   FaTrophy
 } from 'react-icons/fa';
+import { PageHeader } from '@/components/common/PageHeader';
 import { showNotification } from '@/utils/notifications';
 import styles from './BiblicalStudents.module.css';
 
@@ -352,53 +353,47 @@ const BiblicalStudents = () => {
   return (
     <div className={styles.studentsPage}>
       {/* Header */}
-      <div className={styles.pageHeader}>
-        <div className={styles.headerInfo}>
-          <h1 className={styles.pageTitle}>
-            <FaUserGraduate className={styles.titleIcon} />
-            Estudiantes Bíblicos
-          </h1>
-          <p className={styles.pageDescription}>
-            Administra los estudiantes bíblicos y su progreso académico
-          </p>
-        </div>
+      <PageHeader
+        title="Estudiantes Bíblicos"
+        subtitle="Administra los estudiantes bíblicos y su progreso académico"
+        icon={<FaUserGraduate />}
+      />
 
-        {/* Estadísticas rápidas */}
-        <div className={styles.quickStats}>
-          <div className={styles.statCard}>
-            <FaUserGraduate className={styles.statIcon} />
-            <div className={styles.statInfo}>
-              <span className={styles.statNumber}>{stats.total}</span>
-              <span className={styles.statLabel}>Total</span>
-            </div>
+      {/* Estadísticas rápidas */}
+      <div className={styles.quickStats}>
+        <div className={styles.statCard}>
+          <FaUserGraduate className={styles.statIcon} />
+          <div className={styles.statInfo}>
+            <span className={styles.statNumber}>{stats.total}</span>
+            <span className={styles.statLabel}>Total</span>
           </div>
-          <div className={styles.statCard}>
-            <FaBook className={styles.statIcon} />
-            <div className={styles.statInfo}>
-              <span className={styles.statNumber}>{stats.active}</span>
-              <span className={styles.statLabel}>Activos</span>
-            </div>
+        </div>
+        <div className={styles.statCard}>
+          <FaBook className={styles.statIcon} />
+          <div className={styles.statInfo}>
+            <span className={styles.statNumber}>{stats.active}</span>
+            <span className={styles.statLabel}>Activos</span>
           </div>
-          <div className={styles.statCard}>
-            <FaTrophy className={styles.statIcon} />
-            <div className={styles.statInfo}>
-              <span className={styles.statNumber}>{stats.baptized}</span>
-              <span className={styles.statLabel}>Bautizados</span>
-            </div>
+        </div>
+        <div className={styles.statCard}>
+          <FaTrophy className={styles.statIcon} />
+          <div className={styles.statInfo}>
+            <span className={styles.statNumber}>{stats.baptized}</span>
+            <span className={styles.statLabel}>Bautizados</span>
           </div>
-          <div className={styles.statCard}>
-            <FaGraduationCap className={styles.statIcon} />
-            <div className={styles.statInfo}>
-              <span className={styles.statNumber}>{stats.graduated}</span>
-              <span className={styles.statLabel}>Graduados</span>
-            </div>
+        </div>
+        <div className={styles.statCard}>
+          <FaGraduationCap className={styles.statIcon} />
+          <div className={styles.statInfo}>
+            <span className={styles.statNumber}>{stats.graduated}</span>
+            <span className={styles.statLabel}>Graduados</span>
           </div>
-          <div className={styles.statCard}>
-            <FaChartLine className={styles.statIcon} />
-            <div className={styles.statInfo}>
-              <span className={styles.statNumber}>{stats.averageProgress}%</span>
-              <span className={styles.statLabel}>Progreso Promedio</span>
-            </div>
+        </div>
+        <div className={styles.statCard}>
+          <FaChartLine className={styles.statIcon} />
+          <div className={styles.statInfo}>
+            <span className={styles.statNumber}>{stats.averageProgress}%</span>
+            <span className={styles.statLabel}>Progreso Promedio</span>
           </div>
         </div>
       </div>

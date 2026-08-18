@@ -20,6 +20,7 @@ import {
   FaUsers,
   FaTrash
 } from 'react-icons/fa';
+import { PageHeader } from '@/components/common/PageHeader';
 import { showNotification } from '@/utils/notifications';
 import styles from './Members.module.css';
 
@@ -260,29 +261,23 @@ const Members = () => {
   return (
     <div className={styles.membersPage}>
       {/* Header */}
-      <div className={styles.pageHeader}>
-        <div className={styles.headerInfo}>
-          <h1 className={styles.pageTitle}>
-            <FaUsers className={styles.titleIcon} />
-            Gestión de Miembros
-          </h1>
-          <p className={styles.pageDescription}>
-            Administra los miembros de la iglesia y sus datos
-          </p>
-        </div>
+      <PageHeader
+        title="Gestión de Miembros"
+        subtitle="Administra los miembros de la iglesia y sus datos"
+        icon={<FaUsers />}
+      />
 
-        {/* Estadísticas rápidas */}
-        <div className={styles.quickStats}>
-          <div className={styles.statCard}>
-            <span className={styles.statNumber}>{pagination.total}</span>
-            <span className={styles.statLabel}>Total Miembros</span>
-          </div>
-          <div className={styles.statCard}>
-            <span className={styles.statNumber}>
-              {members.filter(m => m.status === 'active').length}
-            </span>
-            <span className={styles.statLabel}>Activos</span>
-          </div>
+      {/* Estadísticas rápidas */}
+      <div className={styles.quickStats}>
+        <div className={styles.statCard}>
+          <span className={styles.statNumber}>{pagination.total}</span>
+          <span className={styles.statLabel}>Total Miembros</span>
+        </div>
+        <div className={styles.statCard}>
+          <span className={styles.statNumber}>
+            {members.filter(m => m.status === 'active').length}
+          </span>
+          <span className={styles.statLabel}>Activos</span>
         </div>
       </div>
 

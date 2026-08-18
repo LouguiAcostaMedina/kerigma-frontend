@@ -47,6 +47,7 @@
 .quickStats {
   display: flex;
   gap: var(--space-4);
+  margin-bottom: var(--space-6);
 }
 
 .statCard {

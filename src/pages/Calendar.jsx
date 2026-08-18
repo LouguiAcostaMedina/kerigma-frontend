@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { FaCalendarAlt, FaPlus, FaChevronLeft, FaChevronRight, FaClock, FaMapMarkerAlt, FaTrash } from 'react-icons/fa';
 import Modal from '@/components/common/Modal';
 import Loading from '@/components/common/Loading';
+import { EmptyState } from '@/components/common/EmptyState';
 import { activityService } from '@/services/activityService';
 import { showToast } from '@/utils/notifications';
 import styles from './Calendar.module.css';
@@ -183,7 +184,7 @@ function Calendar() {
       ) : (
         <div className={styles.listSection}>
           <h3 className={styles.sectionTitle}>Actividades del mes</h3>
-          {activities.length === 0 ? <p className={styles.emptyText}>No hay actividades este mes</p> : (
+          {activities.length === 0 ? <EmptyState icon={FaCalendarAlt} title="Sin actividades" description="No hay actividades este mes" /> : (
             <div className={styles.activityList}>
               {activities.sort((a, b) => new Date(a.startDate || a.start_date) - new Date(b.startDate || b.start_date)).map(a => (
                 <div key={a.id || a._id} className={styles.activityCard} onClick={() => openDetail(a)}>

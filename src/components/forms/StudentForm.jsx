@@ -4,8 +4,8 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import Button from '../common/Button';
 import Loading from '../common/Loading';
+import { FormFooter } from '@/components/common/FormFooter';
 import { groupsService } from '../../services/groupsService';
 import { usersService, cleanParams } from '../../services/usersService';
 import { useAuth } from '../../hooks/useAuth';
@@ -395,16 +395,12 @@ const StudentForm = ({
         </div>
       </div>
 
-      {!isReadOnly && (
-        <div className={styles.formActions}>
-          <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
-            Cancelar
-          </Button>
-          <Button type="submit" variant="primary" disabled={isLoading} loading={isLoading}>
-            {mode === 'create' ? 'Crear Estudiante' : 'Guardar Cambios'}
-          </Button>
-        </div>
-      )}
+      <FormFooter
+        onCancel={onCancel}
+        saving={isLoading}
+        hidden={isReadOnly}
+        labels={{ submit: mode === 'create' ? 'Crear Estudiante' : 'Guardar Cambios' }}
+      />
     </form>
   );
 };

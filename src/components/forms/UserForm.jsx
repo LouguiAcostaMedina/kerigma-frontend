@@ -5,9 +5,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaUpload, FaEye, FaEyeSlash } from 'react-icons/fa';
-import Button from '../common/Button';
 import Loading from '../common/Loading';
-import { useCatalog } from '@/hooks/useCatalog';
+import { FormFooter } from '@/components/common/FormFooter';
+import { RoleSelect } from '@/components/common/RoleSelect';
 import styles from './UserForm.module.css';
 
 const UserForm = ({
@@ -20,7 +20,6 @@ const UserForm = ({
   onSubmit,
   onCancel
 }) => {
-  const { roleOptions } = useCatalog();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -282,12 +281,16 @@ const UserForm = ({
               placeholder: '+1 234 567 8900'
             })}
 
-            {renderSelect({
-              field: 'role',
-              label: 'Rol',
-              options: roleOptions,
-              required: true
-            })}
+            <div className={styles.formGroup}>
+              <label className={styles.label}>
+                Rol
+                <span className={styles.required}>*</span>
+              </label>
+              <RoleSelect value={formData.role} onChange={(val) => handleChange('role', val)} disabled={isReadOnly} required className={`${styles.input} ${getFieldError('role') ? styles.inputError : ''}`} />
+              {getFieldError('role') && (
+                <span className={styles.errorMessage}>{getFieldError('role')}</span>
+              )}
+            </div>
 
             {renderSelect({
               field: 'status',
@@ -423,26 +426,12 @@ const UserForm = ({
       </div>
 
       {/* Acciones */}
-      {!isReadOnly && (
-        <div className={styles.formActions}>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onCancel}
-            disabled={loading}
-          >
-            Cancelar
-          </Button>
-          <Button
-            type="submit"
-            variant="primary"
-            disabled={loading}
-            loading={loading}
-          >
-            {isCreate ? 'Crear Usuario' : 'Guardar Cambios'}
-          </Button>
-        </div>
-      )}
+      <FormFooter
+        onCancel={onCancel}
+        saving={loading}
+        hidden={isReadOnly}
+        labels={{ submit: isCreate ? 'Crear Usuario' : 'Guardar Cambios' }}
+      />
     </form>
   );
 };

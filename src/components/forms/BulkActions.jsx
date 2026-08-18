@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { FaTimes, FaCheck, FaBan, FaTrash, FaUserTag, FaEnvelope, FaDownload, FaChevronDown } from 'react-icons/fa';
 import Button from '../common/Button';
 import Modal from '../common/Modal';
+import { FormFooter } from '@/components/common/FormFooter';
 import { useCatalog } from '@/hooks/useCatalog';
 import styles from './BulkActions.module.css';
 
@@ -311,45 +312,37 @@ const BulkActions = ({
 
           {modalConfig.isConfirmation ? (
             // Modal de confirmación
-            <div className={styles.confirmationContent}>
-              <div className={`${styles.confirmationIcon} ${styles[modalConfig.color]}`}>
-                {operations.find(op => op.key === modalConfig.operation)?.icon}
-              </div>
-              <p className={`${styles.confirmText} ${modalConfig.isDangerous ? styles.dangerous : ''}`}>
-                {modalConfig.confirmText}
-              </p>
-              {modalConfig.isDangerous && (
-                <div className={styles.warningBox}>
-                  <strong>⚠️ ADVERTENCIA:</strong> Esta acción no se puede deshacer.
+            <form onSubmit={(e) => { e.preventDefault(); handleConfirm(); }}>
+              <div className={styles.confirmationContent}>
+                <div className={`${styles.confirmationIcon} ${styles[modalConfig.color]}`}>
+                  {operations.find(op => op.key === modalConfig.operation)?.icon}
                 </div>
-              )}
-            </div>
+                <p className={`${styles.confirmText} ${modalConfig.isDangerous ? styles.dangerous : ''}`}>
+                  {modalConfig.confirmText}
+                </p>
+                {modalConfig.isDangerous && (
+                  <div className={styles.warningBox}>
+                    <strong>⚠️ ADVERTENCIA:</strong> Esta acción no se puede deshacer.
+                  </div>
+                )}
+              </div>
+              <FormFooter
+                onCancel={() => setShowModal(false)}
+                saving={loading}
+                labels={{ submit: modalConfig.isDangerous ? 'Eliminar' : 'Confirmar' }}
+              />
+            </form>
           ) : (
             // Modal con formulario
             <form onSubmit={handleSubmit} className={styles.modalForm}>
               {modalConfig.fields?.map(renderFormField)}
+              <FormFooter
+                onCancel={() => setShowModal(false)}
+                saving={loading}
+                labels={{ submit: modalConfig.isDangerous ? 'Eliminar' : 'Confirmar' }}
+              />
             </form>
           )}
-
-          <div className={styles.modalActions}>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setShowModal(false)}
-              disabled={loading}
-            >
-              Cancelar
-            </Button>
-            <Button
-              type={modalConfig.isConfirmation ? "button" : "submit"}
-              variant={modalConfig.isDangerous ? "error" : modalConfig.color || "primary"}
-              onClick={modalConfig.isConfirmation ? handleConfirm : undefined}
-              disabled={loading}
-              loading={loading}
-            >
-              {modalConfig.isDangerous ? 'Eliminar' : 'Confirmar'}
-            </Button>
-          </div>
         </div>
       </Modal>
 

@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import DataTable from '@/components/common/DataTable';
 import Modal from '@/components/common/Modal';
 import Loading from '@/components/common/Loading';
+import { EmptyState } from '@/components/common/EmptyState';
 import { showToast } from '@/utils/notifications';
 import { FaHandsHelping, FaUsers, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import styles from './Ministries.module.css';
@@ -170,7 +171,7 @@ const Ministries = () => {
             <button className={styles.addBtn} onClick={() => setShowAssign(true)}><FaPlus /> Asignar</button>
           </div>
           {members.length === 0 ? (
-            <p className={styles.emptyMsg}>No hay miembros asignados</p>
+            <EmptyState title="Sin miembros" description="No hay miembros asignados" />
           ) : (
             <div className={styles.membersList}>
               {members.map(m => (

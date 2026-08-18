@@ -11,7 +11,8 @@ import DataTable from '@/components/common/DataTable';
 import Modal  from '@/components/common/Modal';
 import Loading  from '@/components/common/Loading';
 import { ReportBuilder } from '@/components/common/reports/ReportBuilder';
-import  ChartExporter  from '@/components/common/reports/ChartExporter';
+import ChartExporter  from '@/components/common/reports/ChartExporter';
+import { EmptyState } from '@/components/common/EmptyState';
 import { showNotification } from '@/utils/notifications';
 import {
   FiFileText, FiPlus, FiPlay, FiDownload, FiCalendar, FiShare2,
@@ -520,20 +521,16 @@ export const Reports = () => {
             <Loading size="large" message="Cargando reportes..." />
           </div>
         ) : isEmpty ? (
-          <div className={styles.emptyState}>
-            <FiFileText className={styles.emptyIcon} />
-            <h3>No hay reportes disponibles</h3>
-            <p>Comienza creando tu primer reporte personalizado</p>
-            {hasAnyRole(['admin', 'director', 'leader']) && (
-              <Button
-                variant="primary"
-                icon={<FiPlus />}
-                onClick={() => setShowReportBuilder(true)}
-              >
-                Crear Primer Reporte
+          <EmptyState
+            icon={FiFileText}
+            title="No hay reportes disponibles"
+            description="Comienza creando tu primer reporte personalizado"
+            action={
+              <Button variant="primary" icon={<FiPlus />} onClick={() => setShowReportBuilder(true)}>
+                Crear Reporte
               </Button>
-            )}
-          </div>
+            }
+          />
         ) : (
           <DataTable
             data={getActiveReports()}

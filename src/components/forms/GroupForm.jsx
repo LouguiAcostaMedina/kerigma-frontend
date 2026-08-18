@@ -4,8 +4,8 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import Button from '../common/Button';
 import Loading from '../common/Loading';
+import { FormFooter } from '@/components/common/FormFooter';
 import { usersService } from '../../services/usersService';
 import { useCatalog } from '@/hooks/useCatalog';
 import styles from './GroupForm.module.css';
@@ -346,16 +346,12 @@ const GroupForm = ({
         )}
       </div>
 
-      {!isReadOnly && (
-        <div className={styles.formActions}>
-          <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
-            Cancelar
-          </Button>
-          <Button type="submit" variant="primary" disabled={isLoading} loading={isLoading}>
-            {mode === 'create' ? 'Crear Grupo' : 'Guardar Cambios'}
-          </Button>
-        </div>
-      )}
+      <FormFooter
+        onCancel={onCancel}
+        saving={isLoading}
+        hidden={isReadOnly}
+        labels={{ submit: mode === 'create' ? 'Crear Grupo' : 'Guardar Cambios' }}
+      />
     </form>
   );
 };
