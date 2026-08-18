@@ -1,10 +1,11 @@
-// Roles del sistema (coinciden con el ENUM del backend: super_admin | admin | director | leader | reader)
+// Roles del sistema (coinciden con el ENUM del backend: super_admin | admin | director | leader | reader | tesorero)
 export const ROLES = {
   SUPER_ADMIN: 'super_admin',
   ADMIN: 'admin',
   DIRECTOR: 'director',
   LEADER: 'leader',
-  READER: 'reader'
+  READER: 'reader',
+  TESORERO: 'tesorero'
 };
 
 export const ROLE_LABELS = {
@@ -12,7 +13,8 @@ export const ROLE_LABELS = {
   [ROLES.ADMIN]: 'Administrador',
   [ROLES.DIRECTOR]: 'Director',
   [ROLES.LEADER]: 'Líder', 
-  [ROLES.READER]: 'Lector'
+  [ROLES.READER]: 'Lector',
+  [ROLES.TESORERO]: 'Tesorero'
 };
 
 // Opciones de rol para selects (value + label), en orden de jerarquía
@@ -21,7 +23,8 @@ export const ROLE_OPTIONS = [
   ROLES.ADMIN,
   ROLES.DIRECTOR,
   ROLES.LEADER,
-  ROLES.READER
+  ROLES.READER,
+  ROLES.TESORERO
 ].map((role) => ({
   value: role,
   label: ROLE_LABELS[role]
@@ -62,5 +65,12 @@ export const ROLE_PERMISSIONS = {
     'members.read',
     'groups.read',
     'students.read'
+  ],
+  [ROLES.TESORERO]: [
+    'members.read',
+    'financial.read',
+    'financial.create',
+    'financial.delete',
+    'financial.reports'
   ]
 };

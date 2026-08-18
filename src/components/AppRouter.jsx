@@ -32,8 +32,19 @@ import BiblicalStudents from '@/pages/BiblicalStudents';
 
 
 import Reports from '@/pages/Reports';
+import AuditLog from '@/pages/AuditLog';
+import PrivacyPolicy from '@/pages/PrivacyPolicy';
+import TithesOfferings from '@/pages/TithesOfferings';
+import OfficialReports from '@/pages/OfficialReports';
+import Calendar from '@/pages/Calendar';
+import Notifications from '@/pages/Notifications';
 import Churches from '@/pages/Churches';
 import Users from '@/pages/Users';
+import Hierarchy from '@/pages/Hierarchy';
+import Ministries from '@/pages/Ministries';
+import PastoralCare from '@/pages/PastoralCare';
+import BaptismPipeline from '@/pages/BaptismPipeline';
+import ChurchDocuments from '@/pages/ChurchDocuments';
 
 // Páginas de error
 import NotFound from '@/pages/NotFound';
@@ -41,10 +52,11 @@ import Unauthorized from '@/pages/Unauthorized';
 
 
 // Roles que acceden a cada módulo (valores idénticos al ENUM del backend)
-const ALL_AUTHENTICATED = [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER, ROLES.READER];
+const ALL_AUTHENTICATED = [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER, ROLES.READER, ROLES.TESORERO];
 const MANAGE_ROLES = [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER];
 const HIGHER_ROLES = [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR];
 const ADMIN_ROLES = [ROLES.SUPER_ADMIN, ROLES.ADMIN];
+const FINANCIAL_ROLES = [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.TESORERO];
 
 const AppRouter = () => {
   const { isLoading } = useAuth();
@@ -176,6 +188,96 @@ const AppRouter = () => {
           } 
         />
 
+        {/* Diezmos y Ofrendas - Tesorero, Director y Administrador */}
+        <Route 
+          path="tithes-offerings" 
+          element={
+            <ProtectedRoute roles={FINANCIAL_ROLES}>
+              <TithesOfferings />
+            </ProtectedRoute>
+          } 
+        />
+
+        {/* Reportes Oficiales de Membresía - Director y Administrador */}
+        <Route 
+          path="official-reports" 
+          element={
+            <ProtectedRoute roles={HIGHER_ROLES}>
+              <OfficialReports />
+            </ProtectedRoute>
+          } 
+        />
+
+        {/* Calendario de Actividades - Director, Líder y Administrador */}
+        <Route 
+          path="calendar" 
+          element={
+            <ProtectedRoute roles={MANAGE_ROLES}>
+              <Calendar />
+            </ProtectedRoute>
+          } 
+        />
+
+        {/* Notificaciones - Director y Administrador */}
+        <Route 
+          path="notifications" 
+          element={
+            <ProtectedRoute roles={HIGHER_ROLES}>
+              <Notifications />
+            </ProtectedRoute>
+          } 
+        />
+
+        {/* Jerarquía Organizacional - Solo Administrador */}
+        <Route 
+          path="hierarchy" 
+          element={
+            <ProtectedRoute roles={ADMIN_ROLES}>
+              <Hierarchy />
+            </ProtectedRoute>
+          } 
+        />
+
+        {/* Ministerios - Todos los roles */}
+        <Route 
+          path="ministries" 
+          element={
+            <ProtectedRoute roles={ALL_AUTHENTICATED}>
+              <Ministries />
+            </ProtectedRoute>
+          } 
+        />
+
+        {/* Cuidado Pastoral - Director y Administrador */}
+        <Route 
+          path="pastoral-care" 
+          element={
+            <ProtectedRoute roles={HIGHER_ROLES}>
+              <PastoralCare />
+            </ProtectedRoute>
+          } 
+        />
+
+        {/* Pipeline de Bautismo - Todos los roles */}
+        <Route 
+          path="baptism-pipeline" 
+          element={
+            <ProtectedRoute roles={ALL_AUTHENTICATED}>
+              <BaptismPipeline />
+            </ProtectedRoute>
+          } 
+        />
+
+        {/* Repositorio de Documentos - Todos los roles */}
+        <Route 
+          path="documents" 
+          element={
+            <ProtectedRoute roles={ALL_AUTHENTICATED}>
+              <ChurchDocuments />
+            </ProtectedRoute>
+          } 
+        />
+
         {/* Iglesias - Solo Director y Administrador */}
         <Route 
           path="churches" 
@@ -195,9 +297,20 @@ const AppRouter = () => {
             </ProtectedRoute>
           } 
         />
+
+        {/* Bitácora de Auditoría - Solo Administrador */}
+        <Route 
+          path="audit-log" 
+          element={
+            <ProtectedRoute roles={ADMIN_ROLES}>
+              <AuditLog />
+            </ProtectedRoute>
+          } 
+        />
       </Route>
 
       {/* Páginas de error */}
+      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
       <Route path="/404" element={<NotFound />} />
       <Route path="*" element={<Navigate to="/404" replace />} />

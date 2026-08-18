@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { FaUser, FaEnvelope, FaPhone, FaUsers } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaPhone, FaUsers, FaShieldAlt } from 'react-icons/fa';
 import Button from '../common/Button';
 import Loading from '../common/Loading';
 import { groupsService } from '../../services/groupsService';
@@ -78,7 +78,8 @@ const EMPTY_FORM = {
   emergencyContact: '',
   emergencyPhone: '',
   notes: '',
-  groupId: ''
+  groupId: '',
+  consentGiven: false
 };
 
 const MemberForm = ({
@@ -124,7 +125,8 @@ const MemberForm = ({
       emergencyContact: initialData.emergencyContact?.name || initialData.emergencyContact || '',
       emergencyPhone: initialData.emergencyContact?.phone || '',
       notes: initialData.notes || '',
-      groupId: initialData.groupId || ''
+      groupId: initialData.groupId || '',
+      consentGiven: !!initialData.consentGiven
     });
     setErrors({});
   }, [initialData]);
@@ -164,6 +166,7 @@ const MemberForm = ({
     if (!formData.firstName.trim()) newErrors.firstName = 'El nombre es requerido';
     if (!formData.lastName.trim()) newErrors.lastName = 'El apellido es requerido';
     if (!formData.groupId) newErrors.groupId = 'Selecciona un grupo';
+    if (mode === 'create' && !formData.consentGiven) newErrors.consentGiven = 'El consentimiento es requerido';
 
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'El email no es válido';
@@ -418,6 +421,38 @@ const MemberForm = ({
             rows: 3
           })}
         </div>
+
+        {/* Consentimiento de datos personales */}
+        {mode === 'create' && (
+          <div className={styles.section}>
+            <h3 className={styles.sectionTitle}>
+              <FaShieldAlt /> Protección de Datos Personales
+            </h3>
+            <div className={styles.consentBox}>
+              <label className={styles.consentLabel}>
+                <input
+                  type="checkbox"
+                  checked={formData.consentGiven}
+                  onChange={(e) => handleChange('consentGiven', e.target.checked)}
+                  className={styles.consentCheckbox}
+                />
+                <span className={styles.consentText}>
+                  El titular ha otorgado su <strong>consentimiento informado</strong> para el
+                  tratamiento de sus datos personales conforme a la{' '}
+                  <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" className={styles.consentLink}>
+                    Política de Privacidad
+                  </a>{' '}
+                  (Ley N° 29733).
+                </span>
+              </label>
+              {!formData.consentGiven && (
+                <p className={styles.consentWarning}>
+                  El consentimiento es requerido para registrar un nuevo miembro.
+                </p>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {!isReadOnly && (

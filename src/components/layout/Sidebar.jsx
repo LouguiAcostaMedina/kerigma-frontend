@@ -54,11 +54,81 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER, ROLES.READER]
     },
     {
+      id: 'calendar',
+      title: 'Calendario',
+      icon: '📅',
+      path: '/calendar',
+      roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER]
+    },
+    {
       id: 'reports',
       title: 'Reportes',
       icon: '📈',
       path: '/reports',
       roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR]
+    },
+    {
+      id: 'official-reports',
+      title: 'Reportes Oficiales',
+      icon: '📜',
+      path: '/official-reports',
+      roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR]
+    },
+    {
+      id: 'notifications',
+      title: 'Notificaciones',
+      icon: '🔔',
+      path: '/notifications',
+      roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR]
+    },
+    {
+      id: 'tithes-offerings',
+      title: 'Diezmos y Ofrendas',
+      icon: '💰',
+      path: '/tithes-offerings',
+      roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.TESORERO]
+    },
+    {
+      id: 'audit-log',
+      title: 'Bitácora',
+      icon: '📋',
+      path: '/audit-log',
+      roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN]
+    },
+    {
+      id: 'hierarchy',
+      title: 'Jerarquía',
+      icon: '🏛️',
+      path: '/hierarchy',
+      roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN]
+    },
+    {
+      id: 'ministries',
+      title: 'Ministerios',
+      icon: '🙏',
+      path: '/ministries',
+      roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER, ROLES.READER]
+    },
+    {
+      id: 'pastoral-care',
+      title: 'Cuidado Pastoral',
+      icon: '🐑',
+      path: '/pastoral-care',
+      roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR]
+    },
+    {
+      id: 'baptism-pipeline',
+      title: 'Pipeline de Bautismo',
+      icon: '💧',
+      path: '/baptism-pipeline',
+      roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER, ROLES.READER]
+    },
+    {
+      id: 'documents',
+      title: 'Documentos',
+      icon: '📂',
+      path: '/documents',
+      roles: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.LEADER, ROLES.READER]
     },
     {
       id: 'settings',
