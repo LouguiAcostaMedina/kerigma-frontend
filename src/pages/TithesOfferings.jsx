@@ -4,11 +4,13 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import { FaHandHoldingHeart, FaPlus, FaFilter, FaCalendarAlt, FaChartBar, FaSearch, FaTrash, FaEye } from 'react-icons/fa';
+import { FaHandHoldingHeart, FaPlus, FaFilter, FaCalendarAlt, FaChartBar, FaSearch, FaTrash, FaEye, FaLock } from 'react-icons/fa';
 import DataTable from '@/components/common/DataTable';
 import Modal from '@/components/common/Modal';
 import Loading from '@/components/common/Loading';
 import PageHeader from '@/components/common/PageHeader';
+import { useAuth } from '@/contexts/AuthContext';
+import { ROLES } from '@/constants';
 import { financialService } from '@/services/financialService';
 import { showToast } from '@/utils/notifications';
 import styles from './TithesOfferings.module.css';
@@ -47,6 +49,10 @@ const EMPTY_FORM = {
 };
 
 const TithesOfferings = () => {
+  const { user } = useAuth();
+  const canWrite = user?.role === ROLES.TESORERO;
+  const canRead = [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.DIRECTOR, ROLES.TESORERO].includes(user?.role);
+
   const [contributions, setContributions] = useState([]);
   const [pagination, setPagination] = useState(null);
   const [summary, setSummary] = useState([]);
@@ -60,6 +66,10 @@ const TithesOfferings = () => {
   const [filters, setFilters] = useState({ category: '', period: '', page: 1, limit: 20 });
 
   const loadData = useCallback(async () => {
+    if (!canRead) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const params = {};
@@ -90,7 +100,7 @@ const TithesOfferings = () => {
     } finally {
       setLoading(false);
     }
-  }, [filters]);
+  }, [filters, canRead]);
 
   useEffect(() => {
     loadData();
@@ -181,14 +191,28 @@ const TithesOfferings = () => {
 
   return (
     <div className={styles.page}>
+      {!canRead ? (
+        <div className={styles.emptyState}>
+          <FaLock size={48} style={{ color: '#9ca3af', marginBottom: '16px' }} />
+          <h3>Sin permisos</h3>
+          <p>No tienes permiso para ver esta sección. Contacta al administrador si necesitas acceso.</p>
+        </div>
+      ) : (
+      <>
       <PageHeader
         title="Diezmos y Ofrendas"
-        subtitle="Registro de aportes financieros por miembro"
+        subtitle={canWrite ? 'Registro de aportes financieros por miembro' : 'Consulta de aportes financieros (solo lectura)'}
         icon={<FaHandHoldingHeart />}
         actionButton={
-          <button className={styles.createButton} onClick={() => setShowCreateModal(true)}>
-            <FaPlus /> Nueva Contribución
-          </button>
+          canWrite ? (
+            <button className={styles.createButton} onClick={() => setShowCreateModal(true)}>
+              <FaPlus /> Nueva Contribución
+            </button>
+          ) : (
+            <span className={styles.readOnlyBadge}>
+              <FaLock /> Solo lectura
+            </span>
+          )
         }
       />
 
@@ -241,9 +265,9 @@ const TithesOfferings = () => {
           loading={loading}
           pagination={pagination}
           onPageChange={(page) => setFilters((prev) => ({ ...prev, page }))}
-          actions={['view', 'delete']}
+          actions={canWrite ? ['view', 'delete'] : ['view']}
           onView={handleViewDetail}
-          onDelete={(item) => handleDelete(item.id)}
+          onDelete={canWrite ? (item) => handleDelete(item.id) : undefined}
           searchable={false}
         />
       </div>
@@ -396,6 +420,8 @@ const TithesOfferings = () => {
             </div>
           </div>
         </Modal>
+      )}
+      </>
       )}
     </div>
   );
